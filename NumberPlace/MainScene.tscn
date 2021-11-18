@@ -1,3 +1,19 @@
 [gd_scene format=2]
 
 [node name="MainScene" type="Node2D"]
+
+[node name="BG" type="ColorRect" parent="."]
+margin_right = 500.0
+margin_bottom = 900.0
+color = Color( 0.729412, 0.862745, 0.345098, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleBar" type="ColorRect" parent="."]
+margin_right = 500.0
+margin_bottom = 50.0
+color = Color( 0.407843, 0.427451, 0.878431, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
