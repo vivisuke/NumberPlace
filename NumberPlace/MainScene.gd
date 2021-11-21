@@ -25,7 +25,9 @@ var column_used = []		# 各カラムの使用済みビット
 var box_used = []			# 各3x3ブロックの使用済みビット
 #var line_used_bits
 var clue_labels = []			# 手がかり数字用ラベル配列
+var input_labels = []			# 入力数字用ラベル配列
 var ClueLabel = load("res://ClueLabel.tscn")
+var InputLabel = load("res://InputLabel.tscn")
 var rng = RandomNumberGenerator.new()
 
 func _ready():
@@ -40,6 +42,11 @@ func _ready():
 			clue_labels.push_back(label)
 			label.rect_position = Vector2(x*CELL_WIDTH, y*CELL_WIDTH+2)
 			label.text = String((x+y)%9 + 1)
+			$Board.add_child(label)
+			label = InputLabel.instance()
+			input_labels.push_back(label)
+			label.rect_position = Vector2(x*CELL_WIDTH, y*CELL_WIDTH+2)
+			label.text = ""
 			$Board.add_child(label)
 	gen_ans()
 	pass
@@ -157,6 +164,7 @@ func _on_TestButton_pressed():
 	lst.shuffle()
 	for i in range(3*9):
 		clue_labels[lst[i]].text = ""
+		input_labels[lst[i]].text = "8"
 		cell_bit[lst[i]] = 0
 	#
 	var fh = search_fullhouse()
