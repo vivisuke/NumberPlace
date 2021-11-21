@@ -1,5 +1,10 @@
 extends Node2D
 
+enum {
+	HORZ = 1,
+	VERT,
+	BOX
+}
 const N_VERT = 9
 const N_HORZ = 9
 const N_CELLS = N_HORZ * N_VERT
@@ -111,13 +116,49 @@ func gen_ans():		# 解答生成
 	update_cell_labels()
 	pass
 
+func search_fullhouse() -> Array:	# [] for not found, [ix, HORZ|VERT|BOX]
+	var p
+	for y in range(N_VERT):
+		var t = ALL_BITS
+		for x in range(N_HORZ):
+			if cell_bit[x+y*N_HORZ] == 0:
+				p = x+y*N_HORZ
+			else:
+				t &= ~cell_bit[x+y*N_HORZ]
+		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
+			return [p, HORZ]
+	for x in range(N_HORZ):
+		var t = ALL_BITS
+		for y in range(N_VERT):
+			if cell_bit[x+y*N_HORZ] == 0:
+				p = x+y*N_HORZ
+			else:
+				t &= ~cell_bit[x+y*N_HORZ]
+		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
+			return [p, VERT]
+	for y in range(0, N_VERT, 3):
+		for x in range(0, N_HORZ, 3):
+			var ix = x + y * N_HORZ
+			var t = ALL_BITS
+			for v in range(3):
+				for h in range(3):
+					if cell_bit[ix+h+v*N_HORZ] == 0:
+						p = ix+h+v*N_HORZ
+					else:
+						t &= ~cell_bit[ix+h+v*N_HORZ]
+				if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
+					return [p, BOX]
+	return []
 
 func _on_TestButton_pressed():
 	gen_ans()
 	var lst = []
 	for i in range(N_CELLS): lst.push_back(i)
 	lst.shuffle()
-	for i in range(4*9):
+	for i in range(3*9):
 		clue_labels[lst[i]].text = ""
 		cell_bit[lst[i]] = 0
+	#
+	var fh = search_fullhouse()
+	print(fh)
 	pass
