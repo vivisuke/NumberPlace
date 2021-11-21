@@ -123,7 +123,7 @@ func gen_ans():		# 解答生成
 	update_cell_labels()
 	pass
 
-func search_fullhouse() -> Array:	# [] for not found, [ix, HORZ|VERT|BOX]
+func search_fullhouse() -> Array:	# [] for not found, [ix, bit, HORZ|VERT|BOX]
 	var p
 	for y in range(N_VERT):
 		var t = ALL_BITS
@@ -133,7 +133,7 @@ func search_fullhouse() -> Array:	# [] for not found, [ix, HORZ|VERT|BOX]
 			else:
 				t &= ~cell_bit[x+y*N_HORZ]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-			return [p, HORZ]
+			return [p, t, HORZ]
 	for x in range(N_HORZ):
 		var t = ALL_BITS
 		for y in range(N_VERT):
@@ -142,7 +142,7 @@ func search_fullhouse() -> Array:	# [] for not found, [ix, HORZ|VERT|BOX]
 			else:
 				t &= ~cell_bit[x+y*N_HORZ]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-			return [p, VERT]
+			return [p, t, VERT]
 	for y in range(0, N_VERT, 3):
 		for x in range(0, N_HORZ, 3):
 			var ix = x + y * N_HORZ
@@ -154,7 +154,7 @@ func search_fullhouse() -> Array:	# [] for not found, [ix, HORZ|VERT|BOX]
 					else:
 						t &= ~cell_bit[ix+h+v*N_HORZ]
 				if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-					return [p, BOX]
+					return [p, t, BOX]
 	return []
 
 func _on_TestButton_pressed():
@@ -164,9 +164,16 @@ func _on_TestButton_pressed():
 	lst.shuffle()
 	for i in range(3*9):
 		clue_labels[lst[i]].text = ""
-		input_labels[lst[i]].text = "8"
+		#input_labels[lst[i]].text = "8"
 		cell_bit[lst[i]] = 0
 	#
+	pass
+
+
+func _on_SolveButton_pressed():
 	var fh = search_fullhouse()
 	print(fh)
-	pass
+	if fh == []: return
+	cell_bit[fh[0]] = fh[1]
+	input_labels[fh[0]].text = String(bit_to_num(fh[1]))
+	pass # Replace with function body.
