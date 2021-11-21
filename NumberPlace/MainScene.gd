@@ -21,13 +21,14 @@ var box_used = []			# 各3x3ブロックの使用済みビット
 #var line_used_bits
 var clue_labels = []			# 手がかり数字用ラベル配列
 var ClueLabel = load("res://ClueLabel.tscn")
+var rng = RandomNumberGenerator.new()
 
 func _ready():
 	randomize()
+	rng.randomize()
 	cell_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
 	box_used.resize(N_HORZ)
-	for i in range(box_used.size()): box_used[i] = 0
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			var label = ClueLabel.instance()
@@ -95,6 +96,7 @@ func gen_ans_sub(ix : int, line_used):
 	return false;
 
 func gen_ans():		# 解答生成
+	for i in range(box_used.size()): box_used[i] = 0
 	for i in range(cell_bit.size()): cell_bit[i] = 0
 	var t = []
 	for i in range(N_HORZ): t.push_back(1<<i)
@@ -107,4 +109,15 @@ func gen_ans():		# 解答生成
 	gen_ans_sub(N_HORZ, 0)
 	print_cells()
 	update_cell_labels()
+	pass
+
+
+func _on_TestButton_pressed():
+	gen_ans()
+	var lst = []
+	for i in range(N_CELLS): lst.push_back(i)
+	lst.shuffle()
+	for i in range(4*9):
+		clue_labels[lst[i]].text = ""
+		cell_bit[lst[i]] = 0
 	pass
