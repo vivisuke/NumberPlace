@@ -203,8 +203,28 @@ func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
 		if b != 0 && (b & -b) == b:
 			return [ix, b]
 	return []
+func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
+	for y0 in range(0, N_VERT, 3):
+		for x0 in range(0, N_HORZ, 3):
+			var b0 = 0
+			var b1 = 0
+			for v in range(3):
+				for h in range(3):
+					var b = candidates_bit[xyToIX(x0+h, y0+v)]
+					b1 |= (b0 & b)
+					b0 ^= b
+			b0 &= ~b1
+			if b0 != 0:
+				b0 = b0 & -b0
+				for v in range(3):
+					for h in range(3):
+						if (b0 & candidates_bit[xyToIX(x0+h, y0+v)]) != 0:
+							return [xyToIX(x0+h, y0+v), b0]
+				
+	return []
 func _on_TestButton_pressed():
 	gen_ans()
+	for i in range(N_CELLS): input_labels[i].text = ""
 	var lst = []
 	for i in range(N_CELLS): lst.push_back(i)
 	lst.shuffle()
@@ -223,6 +243,14 @@ func _on_SolveButton_pressed():
 	print("Hullhouse: ", pb)
 	if pb != []:
 		print()
+		cell_bit[pb[0]] = pb[1]
+		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
+		update_candidates(pb[0], pb[1])
+		print_candidates()
+		return
+	pb = search_hidden_single()
+	print("Hidden Single: ", pb)
+	if pb != []:
 		cell_bit[pb[0]] = pb[1]
 		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
