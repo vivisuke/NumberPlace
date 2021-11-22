@@ -119,6 +119,11 @@ func update_candidates(ix : int, b : int):		# ix に b を入れたときの候�
 		for h in range(3):
 			candidates_bit[xyToIX(x0 + h, y0 + v)] &= ~b
 
+func clear_input():
+	for i in range(N_CELLS):
+		if clue_labels[i].text == "":
+			input_labels[i].text = ""
+			cell_bit[i] = 0
 # cell_bit[ix] 数字を入れる
 # return: true for 解答生成成功
 func gen_ans_sub(ix : int, line_used):
@@ -174,17 +179,30 @@ func gen_quest():
 	for i in range(N_CELLS): input_labels[i].text = ""
 	var lst = []
 	if true:
-		for y in range(5):
-			for x in range(5):
-				lst.push_back(xyToIX(x, y))
-		lst.shuffle()
-		for i in range(9):
-			var x = lst[i] % N_HORZ
-			var y = lst[i] / N_HORZ
-			remove_clue(x, y)
-			remove_clue(N_HORZ - 1 - x, y)
-			remove_clue(x, N_VERT - 1 - y)
-			remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+		if true:
+			for y in range(5):
+				for x in range(y, N_HORZ - y):
+					lst.push_back(xyToIX(x, y))
+			lst.shuffle()
+			for i in range(9):
+				var x = lst[i] % N_HORZ
+				var y = lst[i] / N_HORZ
+				remove_clue(x, y)
+				remove_clue(y, x)
+				remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+				remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+		else:
+			for y in range(5):
+				for x in range(5):
+					lst.push_back(xyToIX(x, y))
+			lst.shuffle()
+			for i in range(9):
+				var x = lst[i] % N_HORZ
+				var y = lst[i] / N_HORZ
+				remove_clue(x, y)
+				remove_clue(N_HORZ - 1 - x, y)
+				remove_clue(x, N_VERT - 1 - y)
+				remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
 	else:
 		for i in range(N_CELLS): lst.push_back(i)
 		lst.shuffle()
@@ -283,7 +301,10 @@ func step_solve() -> bool:
 		return true
 	return false
 func _on_SolveButton_pressed():
-	step_solve()
+	if is_filled():
+		clear_input()
+	else:
+		step_solve()
 	print_candidates()
 	pass # Replace with function body.
 
