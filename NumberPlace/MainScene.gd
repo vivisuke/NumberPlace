@@ -89,8 +89,9 @@ func update_cell_labels():
 		for x in range(N_HORZ):
 			clue_labels[ix].text = String(bit_to_num(cell_bit[ix]))
 			ix += 1
-func update_candidates():		# 各セルの候補数字計算
-	for i in range(N_CELLS): candidates_bit[i] = ALL_BITS
+func init_candidates():		# 各セルの候補数字計算
+	for i in range(N_CELLS):
+		candidates_bit[i] = ALL_BITS if cell_bit[i] == 0 else 0
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			var b = cell_bit[xyToIX(x, y)]
@@ -98,7 +99,24 @@ func update_candidates():		# 各セルの候補数字計算
 				for t in range(N_HORZ):
 					candidates_bit[xyToIX(t, y)] &= ~b
 					candidates_bit[xyToIX(x, t)] &= ~b
+				var x0 = x - x % 3		# 3x3ブロック左上位置
+				var y0 = y - y % 3
+				for v in range(3):
+					for h in range(3):
+						candidates_bit[xyToIX(x0 + h, y0 + v)] &= ~b
 	pass
+func update_candidates(ix : int, b : int):		# ix に b を入れたときの候補数字更新
+	var x = ix % N_HORZ
+	var y = ix / N_HORZ
+	for t in range(N_HORZ):
+		candidates_bit[xyToIX(t, y)] &= ~b
+		candidates_bit[xyToIX(x, t)] &= ~b
+	var x0 = x - x % 3		# 3x3ブロック左上位置
+	var y0 = y - y % 3
+	for v in range(3):
+		for h in range(3):
+			candidates_bit[xyToIX(x0 + h, y0 + v)] &= ~b
+
 # cell_bit[ix] 数字を入れる
 # return: true for 解答生成成功
 func gen_ans_sub(ix : int, line_used):
@@ -166,20 +184,24 @@ func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 				t &= ~cell_bit[xyToIX(x, y)]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
 			return [pos, t]
-	for y in range(0, N_VERT, 3):
-		for x in range(0, N_HORZ, 3):
-			var ix = xyToIX(x, y)
+	for y0 in range(0, N_VERT, 3):
+		for x0 in range(0, N_HORZ, 3):
+			#var ix = xyToIX(x, y)
 			var t = ALL_BITS
 			for v in range(3):
 				for h in range(3):
-					if cell_bit[ix+xyToIX(h, v)] == 0:
-						pos = ix+xyToIX(h, v)
+					if cell_bit[xyToIX(x0+h, y0+v)] == 0:
+						pos = xyToIX(x0+h, y0+v)
 					else:
-						t &= ~cell_bit[ix+xyToIX(h, v)]
+						t &= ~cell_bit[xyToIX(x0+h, y0+v)]
 				if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
 					return [pos, t]
 	return []
-func search_nakid_single() -> Array:	
+func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
+	for ix in range(N_CELLS):
+		var b = candidates_bit[ix]
+		if b != 0 && (b & -b) == b:
+			return [ix, b]
 	return []
 func _on_TestButton_pressed():
 	gen_ans()
@@ -191,17 +213,27 @@ func _on_TestButton_pressed():
 		#input_labels[lst[i]].text = "8"
 		cell_bit[lst[i]] = 0
 	#
-	update_candidates()			# 各セルの候補数字計算
+	init_candidates()			# 各セルの候補数字計算
 	print_candidates()
 	pass
 
 
 func _on_SolveButton_pressed():
-	var fh = search_fullhouse()
-	print(fh)
-	if fh != []:
-		print("Hullhouse")
-		cell_bit[fh[0]] = fh[1]
-		input_labels[fh[0]].text = String(bit_to_num(fh[1]))
+	var pb = search_fullhouse()
+	print("Hullhouse: ", pb)
+	if pb != []:
+		print()
+		cell_bit[pb[0]] = pb[1]
+		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
+		update_candidates(pb[0], pb[1])
+		print_candidates()
+		return
+	pb = search_nakid_single()
+	print("Nakid Single: ", pb)
+	if pb != []:
+		cell_bit[pb[0]] = pb[1]
+		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
+		update_candidates(pb[0], pb[1])
+		print_candidates()
 		return
 	pass # Replace with function body.
