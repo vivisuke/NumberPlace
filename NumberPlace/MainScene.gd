@@ -256,35 +256,46 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 func _on_TestButton_pressed():
 	gen_quest()
 	pass
-
-func _on_SolveButton_pressed():
+func step_solve() -> bool:
 	var pb = search_fullhouse()
-	print("Hullhouse: ", pb)
+	#print("Hullhouse: ", pb)
 	if pb != []:
-		print()
 		cell_bit[pb[0]] = pb[1]
 		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
-		print_candidates()
-		return
+		#print_candidates()
+		return true
 	pb = search_hidden_single()
-	print("Hidden Single: ", pb)
+	#print("Hidden Single: ", pb)
 	if pb != []:
 		cell_bit[pb[0]] = pb[1]
 		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
-		print_candidates()
-		return
+		#print_candidates()
+		return true
 	pb = search_nakid_single()
-	print("Nakid Single: ", pb)
+	#print("Nakid Single: ", pb)
 	if pb != []:
 		cell_bit[pb[0]] = pb[1]
 		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
-		print_candidates()
-		return
+		#print_candidates()
+		return true
+	return false
+func _on_SolveButton_pressed():
+	step_solve()
+	print_candidates()
 	pass # Replace with function body.
 
-
+func is_filled():	# セルが全部埋まっているか？
+	for i in range(cell_bit.size()):
+		if cell_bit[i] == 0: return false
+	return true
 func _on_QustButton_pressed():
+	while step_solve():
+		pass
+	if is_filled():
+		print("solved")
+	else:
+		print("not solved")
 	pass # Replace with function body.
