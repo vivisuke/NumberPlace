@@ -33,8 +33,8 @@ var InputLabel = load("res://InputLabel.tscn")
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	#randomize()
-	#rng.randomize()
+	randomize()
+	rng.randomize()
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
@@ -283,4 +283,8 @@ func _on_SolveButton_pressed():
 		update_candidates(pb[0], pb[1])
 		print_candidates()
 		return
+	pass # Replace with function body.
+
+
+func _on_QustButton_pressed():
 	pass # Replace with function body.
