@@ -33,8 +33,8 @@ var InputLabel = load("res://InputLabel.tscn")
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	randomize()
-	rng.randomize()
+	#randomize()
+	#rng.randomize()
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
@@ -51,9 +51,10 @@ func _ready():
 			label.rect_position = Vector2(x*CELL_WIDTH, y*CELL_WIDTH+2)
 			label.text = ""
 			$Board.add_child(label)
-	gen_ans()
+	#gen_ans()
+	gen_quest()
 	pass
-func xyToIX(x, y): return x + y * N_HORZ
+func xyToIX(x, y) -> int: return x + y * N_HORZ
 func bit_to_num(b):
 	var mask = 1
 	for i in range(N_HORZ):
@@ -106,6 +107,7 @@ func init_candidates():		# 各セルの候補数字計算
 						candidates_bit[xyToIX(x0 + h, y0 + v)] &= ~b
 	pass
 func update_candidates(ix : int, b : int):		# ix に b を入れたときの候補数字更新
+	candidates_bit[ix] = 0
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
 	for t in range(N_HORZ):
@@ -163,7 +165,36 @@ func gen_ans():		# 解答生成
 	print_cells()
 	update_cell_labels()
 	pass
-
+func remove_clue(x, y):
+	var ix = xyToIX(x, y)
+	clue_labels[ix].text = ""
+	cell_bit[ix] = 0
+func gen_quest():
+	gen_ans()
+	for i in range(N_CELLS): input_labels[i].text = ""
+	var lst = []
+	if true:
+		for y in range(5):
+			for x in range(5):
+				lst.push_back(xyToIX(x, y))
+		lst.shuffle()
+		for i in range(9):
+			var x = lst[i] % N_HORZ
+			var y = lst[i] / N_HORZ
+			remove_clue(x, y)
+			remove_clue(N_HORZ - 1 - x, y)
+			remove_clue(x, N_VERT - 1 - y)
+			remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+	else:
+		for i in range(N_CELLS): lst.push_back(i)
+		lst.shuffle()
+		for i in range(3*9):
+			clue_labels[lst[i]].text = ""
+			#input_labels[lst[i]].text = "8"
+			cell_bit[lst[i]] = 0
+	#
+	init_candidates()			# 各セルの候補数字計算
+	print_candidates()
 func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 	var pos
 	for y in range(N_VERT):
@@ -223,20 +254,8 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 				
 	return []
 func _on_TestButton_pressed():
-	gen_ans()
-	for i in range(N_CELLS): input_labels[i].text = ""
-	var lst = []
-	for i in range(N_CELLS): lst.push_back(i)
-	lst.shuffle()
-	for i in range(3*9):
-		clue_labels[lst[i]].text = ""
-		#input_labels[lst[i]].text = "8"
-		cell_bit[lst[i]] = 0
-	#
-	init_candidates()			# 各セルの候補数字計算
-	print_candidates()
+	gen_quest()
 	pass
-
 
 func _on_SolveButton_pressed():
 	var pb = search_fullhouse()
