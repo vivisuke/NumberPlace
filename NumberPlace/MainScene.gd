@@ -1,10 +1,11 @@
 extends Node2D
 
-enum {
-	HORZ = 1,
-	VERT,
-	BOX
-}
+#enum {
+#	HORZ = 1,
+#	VERT,
+#	BOX
+#}
+
 const N_VERT = 9
 const N_HORZ = 9
 const N_CELLS = N_HORZ * N_VERT
@@ -21,6 +22,7 @@ const BIT_9 = 1<<8
 const ALL_BITS = (1<<N_HORZ) - 1
 
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
+var candidates_bit = []		# 入力可能ビット論理和
 var column_used = []		# 各カラムの使用済みビット
 var box_used = []			# 各3x3ブロックの使用済みビット
 #var line_used_bits
@@ -34,6 +36,7 @@ func _ready():
 	randomize()
 	rng.randomize()
 	cell_bit.resize(N_CELLS)
+	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
 	box_used.resize(N_HORZ)
 	for y in range(N_VERT):
@@ -50,6 +53,7 @@ func _ready():
 			$Board.add_child(label)
 	gen_ans()
 	pass
+func xyToIX(x, y): return x + y * N_HORZ
 func bit_to_num(b):
 	var mask = 1
 	for i in range(N_HORZ):
@@ -65,6 +69,15 @@ func print_cells():
 			ix += 1
 		print(lst)
 	print("")
+func print_candidates():
+	var ix = 0
+	for y in range(N_VERT):
+		var txt = ""
+		for x in range(N_HORZ):
+			txt += "%03x " % candidates_bit[ix]
+			ix += 1
+		print(txt)
+	print("")
 func print_box_used():
 	var txt = ""
 	for i in range(box_used.size()):
@@ -76,6 +89,16 @@ func update_cell_labels():
 		for x in range(N_HORZ):
 			clue_labels[ix].text = String(bit_to_num(cell_bit[ix]))
 			ix += 1
+func update_candidates():		# 各セルの候補数字計算
+	for i in range(N_CELLS): candidates_bit[i] = ALL_BITS
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			var b = cell_bit[xyToIX(x, y)]
+			if b != 0:
+				for t in range(N_HORZ):
+					candidates_bit[xyToIX(t, y)] &= ~b
+					candidates_bit[xyToIX(x, t)] &= ~b
+	pass
 # cell_bit[ix] 数字を入れる
 # return: true for 解答生成成功
 func gen_ans_sub(ix : int, line_used):
@@ -123,40 +146,41 @@ func gen_ans():		# 解答生成
 	update_cell_labels()
 	pass
 
-func search_fullhouse() -> Array:	# [] for not found, [ix, bit, HORZ|VERT|BOX]
-	var p
+func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
+	var pos
 	for y in range(N_VERT):
 		var t = ALL_BITS
 		for x in range(N_HORZ):
-			if cell_bit[x+y*N_HORZ] == 0:
-				p = x+y*N_HORZ
+			if cell_bit[xyToIX(x, y)] == 0:
+				pos = xyToIX(x, y)
 			else:
-				t &= ~cell_bit[x+y*N_HORZ]
+				t &= ~cell_bit[xyToIX(x, y)]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-			return [p, t, HORZ]
+			return [pos, t]
 	for x in range(N_HORZ):
 		var t = ALL_BITS
 		for y in range(N_VERT):
-			if cell_bit[x+y*N_HORZ] == 0:
-				p = x+y*N_HORZ
+			if cell_bit[xyToIX(x, y)] == 0:
+				pos = xyToIX(x, y)
 			else:
-				t &= ~cell_bit[x+y*N_HORZ]
+				t &= ~cell_bit[xyToIX(x, y)]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-			return [p, t, VERT]
+			return [pos, t]
 	for y in range(0, N_VERT, 3):
 		for x in range(0, N_HORZ, 3):
-			var ix = x + y * N_HORZ
+			var ix = xyToIX(x, y)
 			var t = ALL_BITS
 			for v in range(3):
 				for h in range(3):
-					if cell_bit[ix+h+v*N_HORZ] == 0:
-						p = ix+h+v*N_HORZ
+					if cell_bit[ix+xyToIX(h, v)] == 0:
+						pos = ix+xyToIX(h, v)
 					else:
-						t &= ~cell_bit[ix+h+v*N_HORZ]
+						t &= ~cell_bit[ix+xyToIX(h, v)]
 				if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-					return [p, t, BOX]
+					return [pos, t]
 	return []
-
+func search_nakid_single() -> Array:	
+	return []
 func _on_TestButton_pressed():
 	gen_ans()
 	var lst = []
@@ -167,13 +191,17 @@ func _on_TestButton_pressed():
 		#input_labels[lst[i]].text = "8"
 		cell_bit[lst[i]] = 0
 	#
+	update_candidates()			# 各セルの候補数字計算
+	print_candidates()
 	pass
 
 
 func _on_SolveButton_pressed():
 	var fh = search_fullhouse()
 	print(fh)
-	if fh == []: return
-	cell_bit[fh[0]] = fh[1]
-	input_labels[fh[0]].text = String(bit_to_num(fh[1]))
+	if fh != []:
+		print("Hullhouse")
+		cell_bit[fh[0]] = fh[1]
+		input_labels[fh[0]].text = String(bit_to_num(fh[1]))
+		return
 	pass # Replace with function body.
