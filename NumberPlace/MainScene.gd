@@ -61,6 +61,9 @@ func bit_to_num(b):
 		if (b & mask) != 0: return i + 1
 		mask <<= 1
 	return 0
+func bit_to_numstr(b):
+	if b == 0: return ""
+	return String(bit_to_num(b))
 func print_cells():
 	var ix = 0
 	for y in range(N_VERT):
@@ -88,14 +91,14 @@ func update_cell_labels():		# 前提：cell_bit[ix] は 0 でない
 	var ix = 0
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
-			clue_labels[ix].text = String(bit_to_num(cell_bit[ix]))
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			ix += 1
 func update_input_labels():		# clue_labels
 	var ix = 0
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			if clue_labels[ix].text == "" && cell_bit[ix] != 0:
-				input_labels[ix].text = String(bit_to_num(cell_bit[ix]))
+				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			ix += 1
 	
 func init_candidates():		# 各セルの候補数字計算
@@ -204,7 +207,7 @@ func gen_quest():
 				for x in range(5):
 					lst.push_back(xyToIX(x, y))
 			lst.shuffle()
-			for i in range(9):
+			for i in range(12):
 				var x = lst[i] % N_HORZ
 				var y = lst[i] / N_HORZ
 				remove_clue(x, y)
@@ -229,7 +232,7 @@ func gen_quest_greedy():
 		for x in range(y, N_HORZ - y):
 			lst.push_back(xyToIX(x, y))
 	lst.shuffle()
-	var stack = []
+	#var stack = []
 	for i in range(lst.size()):
 		stack.push_back(cell_bit)		# 現在の状態を保存
 		var x = lst[i] % N_HORZ
@@ -240,7 +243,14 @@ func gen_quest_greedy():
 		remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
 		if !can_solve():
 			cell_bit = stack.pop_back()
-			clue_labels[xyToIX(x, y)].text = String(bit_to_num(cell_bit[xyToIX(x, y)]))
+			var ix = xyToIX(x, y)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			ix = xyToIX(y, x)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			init_candidates()
 	pass
 func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
@@ -302,7 +312,8 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 				
 	return []
 func _on_TestButton_pressed():
-	gen_quest()
+	#gen_quest()
+	gen_quest_greedy()
 	pass
 func step_solve() -> bool:
 	var pb = search_fullhouse()

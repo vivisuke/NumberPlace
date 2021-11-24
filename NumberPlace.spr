@@ -23,7 +23,7 @@
 0021 ● C 11/23            │ToDo│greedy な問題生成
 0022 ◎ C 11/24 11/24 0.001│ToDo│can_solve()：input ラベルを非更新に
 0023 ◎ C 11/24 11/24 0.001│ToDo│update_input_label()：cell_bit, clue_labels から input_labels テキスト設定
-0024 ● C 11/24            │ToDo│
+0024 ◎ C 11/24 11/24 0.001│ToDo│bit_to_numstr(b) 追加
 0025 ● C 11/24            │ToDo│
 0026 ● C 11/24            │ToDo│
 0027 ● C 11/24            │ToDo│
