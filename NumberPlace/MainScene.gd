@@ -25,6 +25,9 @@ var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
 var column_used = []		# 各カラムの使用済みビット
 var box_used = []			# 各3x3ブロックの使用済みビット
+var rmix_list = []			# 削除位置リスト
+var rmixix					# 次に削除する要素位置
+var nRemoved
 #var line_used_bits
 var clue_labels = []			# 手がかり数字用ラベル配列
 var input_labels = []			# 入力数字用ラベル配列
@@ -53,6 +56,8 @@ func _ready():
 			$Board.add_child(label)
 	#gen_ans()
 	gen_quest()
+	pass
+func _process(delta):
 	pass
 func xyToIX(x, y) -> int: return x + y * N_HORZ
 func bit_to_num(b):
@@ -130,7 +135,7 @@ func update_candidates(ix : int, b : int):		# ix に b を入れたときの候�
 		for h in range(3):
 			candidates_bit[xyToIX(x0 + h, y0 + v)] &= ~b
 
-func clear_input():
+func clear_input():		# 手がかり数字が空のセルの入力ラベルクリア
 	for i in range(N_CELLS):
 		if clue_labels[i].text == "":
 			input_labels[i].text = ""
@@ -180,6 +185,7 @@ func gen_ans():		# 解答生成
 	gen_ans_sub(N_HORZ, 0)
 	print_cells()
 	update_cell_labels()
+	for i in range(N_CELLS): input_labels[i].text = ""		# 入力ラベル全消去
 	pass
 func remove_clue(x, y):
 	var ix = xyToIX(x, y)
@@ -187,7 +193,6 @@ func remove_clue(x, y):
 	cell_bit[ix] = 0
 func gen_quest():
 	gen_ans()
-	for i in range(N_CELLS): input_labels[i].text = ""
 	var lst = []
 	if true:
 		if true:
@@ -226,13 +231,13 @@ func gen_quest():
 	print_candidates()
 func gen_quest_greedy():
 	gen_ans()
-	for i in range(N_CELLS): input_labels[i].text = ""
+	#for i in range(N_CELLS): input_labels[i].text = ""
 	var lst = []
 	for y in range(5):
 		for x in range(y, N_HORZ - y):
 			lst.push_back(xyToIX(x, y))
 	lst.shuffle()
-	#var stack = []
+	var stack = []
 	for i in range(lst.size()):
 		stack.push_back(cell_bit)		# 現在の状態を保存
 		var x = lst[i] % N_HORZ
@@ -313,7 +318,46 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 	return []
 func _on_TestButton_pressed():
 	#gen_quest()
-	gen_quest_greedy()
+	#gen_quest_greedy()
+	if rmix_list.empty():
+		gen_ans()
+		for y in range(5):
+			for x in range(y, N_HORZ - y):
+				rmix_list.push_back(xyToIX(x, y))
+		rmix_list.shuffle()
+		rmixix = 0		# 次に削除する位置
+		nRemoved = 0
+		print("rmix_list: ", rmix_list)
+		print("rmixix: ", rmixix)
+	else:
+		print("rmixix: ", rmixix)
+		if rmixix >= rmix_list.size():
+			rmix_list.clear()
+		else:
+			var sv = cell_bit.duplicate()
+			var x = rmix_list[rmixix] % N_HORZ
+			var y = rmix_list[rmixix] / N_HORZ
+			remove_clue(x, y)
+			remove_clue(y, x)
+			remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+			remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+			if !can_solve():
+				print("CAN NOT SOLVE")
+				cell_bit = sv
+				var ix = xyToIX(x, y)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				ix = xyToIX(y, x)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			else:
+				nRemoved += 1
+				print("can solve, nRemoved = ", nRemoved)
+			rmixix += 1
+			if rmixix == rmix_list.size():
+				print("*** quest is generated ***")
 	pass
 func step_solve() -> bool:
 	var pb = search_fullhouse()
