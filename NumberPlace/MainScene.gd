@@ -84,12 +84,20 @@ func print_box_used():
 	for i in range(box_used.size()):
 		txt += "%03x " % box_used[i]
 	print(txt)
-func update_cell_labels():
+func update_cell_labels():		# 前提：cell_bit[ix] は 0 でない
 	var ix = 0
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			clue_labels[ix].text = String(bit_to_num(cell_bit[ix]))
 			ix += 1
+func update_input_labels():		# clue_labels
+	var ix = 0
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			if clue_labels[ix].text == "" && cell_bit[ix] != 0:
+				input_labels[ix].text = String(bit_to_num(cell_bit[ix]))
+			ix += 1
+	
 func init_candidates():		# 各セルの候補数字計算
 	for i in range(N_CELLS):
 		candidates_bit[i] = ALL_BITS if cell_bit[i] == 0 else 0
@@ -213,6 +221,28 @@ func gen_quest():
 	#
 	init_candidates()			# 各セルの候補数字計算
 	print_candidates()
+func gen_quest_greedy():
+	gen_ans()
+	for i in range(N_CELLS): input_labels[i].text = ""
+	var lst = []
+	for y in range(5):
+		for x in range(y, N_HORZ - y):
+			lst.push_back(xyToIX(x, y))
+	lst.shuffle()
+	var stack = []
+	for i in range(lst.size()):
+		stack.push_back(cell_bit)		# 現在の状態を保存
+		var x = lst[i] % N_HORZ
+		var y = lst[i] / N_HORZ
+		remove_clue(x, y)
+		remove_clue(y, x)
+		remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+		remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+		if !can_solve():
+			cell_bit = stack.pop_back()
+			clue_labels[xyToIX(x, y)].text = String(bit_to_num(cell_bit[xyToIX(x, y)]))
+			init_candidates()
+	pass
 func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 	var pos
 	for y in range(N_VERT):
@@ -279,7 +309,7 @@ func step_solve() -> bool:
 	#print("Hullhouse: ", pb)
 	if pb != []:
 		cell_bit[pb[0]] = pb[1]
-		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
+		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
 		return true
@@ -287,7 +317,7 @@ func step_solve() -> bool:
 	#print("Hidden Single: ", pb)
 	if pb != []:
 		cell_bit[pb[0]] = pb[1]
-		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
+		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
 		return true
@@ -295,7 +325,7 @@ func step_solve() -> bool:
 	#print("Nakid Single: ", pb)
 	if pb != []:
 		cell_bit[pb[0]] = pb[1]
-		input_labels[pb[0]].text = String(bit_to_num(pb[1]))
+		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
 		return true
@@ -305,18 +335,23 @@ func _on_SolveButton_pressed():
 		clear_input()
 	else:
 		step_solve()
+		update_input_labels()
 	print_candidates()
 	pass # Replace with function body.
-
+func can_solve():
+	clear_input()
+	init_candidates()
+	while step_solve():
+		pass
+	return is_filled()
 func is_filled():	# セルが全部埋まっているか？
 	for i in range(cell_bit.size()):
 		if cell_bit[i] == 0: return false
 	return true
 func _on_QustButton_pressed():
-	while step_solve():
-		pass
-	if is_filled():
+	if can_solve():
 		print("solved")
 	else:
 		print("not solved")
+	update_input_labels()
 	pass # Replace with function body.
