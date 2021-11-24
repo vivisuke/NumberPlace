@@ -25,7 +25,7 @@
 0023 ◎ C 11/24 11/24 0.001│ToDo│update_input_label()：cell_bit, clue_labels から input_labels テキスト設定
 0024 ◎ C 11/24 11/24 0.001│ToDo│bit_to_numstr(b) 追加
 0025 ○ C 11/24            │ToDo│cell_bit が手がかり数字かどうかのフラグ is_clues 配列追加？
-0026 ● C 11/25            │ToDo│gen_ans_greedy()：１フレームごとに１つの手がかり数字を消す
+0026 ◎ C 11/25 11/25 0.001│ToDo│１フレームごとに１つの手がかり数字を消す
 0027 ● C 11/25            │ToDo│
 0028 ● C 11/25            │ToDo│
 0029 ● C 11/25            │ToDo│

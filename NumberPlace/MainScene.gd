@@ -58,7 +58,39 @@ func _ready():
 	gen_quest()
 	pass
 func _process(delta):
+	if !rmix_list.empty():
+		var sv = cell_bit.duplicate()
+		var x = rmix_list[rmixix] % N_HORZ
+		var y = rmix_list[rmixix] / N_HORZ
+		remove_clue(x, y)
+		remove_clue(y, x)
+		remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+		remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+		if !can_solve():
+			print("CAN NOT SOLVE")
+			cell_bit = sv
+			var ix = xyToIX(x, y)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			ix = xyToIX(y, x)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
+			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+		else:
+			nRemoved += 1
+			print("can solve, nRemoved = ", nRemoved)
+		rmixix += 1
+		if rmixix == rmix_list.size():
+			rmix_list.clear()
+			print("*** quest is generated ***")
+			print("nEmpty = ", nEmpty())
 	pass
+func nEmpty():
+	var n = 0
+	for i in range(clue_labels.size()):
+		if clue_labels[i].text == "": n += 1
+	return n
 func xyToIX(x, y) -> int: return x + y * N_HORZ
 func bit_to_num(b):
 	var mask = 1
