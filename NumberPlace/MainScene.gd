@@ -83,6 +83,7 @@ func _input(event):
 				input_labels[ix].text = ""
 			else:
 				input_labels[ix].text = num_str
+		update_num_buttons_disabled()
 		update_cell_cursor()
 	pass
 func _process(delta):
@@ -122,6 +123,7 @@ func _process(delta):
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
 			update_cell_cursor()
+			update_num_buttons_disabled()
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
 			print_cells()
@@ -170,6 +172,13 @@ func print_box_used():
 	for i in range(box_used.size()):
 		txt += "%03x " % box_used[i]
 	print(txt)
+func update_num_buttons_disabled():
+	var nUsed = []		# 各数字の使用数 [0] for EMPTY
+	for i in range(N_HORZ+1): nUsed.push_back(0)
+	for ix in range(N_CELLS):
+		nUsed[get_cell_numer(ix)] += 1
+	for i in range(N_HORZ):
+		num_buttons[i].disabled = nUsed[i+1] >= N_HORZ
 func update_cell_labels():		# 前提：cell_bit[ix] は 0 でない
 	var ix = 0
 	for y in range(N_VERT):
@@ -400,6 +409,7 @@ func _on_TestButton_pressed():
 	#gen_quest_greedy()
 	if rmix_list.empty():
 		clear_cell_cursor()
+		update_num_buttons_disabled()
 		gen_ans()
 		for y in range(5):
 			for x in range(y, N_HORZ - y):
