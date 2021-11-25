@@ -23,6 +23,7 @@ const ALL_BITS = (1<<N_HORZ) - 1
 const TILE_NONE = -1
 const TILE_CURSOR = 0
 
+var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
 var column_used = []		# 各カラムの使用済みビット
@@ -45,6 +46,7 @@ func _ready():
 	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
 	box_used.resize(N_HORZ)
+	# 手がかり数字、入力数字用 Label 生成
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			var label = ClueLabel.instance()
@@ -57,8 +59,14 @@ func _ready():
 			label.rect_position = Vector2(x*CELL_WIDTH, y*CELL_WIDTH+2)
 			label.text = ""
 			$Board.add_child(label)
+	#
+	for i in range(N_HORZ):
+		num_buttons.push_back(get_node("Button%d" % (i+1)))
 	#gen_ans()
 	gen_quest()
+	cur_num = 1
+	num_buttons[cur_num - 1].grab_focus()
+	update_cell_cursor()
 	pass
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
