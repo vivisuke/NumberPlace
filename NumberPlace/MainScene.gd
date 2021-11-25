@@ -22,6 +22,9 @@ const BIT_9 = 1<<8
 const ALL_BITS = (1<<N_HORZ) - 1
 const TILE_NONE = -1
 const TILE_CURSOR = 0
+const COLOR_DUP = Color.red
+const COLOR_CLUE = Color.black
+const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
 
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
@@ -85,6 +88,7 @@ func _input(event):
 				input_labels[ix].text = num_str
 		update_num_buttons_disabled()
 		update_cell_cursor()
+		check_duplicated()
 	pass
 func _process(delta):
 	if !rmix_list.empty():
@@ -126,6 +130,7 @@ func _process(delta):
 			num_buttons[cur_num - 1].grab_focus()
 			update_cell_cursor()
 			update_num_buttons_disabled()
+			check_duplicated()
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
 			print_cells()
@@ -151,6 +156,26 @@ func bit_to_num(b):
 func bit_to_numstr(b):
 	if b == 0: return ""
 	return String(bit_to_num(b))
+func is_duplicated(ix : int):
+	var n = get_cell_numer(ix)
+	if n == 0: return false
+	var x = ix % N_HORZ
+	var y = ix / N_HORZ
+	for t in range(N_HORZ):
+		if t != x && get_cell_numer(xyToIX(t, y)) == n:
+			return true
+		if t != y && get_cell_numer(xyToIX(x, t)) == n:
+			return true
+	return false
+func check_duplicated():
+	for ix in range(N_CELLS):
+		if is_duplicated(ix):
+			clue_labels[ix].add_color_override("font_color", COLOR_DUP)
+			input_labels[ix].add_color_override("font_color", COLOR_DUP)
+		else:
+			clue_labels[ix].add_color_override("font_color", COLOR_CLUE)
+			input_labels[ix].add_color_override("font_color", COLOR_INPUT)
+	pass
 func print_cells():
 	var ix = 0
 	for y in range(N_VERT):
