@@ -60,26 +60,48 @@ func _ready():
 	#gen_ans()
 	gen_quest()
 	pass
+func _input(event):
+	if event is InputEventMouseButton && event.is_pressed():
+		if cur_num == 0: return
+		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
+		print(mp)
+		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
+		var ix = xyToIX(mp.x, mp.y)
+		if clue_labels[ix].text != "":
+			pass
+		else:
+			if input_labels[ix].text == "":
+				input_labels[ix].text = String(cur_num)
+	pass
 func _process(delta):
 	if !rmix_list.empty():
 		var sv = cell_bit.duplicate()
 		var x = rmix_list[rmixix] % N_HORZ
 		var y = rmix_list[rmixix] / N_HORZ
-		remove_clue(x, y)
-		remove_clue(y, x)
-		remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
-		remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+		var lst = []
+		lst.push_back(xyToIX(x, y))
+		lst.push_back(xyToIX(y, x))
+		lst.push_back(xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y))
+		lst.push_back(xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x))
+		for i in range(lst.size()):
+			remove_clue_ix(lst[i])
+		#remove_clue(x, y)
+		#remove_clue(y, x)
+		#remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+		#remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
 		if !can_solve():
 			print("CAN NOT SOLVE")
 			cell_bit = sv
-			var ix = xyToIX(x, y)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			ix = xyToIX(y, x)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			for i in range(lst.size()):
+				clue_labels[lst[i]].text = bit_to_numstr(cell_bit[lst[i]])
+			#var ix = xyToIX(x, y)
+			#clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			#ix = xyToIX(y, x)
+			#clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			#ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
+			#clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			#ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
+			#clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 		else:
 			nRemoved += 1
 			print("can solve, nRemoved = ", nRemoved)
@@ -224,10 +246,11 @@ func gen_ans():		# 解答生成
 	update_cell_labels()
 	for i in range(N_CELLS): input_labels[i].text = ""		# 入力ラベル全消去
 	pass
-func remove_clue(x, y):
-	var ix = xyToIX(x, y)
+func remove_clue_ix(ix):
 	clue_labels[ix].text = ""
 	cell_bit[ix] = 0
+func remove_clue(x, y):
+	remove_clue_ix(xyToIX(x, y))
 func gen_quest():
 	gen_ans()
 	var lst = []
