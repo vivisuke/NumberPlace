@@ -72,6 +72,7 @@ func _input(event):
 		else:
 			if input_labels[ix].text == "":
 				input_labels[ix].text = String(cur_num)
+		update_cell_cursor()
 	pass
 func _process(delta):
 	if !rmix_list.empty():
@@ -113,6 +114,12 @@ func _process(delta):
 			print("nEmpty = ", nEmpty())
 			print_cells()
 	pass
+func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
+	if clue_labels[ix].text != "":
+		return int(clue_labels[ix].text)
+	if input_labels[ix].text != "":
+		return int(input_labels[ix].text)
+	return 0
 func nEmpty():
 	var n = 0
 	for i in range(clue_labels.size()):
@@ -474,8 +481,7 @@ func _on_QustButton_pressed():
 func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強調
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
-			var ix = xyToIX(x, y)
-			if cell_bit[ix] != 0 && bit_to_num(cell_bit[ix]) == cur_num:
+			if get_cell_numer(xyToIX(x, y)) == cur_num:
 				$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 			else:
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
@@ -489,7 +495,6 @@ func _on_Button1_pressed():
 	pass # Replace with function body.
 func _on_Button2_pressed():
 	num_button_pressed(2)
-	pass # Replace with function body.
 func _on_Button3_pressed():
 	num_button_pressed(3)
 	pass # Replace with function body.
