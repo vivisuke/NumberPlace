@@ -20,6 +20,8 @@ const BIT_7 = 1<<6
 const BIT_8 = 1<<7
 const BIT_9 = 1<<8
 const ALL_BITS = (1<<N_HORZ) - 1
+const TILE_NONE = -1
+const TILE_CURSOR = 0
 
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
@@ -27,6 +29,7 @@ var column_used = []		# 各カラムの使用済みビット
 var box_used = []			# 各3x3ブロックの使用済みビット
 var rmix_list = []			# 削除位置リスト
 var rmixix					# 次に削除する要素位置
+var cur_num = 0				# 選択されている数字ボタン、0 for 選択無し
 var nRemoved
 #var line_used_bits
 var clue_labels = []			# 手がかり数字用ラベル配列
@@ -83,8 +86,10 @@ func _process(delta):
 		rmixix += 1
 		if rmixix == rmix_list.size():
 			rmix_list.clear()
+			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
+			print_cells()
 	pass
 func nEmpty():
 	var n = 0
@@ -441,4 +446,45 @@ func _on_QustButton_pressed():
 	else:
 		print("not solved")
 	update_input_labels()
+	pass # Replace with function body.
+
+func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強調
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			var ix = xyToIX(x, y)
+			if cell_bit[ix] != 0 && bit_to_num(cell_bit[ix]) == cur_num:
+				$Board/TileMap.set_cell(x, y, TILE_CURSOR)
+			else:
+				$Board/TileMap.set_cell(x, y, TILE_NONE)
+func num_button_pressed(num):
+	cur_num = num
+	update_cell_cursor()
+	pass
+
+func _on_Button1_pressed():
+	num_button_pressed(1)
+	pass # Replace with function body.
+func _on_Button2_pressed():
+	num_button_pressed(2)
+	pass # Replace with function body.
+func _on_Button3_pressed():
+	num_button_pressed(3)
+	pass # Replace with function body.
+func _on_Button4_pressed():
+	num_button_pressed(4)
+	pass # Replace with function body.
+func _on_Button5_pressed():
+	num_button_pressed(5)
+	pass # Replace with function body.
+func _on_Button6_pressed():
+	num_button_pressed(6)
+	pass # Replace with function body.
+func _on_Button7_pressed():
+	num_button_pressed(7)
+	pass # Replace with function body.
+func _on_Button8_pressed():
+	num_button_pressed(8)
+	pass # Replace with function body.
+func _on_Button9_pressed():
+	num_button_pressed(9)
 	pass # Replace with function body.
