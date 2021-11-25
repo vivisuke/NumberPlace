@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://images/question_black.png" type="Texture" id=11]
 [ext_resource path="res://fonts/arialbd.ttf" type="DynamicFontData" id=12]
 [ext_resource path="res://images/lightyellow53x53.png" type="Texture" id=13]
+[ext_resource path="res://Grid.gd" type="Script" id=14]
+[ext_resource path="res://Board.gd" type="Script" id=15]
 
 [sub_resource type="TileSet" id=8]
 0/name = "lightyellow53x53.png 0"
@@ -96,7 +98,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Board" type="TextureRect" parent="."]
+[node name="Board" type="ColorRect" parent="."]
+margin_left = 11.5
+margin_top = 80.0
+margin_right = 488.5
+margin_bottom = 557.0
+script = ExtResource( 15 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileMap" type="TileMap" parent="Board"]
+tile_set = SubResource( 8 )
+cell_size = Vector2( 53, 53 )
+format = 1
+
+[node name="Grid" type="ColorRect" parent="Board"]
+margin_right = 477.0
+margin_bottom = 477.0
+color = Color( 1, 1, 1, 0 )
+script = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Board0" type="TextureRect" parent="."]
+visible = false
 margin_left = 10.5
 margin_top = 80.0
 margin_right = 489.5
@@ -105,13 +132,6 @@ texture = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="TileMap" type="TileMap" parent="Board"]
-position = Vector2( 0.5, 0.5 )
-tile_set = SubResource( 8 )
-cell_size = Vector2( 53, 53 )
-format = 1
-tile_data = PoolIntArray( 0, 0, 0, 65537, 0, 0, 131074, 0, 0, 196611, 0, 0, 262148, 0, 0 )
 
 [node name="TestButton" type="TextureButton" parent="."]
 margin_left = 430.0
