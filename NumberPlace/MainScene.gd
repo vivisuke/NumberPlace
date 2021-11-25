@@ -110,6 +110,7 @@ func _process(delta):
 		if rmixix == rmix_list.size():
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
+			update_cell_cursor()
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
 			print_cells()
@@ -387,6 +388,7 @@ func _on_TestButton_pressed():
 	#gen_quest()
 	#gen_quest_greedy()
 	if rmix_list.empty():
+		clear_cell_cursor()
 		gen_ans()
 		for y in range(5):
 			for x in range(y, N_HORZ - y):
@@ -478,10 +480,14 @@ func _on_QustButton_pressed():
 	update_input_labels()
 	pass # Replace with function body.
 
+func clear_cell_cursor():
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			$Board/TileMap.set_cell(x, y, TILE_NONE)
 func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強調
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
-			if get_cell_numer(xyToIX(x, y)) == cur_num:
+			if cur_num != 0 && get_cell_numer(xyToIX(x, y)) == cur_num:
 				$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 			else:
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
