@@ -63,10 +63,10 @@ func _ready():
 	for i in range(N_HORZ):
 		num_buttons.push_back(get_node("Button%d" % (i+1)))
 	#gen_ans()
-	gen_quest()
-	cur_num = 1
-	num_buttons[cur_num - 1].grab_focus()
-	update_cell_cursor()
+	gen_quest_greedy()
+	#cur_num = 1
+	#num_buttons[cur_num - 1].grab_focus()
+	#update_cell_cursor()
 	pass
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
@@ -122,6 +122,8 @@ func _process(delta):
 		if rmixix == rmix_list.size():
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
+			cur_num = 1
+			num_buttons[cur_num - 1].grab_focus()
 			update_cell_cursor()
 			update_num_buttons_disabled()
 			print("*** quest is generated ***")
@@ -318,33 +320,47 @@ func gen_quest():
 	init_candidates()			# 各セルの候補数字計算
 	print_candidates()
 func gen_quest_greedy():
-	gen_ans()
-	#for i in range(N_CELLS): input_labels[i].text = ""
-	var lst = []
-	for y in range(5):
-		for x in range(y, N_HORZ - y):
-			lst.push_back(xyToIX(x, y))
-	lst.shuffle()
-	var stack = []
-	for i in range(lst.size()):
-		stack.push_back(cell_bit)		# 現在の状態を保存
-		var x = lst[i] % N_HORZ
-		var y = lst[i] / N_HORZ
-		remove_clue(x, y)
-		remove_clue(y, x)
-		remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
-		remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
-		if !can_solve():
-			cell_bit = stack.pop_back()
-			var ix = xyToIX(x, y)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			ix = xyToIX(y, x)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
-			clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-			init_candidates()
+	if true:
+		if rmix_list.empty():
+			clear_cell_cursor()
+			update_num_buttons_disabled()
+			gen_ans()
+			for y in range(5):
+				for x in range(y, N_HORZ - y):
+					rmix_list.push_back(xyToIX(x, y))
+			rmix_list.shuffle()
+			rmixix = 0		# 次に削除する位置
+			nRemoved = 0
+			print("rmix_list: ", rmix_list)
+			print("rmixix: ", rmixix)
+	else:
+		gen_ans()
+		#for i in range(N_CELLS): input_labels[i].text = ""
+		var lst = []
+		for y in range(5):
+			for x in range(y, N_HORZ - y):
+				lst.push_back(xyToIX(x, y))
+		lst.shuffle()
+		var stack = []
+		for i in range(lst.size()):
+			stack.push_back(cell_bit)		# 現在の状態を保存
+			var x = lst[i] % N_HORZ
+			var y = lst[i] / N_HORZ
+			remove_clue(x, y)
+			remove_clue(y, x)
+			remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+			remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+			if !can_solve():
+				cell_bit = stack.pop_back()
+				var ix = xyToIX(x, y)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				ix = xyToIX(y, x)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				init_candidates()
 	pass
 func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 	var pos
@@ -406,48 +422,49 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 	return []
 func _on_TestButton_pressed():
 	#gen_quest()
-	#gen_quest_greedy()
-	if rmix_list.empty():
-		clear_cell_cursor()
-		update_num_buttons_disabled()
-		gen_ans()
-		for y in range(5):
-			for x in range(y, N_HORZ - y):
-				rmix_list.push_back(xyToIX(x, y))
-		rmix_list.shuffle()
-		rmixix = 0		# 次に削除する位置
-		nRemoved = 0
-		print("rmix_list: ", rmix_list)
-		print("rmixix: ", rmixix)
-	else:
-		print("rmixix: ", rmixix)
-		if rmixix >= rmix_list.size():
-			rmix_list.clear()
+	gen_quest_greedy()
+	if false:
+		if rmix_list.empty():
+			clear_cell_cursor()
+			update_num_buttons_disabled()
+			gen_ans()
+			for y in range(5):
+				for x in range(y, N_HORZ - y):
+					rmix_list.push_back(xyToIX(x, y))
+			rmix_list.shuffle()
+			rmixix = 0		# 次に削除する位置
+			nRemoved = 0
+			print("rmix_list: ", rmix_list)
+			print("rmixix: ", rmixix)
 		else:
-			var sv = cell_bit.duplicate()
-			var x = rmix_list[rmixix] % N_HORZ
-			var y = rmix_list[rmixix] / N_HORZ
-			remove_clue(x, y)
-			remove_clue(y, x)
-			remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
-			remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
-			if !can_solve():
-				print("CAN NOT SOLVE")
-				cell_bit = sv
-				var ix = xyToIX(x, y)
-				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-				ix = xyToIX(y, x)
-				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-				ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
-				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
-				ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
-				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			print("rmixix: ", rmixix)
+			if rmixix >= rmix_list.size():
+				rmix_list.clear()
 			else:
-				nRemoved += 1
-				print("can solve, nRemoved = ", nRemoved)
-			rmixix += 1
-			if rmixix == rmix_list.size():
-				print("*** quest is generated ***")
+				var sv = cell_bit.duplicate()
+				var x = rmix_list[rmixix] % N_HORZ
+				var y = rmix_list[rmixix] / N_HORZ
+				remove_clue(x, y)
+				remove_clue(y, x)
+				remove_clue(N_HORZ - 1 - x, N_VERT - 1 - y)
+				remove_clue(N_VERT - 1 - y, N_HORZ - 1 - x)
+				if !can_solve():
+					print("CAN NOT SOLVE")
+					cell_bit = sv
+					var ix = xyToIX(x, y)
+					clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+					ix = xyToIX(y, x)
+					clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+					ix = xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y)
+					clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+					ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
+					clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+				else:
+					nRemoved += 1
+					print("can solve, nRemoved = ", nRemoved)
+				rmixix += 1
+				if rmixix == rmix_list.size():
+					print("*** quest is generated ***")
 	pass
 func step_solve() -> bool:
 	var pb = search_fullhouse()
