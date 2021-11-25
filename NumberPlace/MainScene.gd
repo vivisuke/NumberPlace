@@ -78,8 +78,11 @@ func _input(event):
 		if clue_labels[ix].text != "":
 			pass
 		else:
-			if input_labels[ix].text == "":
-				input_labels[ix].text = String(cur_num)
+			var num_str = String(cur_num)
+			if input_labels[ix].text == num_str:
+				input_labels[ix].text = ""
+			else:
+				input_labels[ix].text = num_str
 		update_cell_cursor()
 	pass
 func _process(delta):
