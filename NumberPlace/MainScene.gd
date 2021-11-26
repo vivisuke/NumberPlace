@@ -25,10 +25,14 @@ const TILE_CURSOR = 0
 const COLOR_DUP = Color.red
 const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
+const DFCLT_FULLHOUSE = 1
+const DFCLT_HIDDEN_SINGLE = 2
+const DFCLT_NAKID_SINGLE = 10
 
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
+var diffculty = 0			# 難易度、フルハウス: 1, 隠れたシングル: 2, 裸のシングル: 10pnt？
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
@@ -153,6 +157,7 @@ func _process(delta):
 			print("can solve, nRemoved = ", nRemoved)
 		rmixix += 1
 		if rmixix == rmix_list.size():
+			can_solve()			# 難易度を再計算
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
 			cur_num = 1
@@ -162,8 +167,10 @@ func _process(delta):
 			update_num_buttons_disabled()
 			update_NEmptyLabel()
 			check_duplicated()
+			$DfcltLabel.text = "dfclt: %.1f" % (diffculty/10.0)
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
+			print("diffculty = ", diffculty)
 			print_cells()
 			elapsedTime = 0.0
 	pass
@@ -525,7 +532,7 @@ func _on_TestButton_pressed():
 				if rmixix == rmix_list.size():
 					print("*** quest is generated ***")
 	pass
-func step_solve() -> bool:
+func step_solve() -> int:
 	var pb = search_fullhouse()
 	#print("Hullhouse: ", pb)
 	if pb != []:
@@ -533,7 +540,7 @@ func step_solve() -> bool:
 		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
-		return true
+		return DFCLT_FULLHOUSE
 	pb = search_hidden_single()
 	#print("Hidden Single: ", pb)
 	if pb != []:
@@ -541,7 +548,7 @@ func step_solve() -> bool:
 		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
-		return true
+		return DFCLT_HIDDEN_SINGLE
 	pb = search_nakid_single()
 	#print("Nakid Single: ", pb)
 	if pb != []:
@@ -549,8 +556,8 @@ func step_solve() -> bool:
 		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
-		return true
-	return false
+		return DFCLT_NAKID_SINGLE
+	return 0
 func _on_SolveButton_pressed():
 	if is_filled():
 		clear_input()
@@ -562,8 +569,11 @@ func _on_SolveButton_pressed():
 func can_solve():
 	clear_input()
 	init_candidates()
-	while step_solve():
-		pass
+	diffculty = 0
+	while true:
+		var d = step_solve()
+		if d == 0: break
+		diffculty += d
 	return is_filled()
 func is_filled():	# セルが全部埋まっているか？
 	for i in range(cell_bit.size()):
