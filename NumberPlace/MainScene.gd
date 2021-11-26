@@ -76,10 +76,10 @@ func _ready():
 	update_NEmptyLabel()
 	pass
 func update_NEmptyLabel():
-	var n = 0
+	nEmpty = 0
 	for ix in range(N_CELLS):
-		if get_cell_numer(ix) == 0: n += 1
-	$NEmptyLabel.text = "#spc: %d" % n
+		if get_cell_numer(ix) == 0: nEmpty += 1
+	$NEmptyLabel.text = "#spc: %d" % nEmpty
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if cur_num == 0: return
@@ -108,8 +108,10 @@ func _input(event):
 func set_num_cursor(num):
 	cur_num = num
 	num_buttons[num - 1].grab_focus()
+func is_solved():
+	return nEmpty == 0 && nDuplicated == 0
 func _process(delta):
-	if true:	# undone クリア時はスキップ
+	if !is_solved():	# undone クリア時はスキップ
 		elapsedTime += delta
 		var sec = int(elapsedTime)
 		var h = sec / (60*60)
