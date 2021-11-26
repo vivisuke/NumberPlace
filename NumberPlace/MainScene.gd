@@ -630,3 +630,8 @@ func _on_Button8_pressed():
 func _on_Button9_pressed():
 	num_button_pressed(9)
 	pass # Replace with function body.
+
+
+func _on_NextButton_pressed():
+	gen_quest_greedy()
+	pass # Replace with function body.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -15,10 +15,21 @@
 [ext_resource path="res://images/lightyellow53x53.png" type="Texture" id=13]
 [ext_resource path="res://Grid.gd" type="Script" id=14]
 [ext_resource path="res://Board.gd" type="Script" id=15]
+[ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=16]
+[ext_resource path="res://images/undo_black.png" type="Texture" id=17]
+[ext_resource path="res://images/undo_white.png" type="Texture" id=18]
+[ext_resource path="res://images/redo_white.png" type="Texture" id=19]
+[ext_resource path="res://images/redo_black.png" type="Texture" id=20]
+[ext_resource path="res://images/restart_black.png" type="Texture" id=21]
+[ext_resource path="res://images/restart_white.png" type="Texture" id=22]
+[ext_resource path="res://images/skip_next_black.png" type="Texture" id=23]
+[ext_resource path="res://images/skip_next_white.png" type="Texture" id=24]
+[ext_resource path="res://images/pause_black.png" type="Texture" id=25]
+[ext_resource path="res://images/pause_white.png" type="Texture" id=26]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
-font_data = ExtResource( 12 )
+font_data = ExtResource( 16 )
 
 [sub_resource type="TileSet" id=8]
 0/name = "lightyellow53x53.png 0"
@@ -35,6 +46,9 @@ font_data = ExtResource( 12 )
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
+
+[sub_resource type="DynamicFont" id=12]
+font_data = ExtResource( 16 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -78,6 +92,10 @@ shadow_size = 4
 shadow_offset = Vector2( 2, 2 )
 
 [sub_resource type="StyleBoxFlat" id=10]
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -130,7 +148,7 @@ margin_right = 487.0
 margin_bottom = 79.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 11 )
-text = "spc: 0"
+text = "#spc: 0"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -184,38 +202,157 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TestButton" type="TextureButton" parent="."]
-margin_left = 430.0
-margin_top = 585.0
-margin_right = 478.0
-margin_bottom = 633.0
+[node name="RedoButton" type="TextureButton" parent="."]
+margin_left = 434.0
+margin_top = 590.0
+margin_right = 482.0
+margin_bottom = 638.0
+texture_normal = ExtResource( 20 )
+texture_pressed = ExtResource( 19 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="RedoButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "redo"
+align = 1
+
+[node name="UndoButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 590.0
+margin_right = 421.0
+margin_bottom = 638.0
+texture_normal = ExtResource( 17 )
+texture_pressed = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UndoButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "undo"
+align = 1
+
+[node name="RestartButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 670.0
+margin_right = 421.0
+margin_bottom = 718.0
+texture_normal = ExtResource( 21 )
+texture_pressed = ExtResource( 22 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="RestartButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "restart"
+align = 1
+
+[node name="PauseButton" type="TextureButton" parent="."]
+margin_left = 434.0
+margin_top = 670.0
+margin_right = 482.0
+margin_bottom = 718.0
+texture_normal = ExtResource( 25 )
+texture_pressed = ExtResource( 26 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PauseButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "pause"
+align = 1
+
+[node name="HintButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 750.0
+margin_right = 421.0
+margin_bottom = 798.0
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Label" type="Label" parent="HintButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "hint"
+align = 1
+
+[node name="NextButton" type="TextureButton" parent="."]
+margin_left = 434.0
+margin_top = 750.0
+margin_right = 482.0
+margin_bottom = 798.0
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="NextButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "next"
+align = 1
+
 [node name="SolveButton" type="TextureButton" parent="."]
-margin_left = 380.0
-margin_top = 585.0
-margin_right = 428.0
-margin_bottom = 633.0
+visible = false
+margin_left = 14.0
+margin_top = 670.0
+margin_right = 62.0
+margin_bottom = 718.0
 texture_normal = ExtResource( 9 )
 texture_pressed = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="QustButton" type="TextureButton" parent="."]
-margin_left = 11.0
-margin_top = 585.0
-margin_right = 59.0
-margin_bottom = 633.0
+[node name="HelpButton" type="TextureButton" parent="."]
+margin_left = 14.0
+margin_top = 590.0
+margin_right = 62.0
+margin_bottom = 638.0
 texture_normal = ExtResource( 11 )
 texture_pressed = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Label" type="Label" parent="HelpButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "help"
+align = 1
 
 [node name="Button1" type="Button" parent="."]
 anchor_left = 26.0
@@ -406,9 +543,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="TestButton" to="." method="_on_TestButton_pressed"]
+[connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
-[connection signal="pressed" from="QustButton" to="." method="_on_QustButton_pressed"]
+[connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
 [connection signal="pressed" from="Button1" to="." method="_on_Button1_pressed"]
 [connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
 [connection signal="pressed" from="Button3" to="." method="_on_Button3_pressed"]
