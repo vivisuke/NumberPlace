@@ -26,6 +26,7 @@ const COLOR_DUP = Color.red
 const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
 
+var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
@@ -99,6 +100,14 @@ func set_num_cursor(num):
 	cur_num = num
 	num_buttons[num - 1].grab_focus()
 func _process(delta):
+	if true:	# undone クリア時はスキップ
+		elapsedTime += delta
+		var sec = int(elapsedTime)
+		var h = sec / (60*60)
+		sec -= h * (60*60)
+		var m = sec / 60
+		sec -= m * 60
+		$TimeLabel.text = "%02d:%02d:%02d" % [h, m, sec]
 	#if cur_num != 0: set_num_cursor(cur_num)
 	if !rmix_list.empty():
 		var sv = cell_bit.duplicate()
@@ -144,6 +153,7 @@ func _process(delta):
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
 			print_cells()
+			elapsedTime = 0.0
 	pass
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":

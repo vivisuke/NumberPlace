@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -15,6 +15,10 @@
 [ext_resource path="res://images/lightyellow53x53.png" type="Texture" id=13]
 [ext_resource path="res://Grid.gd" type="Script" id=14]
 [ext_resource path="res://Board.gd" type="Script" id=15]
+
+[sub_resource type="DynamicFont" id=11]
+size = 18
+font_data = ExtResource( 12 )
 
 [sub_resource type="TileSet" id=8]
 0/name = "lightyellow53x53.png 0"
@@ -103,6 +107,19 @@ margin_bottom = 49.0
 hint_tooltip = "Back"
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeLabel" type="Label" parent="."]
+margin_left = 415.0
+margin_top = 60.0
+margin_right = 487.0
+margin_bottom = 81.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 11 )
+text = "00:00:00"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
