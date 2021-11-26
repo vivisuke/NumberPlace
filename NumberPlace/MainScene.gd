@@ -89,8 +89,17 @@ func _input(event):
 		update_num_buttons_disabled()
 		update_cell_cursor()
 		check_duplicated()
+	if event is InputEventKey && event.is_pressed():
+		print(event.as_text())
+		var n = int(event.as_text())
+		if n >= 1 && n <= 9:
+			num_button_pressed(n)
 	pass
+func set_num_cursor(num):
+	cur_num = num
+	num_buttons[num - 1].grab_focus()
 func _process(delta):
+	#if cur_num != 0: set_num_cursor(cur_num)
 	if !rmix_list.empty():
 		var sv = cell_bit.duplicate()
 		var x = rmix_list[rmixix] % N_HORZ
@@ -127,7 +136,8 @@ func _process(delta):
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
 			cur_num = 1
-			num_buttons[cur_num - 1].grab_focus()
+			set_num_cursor(cur_num)
+			#num_buttons[cur_num - 1].grab_focus()
 			update_cell_cursor()
 			update_num_buttons_disabled()
 			check_duplicated()
@@ -555,7 +565,8 @@ func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強�
 			else:
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
 func num_button_pressed(num):
-	cur_num = num
+	#cur_num = num
+	set_num_cursor(num)
 	update_cell_cursor()
 	pass
 
