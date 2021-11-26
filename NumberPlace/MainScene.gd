@@ -27,6 +27,8 @@ const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
 
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
+var nEmpty = 0				# 空欄数
+var nDuplicated = 0			# 重複数字数
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
@@ -71,7 +73,13 @@ func _ready():
 	#cur_num = 1
 	#num_buttons[cur_num - 1].grab_focus()
 	#update_cell_cursor()
+	update_NEmptyLabel()
 	pass
+func update_NEmptyLabel():
+	var n = 0
+	for ix in range(N_CELLS):
+		if get_cell_numer(ix) == 0: n += 1
+	$NEmptyLabel.text = "#spc: %d" % n
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if cur_num == 0: return
@@ -89,6 +97,7 @@ func _input(event):
 				input_labels[ix].text = num_str
 		update_num_buttons_disabled()
 		update_cell_cursor()
+		update_NEmptyLabel()
 		check_duplicated()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
@@ -149,6 +158,7 @@ func _process(delta):
 			#num_buttons[cur_num - 1].grab_focus()
 			update_cell_cursor()
 			update_num_buttons_disabled()
+			update_NEmptyLabel()
 			check_duplicated()
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
@@ -188,8 +198,10 @@ func is_duplicated(ix : int):
 			return true
 	return false
 func check_duplicated():
+	nDuplicated = 0
 	for ix in range(N_CELLS):
 		if is_duplicated(ix):
+			nDuplicated += 1
 			clue_labels[ix].add_color_override("font_color", COLOR_DUP)
 			input_labels[ix].add_color_override("font_color", COLOR_DUP)
 		else:
