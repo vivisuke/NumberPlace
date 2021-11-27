@@ -32,6 +32,9 @@ const OPT_BEGINNER = 0
 const OPT_EASY = 1
 const OPT_NORMAL = 2
 const N_EMPTY_BEGINNER = 32
+const UNDO_ITEM_IX = 0
+const UNDO_ITEM_OLD = 1
+const UNDO_ITEM_NEW = 2
 
 var paused = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
@@ -49,8 +52,10 @@ var rmixix					# 次に削除する要素位置
 var cur_num = 0				# 選択されている数字ボタン、0 for 選択無し
 var nRemoved
 #var line_used_bits
-var clue_labels = []			# 手がかり数字用ラベル配列
-var input_labels = []			# 入力数字用ラベル配列
+var clue_labels = []		# 手がかり数字用ラベル配列
+var input_labels = []		# 入力数字用ラベル配列
+var undo_ix = 0
+var undo_stack = []			# 要素：[ix old new]、old, new は 0～9 の数値、0 for 空欄
 var ClueLabel = load("res://ClueLabel.tscn")
 var InputLabel = load("res://InputLabel.tscn")
 var rng = RandomNumberGenerator.new()
@@ -87,12 +92,21 @@ func _ready():
 	#num_buttons[cur_num - 1].grab_focus()
 	#update_cell_cursor()
 	update_NEmptyLabel()
+	update_undo_redo()
 	pass
 func update_NEmptyLabel():
 	nEmpty = 0
 	for ix in range(N_CELLS):
 		if get_cell_numer(ix) == 0: nEmpty += 1
 	$NEmptyLabel.text = "#spc: %d" % nEmpty
+func update_undo_redo():
+	$UndoButton.disabled = undo_ix == 0
+	$RedoButton.disabled = undo_ix == undo_stack.size()
+func push_to_undo_stack(item):
+	if undo_stack.size() > undo_ix:
+		undo_stack.resize(undo_ix)
+	undo_stack.push_back(item)
+	undo_ix += 1
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if cur_num == 0: return
@@ -105,9 +119,12 @@ func _input(event):
 		else:
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
+				push_to_undo_stack([ix, int(cur_num), 0])
 				input_labels[ix].text = ""
 			else:
+				push_to_undo_stack([ix, int(input_labels[ix].text), int(cur_num)])
 				input_labels[ix].text = num_str
+		update_undo_redo()
 		update_num_buttons_disabled()
 		update_cell_cursor()
 		update_NEmptyLabel()
@@ -172,10 +189,11 @@ func _process(delta):
 			cur_num = 1
 			set_num_cursor(cur_num)
 			#num_buttons[cur_num - 1].grab_focus()
-			update_cell_cursor()
-			update_num_buttons_disabled()
-			update_NEmptyLabel()
-			check_duplicated()
+			update_all_status()
+			#update_cell_cursor()
+			#update_num_buttons_disabled()
+			#update_NEmptyLabel()
+			#check_duplicated()
 			$DfcltLabel.text = "dfclt: %.1f" % (diffculty/10.0)
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
@@ -183,6 +201,12 @@ func _process(delta):
 			print_cells()
 			elapsedTime = 0.0
 	pass
+func update_all_status():
+	update_undo_redo()
+	update_cell_cursor()
+	update_NEmptyLabel()
+	update_num_buttons_disabled()
+	check_duplicated()
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
@@ -675,8 +699,23 @@ func _on_RestartButton_pressed():
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "":
 			input_labels[ix].text = ""
-	update_num_buttons_disabled()
-	update_cell_cursor()
-	update_NEmptyLabel()
-	check_duplicated()
+	update_all_status()
 	pass # Replace with function body.
+
+
+func _on_UndoButton_pressed():
+	undo_ix -= 1
+	var item = undo_stack[undo_ix]
+	var txt = String(item[UNDO_ITEM_OLD]) if item[UNDO_ITEM_OLD] != 0 else ""
+	input_labels[item[UNDO_ITEM_IX]].text = txt
+	update_all_status()
+	pass
+
+
+func _on_RedoButton_pressed():
+	var item = undo_stack[undo_ix]
+	var txt = String(item[UNDO_ITEM_NEW]) if item[UNDO_ITEM_NEW] != 0 else ""
+	input_labels[item[UNDO_ITEM_IX]].text = txt
+	undo_ix += 1
+	update_all_status()
+	pass

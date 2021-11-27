@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -28,6 +28,8 @@
 [ext_resource path="res://images/pause_white.png" type="Texture" id=26]
 [ext_resource path="res://images/table_white.png" type="Texture" id=27]
 [ext_resource path="res://images/table_black.png" type="Texture" id=28]
+[ext_resource path="res://images/undo_gray.png" type="Texture" id=29]
+[ext_resource path="res://images/redo_gray.png" type="Texture" id=30]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -221,26 +223,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RedoButton" type="TextureButton" parent="."]
-margin_left = 77.0
-margin_top = 590.0
-margin_right = 125.0
-margin_bottom = 638.0
-texture_normal = ExtResource( 20 )
-texture_pressed = ExtResource( 19 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="RedoButton"]
-margin_top = 46.0
-margin_right = 48.0
-margin_bottom = 65.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "redo"
-align = 1
-
 [node name="UndoButton" type="TextureButton" parent="."]
 margin_left = 14.0
 margin_top = 590.0
@@ -248,6 +230,7 @@ margin_right = 62.0
 margin_bottom = 638.0
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 18 )
+texture_disabled = ExtResource( 29 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -259,6 +242,27 @@ margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "undo"
+align = 1
+
+[node name="RedoButton" type="TextureButton" parent="."]
+margin_left = 77.0
+margin_top = 590.0
+margin_right = 125.0
+margin_bottom = 638.0
+texture_normal = ExtResource( 20 )
+texture_pressed = ExtResource( 19 )
+texture_disabled = ExtResource( 30 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="RedoButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "redo"
 align = 1
 
 [node name="RestartButton" type="TextureButton" parent="."]
@@ -595,6 +599,8 @@ __meta__ = {
 "_editor_description_": ""
 }
 
+[connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
+[connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
