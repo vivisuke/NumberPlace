@@ -28,10 +28,15 @@ const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
 const DFCLT_FULLHOUSE = 1
 const DFCLT_HIDDEN_SINGLE = 2
 const DFCLT_NAKID_SINGLE = 10
+const OPT_BEGINNER = 0
+const OPT_EASY = 1
+const OPT_NORMAL = 2
+const N_EMPTY_BEGINNER = 32
 
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
+var optGrade = -1			# 問題グレード、0: 入門、1:初級、2:ノーマル（初中級）
 var diffculty = 0			# 難易度、フルハウス: 1, 隠れたシングル: 2, 裸のシングル: 10pnt？
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
@@ -72,6 +77,9 @@ func _ready():
 	#
 	for i in range(N_HORZ):
 		num_buttons.push_back(get_node("Button%d" % (i+1)))
+	$OptionButton.add_item(" Beginner")
+	$OptionButton.add_item(" Easy")
+	$OptionButton.add_item(" Normal")
 	#gen_ans()
 	gen_quest_greedy()
 	#cur_num = 1
@@ -156,7 +164,7 @@ func _process(delta):
 			nRemoved += 1
 			print("can solve, nRemoved = ", nRemoved)
 		rmixix += 1
-		if rmixix == rmix_list.size():
+		if rmixix == rmix_list.size() || optGrade == OPT_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
@@ -386,6 +394,7 @@ func gen_quest():
 	init_candidates()			# 各セルの候補数字計算
 	print_candidates()
 func gen_quest_greedy():
+	optGrade = $OptionButton.get_selected_id()
 	if true:
 		if rmix_list.empty():
 			clear_cell_cursor()
@@ -549,6 +558,7 @@ func step_solve() -> int:
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
 		return DFCLT_HIDDEN_SINGLE
+	if optGrade < OPT_NORMAL: return 0
 	pb = search_nakid_single()
 	#print("Nakid Single: ", pb)
 	if pb != []:
@@ -633,5 +643,7 @@ func _on_Button9_pressed():
 
 
 func _on_NextButton_pressed():
+	#print("sel id = ", $OptionButton.get_selected_id())
 	gen_quest_greedy()
+	#print("sel id = ", $OptionButton.get_selected_id())
 	pass # Replace with function body.
