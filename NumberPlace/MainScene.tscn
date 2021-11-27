@@ -573,6 +573,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 
+[connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]

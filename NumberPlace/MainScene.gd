@@ -33,6 +33,7 @@ const OPT_EASY = 1
 const OPT_NORMAL = 2
 const N_EMPTY_BEGINNER = 32
 
+var paused = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
@@ -123,7 +124,7 @@ func set_num_cursor(num):
 func is_solved():
 	return nEmpty == 0 && nDuplicated == 0
 func _process(delta):
-	if !is_solved():	# undone クリア時はスキップ
+	if !is_solved() && !paused:	# undone クリア時はスキップ
 		elapsedTime += delta
 		var sec = int(elapsedTime)
 		var h = sec / (60*60)
@@ -194,6 +195,7 @@ func nEmpty():
 		if clue_labels[i].text == "": n += 1
 	return n
 func xyToIX(x, y) -> int: return x + y * N_HORZ
+func num_to_bit(n : int): return 1 << (n-1)
 func bit_to_num(b):
 	var mask = 1
 	for i in range(N_HORZ):
@@ -646,4 +648,25 @@ func _on_NextButton_pressed():
 	#print("sel id = ", $OptionButton.get_selected_id())
 	gen_quest_greedy()
 	#print("sel id = ", $OptionButton.get_selected_id())
+	pass # Replace with function body.
+
+
+func _on_PauseButton_pressed():
+	paused = !paused
+	if paused:
+		for ix in range(N_CELLS):
+			if clue_labels[ix].text != "":
+				cell_bit[ix] = num_to_bit(int(clue_labels[ix].text))
+				clue_labels[ix].text = "?"
+			elif input_labels[ix].text != "":
+				cell_bit[ix] = num_to_bit(int(input_labels[ix].text))
+				input_labels[ix].text = "?"
+			else:
+				cell_bit[ix] = 0
+	else:
+		for ix in range(N_CELLS):
+			if clue_labels[ix].text != "":
+				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			elif input_labels[ix].text != "":
+				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
 	pass # Replace with function body.
