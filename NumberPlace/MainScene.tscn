@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -26,6 +26,8 @@
 [ext_resource path="res://images/skip_next_white.png" type="Texture" id=24]
 [ext_resource path="res://images/pause_black.png" type="Texture" id=25]
 [ext_resource path="res://images/pause_white.png" type="Texture" id=26]
+[ext_resource path="res://images/table_white.png" type="Texture" id=27]
+[ext_resource path="res://images/table_black.png" type="Texture" id=28]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -220,9 +222,9 @@ __meta__ = {
 }
 
 [node name="RedoButton" type="TextureButton" parent="."]
-margin_left = 434.0
+margin_left = 77.0
 margin_top = 590.0
-margin_right = 482.0
+margin_right = 125.0
 margin_bottom = 638.0
 texture_normal = ExtResource( 20 )
 texture_pressed = ExtResource( 19 )
@@ -240,9 +242,9 @@ text = "redo"
 align = 1
 
 [node name="UndoButton" type="TextureButton" parent="."]
-margin_left = 373.0
+margin_left = 14.0
 margin_top = 590.0
-margin_right = 421.0
+margin_right = 62.0
 margin_bottom = 638.0
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 18 )
@@ -261,9 +263,9 @@ align = 1
 
 [node name="RestartButton" type="TextureButton" parent="."]
 margin_left = 373.0
-margin_top = 670.0
+margin_top = 590.0
 margin_right = 421.0
-margin_bottom = 718.0
+margin_bottom = 638.0
 texture_normal = ExtResource( 21 )
 texture_pressed = ExtResource( 22 )
 __meta__ = {
@@ -281,9 +283,9 @@ align = 1
 
 [node name="PauseButton" type="TextureButton" parent="."]
 margin_left = 434.0
-margin_top = 670.0
+margin_top = 590.0
 margin_right = 482.0
-margin_bottom = 718.0
+margin_bottom = 638.0
 texture_normal = ExtResource( 25 )
 texture_pressed = ExtResource( 26 )
 __meta__ = {
@@ -301,9 +303,9 @@ align = 1
 
 [node name="HintButton" type="TextureButton" parent="."]
 margin_left = 77.0
-margin_top = 590.0
+margin_top = 670.0
 margin_right = 125.0
-margin_bottom = 638.0
+margin_bottom = 718.0
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 __meta__ = {
@@ -317,6 +319,26 @@ margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "hint"
+align = 1
+
+[node name="CreateButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 750.0
+margin_right = 421.0
+margin_bottom = 798.0
+texture_normal = ExtResource( 28 )
+texture_pressed = ExtResource( 27 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CreateButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "create"
 align = 1
 
 [node name="NextButton" type="TextureButton" parent="."]
@@ -353,9 +375,9 @@ __meta__ = {
 
 [node name="HelpButton" type="TextureButton" parent="."]
 margin_left = 14.0
-margin_top = 590.0
+margin_top = 670.0
 margin_right = 62.0
-margin_bottom = 638.0
+margin_bottom = 718.0
 texture_normal = ExtResource( 11 )
 texture_pressed = ExtResource( 10 )
 __meta__ = {
@@ -561,10 +583,10 @@ __meta__ = {
 }
 
 [node name="OptionButton" type="OptionButton" parent="."]
-margin_left = 14.0
-margin_top = 750.0
-margin_right = 125.0
-margin_bottom = 802.0
+margin_left = 373.0
+margin_top = 670.0
+margin_right = 484.0
+margin_bottom = 722.0
 custom_fonts/font = SubResource( 13 )
 custom_styles/normal = SubResource( 14 )
 text = "beginer"
@@ -573,6 +595,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 
+[connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]

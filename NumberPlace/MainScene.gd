@@ -670,3 +670,13 @@ func _on_PauseButton_pressed():
 			elif input_labels[ix].text != "":
 				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
 	pass # Replace with function body.
+
+func _on_RestartButton_pressed():
+	for ix in range(N_CELLS):
+		if input_labels[ix].text != "":
+			input_labels[ix].text = ""
+	update_num_buttons_disabled()
+	update_cell_cursor()
+	update_NEmptyLabel()
+	check_duplicated()
+	pass # Replace with function body.
