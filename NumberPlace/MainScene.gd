@@ -239,6 +239,13 @@ func is_duplicated(ix : int):
 			return true
 		if t != y && get_cell_numer(xyToIX(x, t)) == n:
 			return true
+	var x0 = x - x % 3		# 3x3ブロック左上位置
+	var y0 = y - y % 3
+	for v in range(3):
+		for h in range(3):
+			var ix3 = xyToIX(x0+h, y0+v)
+			if ix3 != ix && get_cell_numer(ix3) == n:
+				return true
 	return false
 func check_duplicated():
 	nDuplicated = 0
