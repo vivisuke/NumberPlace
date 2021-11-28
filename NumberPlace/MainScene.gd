@@ -54,6 +54,7 @@ var nRemoved
 #var line_used_bits
 var clue_labels = []		# 手がかり数字用ラベル配列
 var input_labels = []		# 入力数字用ラベル配列
+var shock_wave_timer = -1
 var undo_ix = 0
 var undo_stack = []			# 要素：[ix old new]、old, new は 0～9 の数値、0 for 空欄
 var ClueLabel = load("res://ClueLabel.tscn")
@@ -93,6 +94,7 @@ func _ready():
 	#update_cell_cursor()
 	update_NEmptyLabel()
 	update_undo_redo()
+	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	pass
 func update_NEmptyLabel():
 	nEmpty = 0
@@ -131,6 +133,8 @@ func _input(event):
 		check_duplicated()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
+		if event.as_text() == "W" :
+			shock_wave_timer = 0.0      # start shock wave
 		var n = int(event.as_text())
 		if n >= 1 && n <= 9:
 			num_button_pressed(n)
@@ -200,6 +204,11 @@ func _process(delta):
 			print("diffculty = ", diffculty)
 			print_cells()
 			elapsedTime = 0.0
+	if shock_wave_timer >= 0:
+		shock_wave_timer += delta
+		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
+		if shock_wave_timer > 2:
+			shock_wave_timer = -1.0
 	pass
 func update_all_status():
 	update_undo_redo()
