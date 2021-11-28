@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -36,6 +36,8 @@
 [ext_resource path="res://images/lightblue53x53.png" type="Texture" id=34]
 [ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=35]
 [ext_resource path="res://sounds/kirakira-3.mp3" type="AudioStream" id=36]
+[ext_resource path="res://images/volume_up.png" type="Texture" id=37]
+[ext_resource path="res://images/volume_off_black.png" type="Texture" id=38]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -356,28 +358,6 @@ custom_fonts/font = SubResource( 12 )
 text = "pause"
 align = 1
 
-[node name="HintButton" type="TextureButton" parent="."]
-margin_left = 77.0
-margin_top = 670.0
-margin_right = 125.0
-margin_bottom = 718.0
-disabled = true
-texture_normal = ExtResource( 7 )
-texture_pressed = ExtResource( 6 )
-texture_disabled = ExtResource( 31 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="HintButton"]
-margin_top = 46.0
-margin_right = 48.0
-margin_bottom = 65.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "hint"
-align = 1
-
 [node name="CreateButton" type="TextureButton" parent="."]
 margin_left = 373.0
 margin_top = 750.0
@@ -452,6 +432,49 @@ margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "help"
+align = 1
+
+[node name="HintButton" type="TextureButton" parent="."]
+margin_left = 77.0
+margin_top = 670.0
+margin_right = 125.0
+margin_bottom = 718.0
+disabled = true
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 6 )
+texture_disabled = ExtResource( 31 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HintButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "hint"
+align = 1
+
+[node name="SoundButton" type="TextureButton" parent="."]
+margin_left = 14.0
+margin_top = 750.0
+margin_right = 62.0
+margin_bottom = 798.0
+toggle_mode = true
+texture_normal = ExtResource( 38 )
+texture_pressed = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SoundButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "Sound"
 align = 1
 
 [node name="Button1" type="Button" parent="."]
@@ -659,6 +682,7 @@ __meta__ = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
 material = SubResource( 17 )
 margin_right = 500.0
 margin_bottom = 900.0
