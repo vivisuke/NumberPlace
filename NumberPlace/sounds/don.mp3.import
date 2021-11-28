@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/don.mp3-22635594052023fd3827e73e46ec981f.mp3str"
+
+[deps]
+
+source_file="res://sounds/don.mp3"
+dest_files=[ "res://.import/don.mp3-22635594052023fd3827e73e46ec981f.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

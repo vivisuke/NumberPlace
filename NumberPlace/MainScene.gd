@@ -44,6 +44,7 @@ var nDuplicated = 0			# 重複数字数
 var optGrade = -1			# 問題グレード、0: 入門、1:初級、2:ノーマル（初中級）
 var diffculty = 0			# 難易度、フルハウス: 1, 隠れたシングル: 2, 裸のシングル: 10pnt？
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
+var num_used = []			# 各数字使用数（手がかり数字＋入力数字）
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
 var column_used = []		# 各カラムの使用済みビット
@@ -69,6 +70,7 @@ func _ready():
 	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
 	box_used.resize(N_HORZ)
+	num_used.resize(N_HORZ + 1)		# +1 for 0
 	# 手がかり数字、入力数字用 Label 生成
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
@@ -132,8 +134,13 @@ func _input(event):
 		update_cell_cursor()
 		update_NEmptyLabel()
 		check_duplicated()
-		if $SoundButton.is_pressed(): $AudioNumClicked.play()
+		if $SoundButton.is_pressed():
+			if num_used[cur_num] >= 9:
+				$AudioNumCompleted.play()
+			else:
+				$AudioNumClicked.play()
 		if !solvedStat && is_solved():
+			$CanvasLayer/ColorRect.show()
 			shock_wave_timer = 0.0      # start shock wave
 			solvedStat = true
 			if $SoundButton.is_pressed(): $AudioSolved.play()
@@ -297,12 +304,12 @@ func print_box_used():
 		txt += "%03x " % box_used[i]
 	print(txt)
 func update_num_buttons_disabled():
-	var nUsed = []		# 各数字の使用数 [0] for EMPTY
-	for i in range(N_HORZ+1): nUsed.push_back(0)
+	#var nUsed = []		# 各数字の使用数 [0] for EMPTY
+	for i in range(N_HORZ+1): num_used[i] = 0
 	for ix in range(N_CELLS):
-		nUsed[get_cell_numer(ix)] += 1
+		num_used[get_cell_numer(ix)] += 1
 	for i in range(N_HORZ):
-		num_buttons[i].disabled = nUsed[i+1] >= N_HORZ
+		num_buttons[i].disabled = num_used[i+1] >= N_HORZ
 func update_cell_labels():		# 前提：cell_bit[ix] は 0 でない
 	var ix = 0
 	for y in range(N_VERT):

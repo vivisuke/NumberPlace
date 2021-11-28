@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -38,6 +38,7 @@
 [ext_resource path="res://sounds/kirakira-3.mp3" type="AudioStream" id=36]
 [ext_resource path="res://images/volume_up.png" type="Texture" id=37]
 [ext_resource path="res://images/volume_off_black.png" type="Texture" id=38]
+[ext_resource path="res://sounds/don.mp3" type="AudioStream" id=39]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -694,6 +695,9 @@ __meta__ = {
 
 [node name="AudioNumClicked" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 35 )
+
+[node name="AudioNumCompleted" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 39 )
 
 [node name="AudioSolved" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 36 )
