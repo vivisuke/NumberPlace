@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -33,6 +33,7 @@
 [ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=31]
 [ext_resource path="res://images/question_gray.png" type="Texture" id=32]
 [ext_resource path="res://images/table_gray.png" type="Texture" id=33]
+[ext_resource path="res://images/lightblue53x53.png" type="Texture" id=34]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -53,6 +54,20 @@ font_data = ExtResource( 16 )
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
+1/name = "lightblue53x53.png 1"
+1/texture = ExtResource( 34 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 0, 0, 53, 53 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
 
 [sub_resource type="DynamicFont" id=12]
 font_data = ExtResource( 16 )
