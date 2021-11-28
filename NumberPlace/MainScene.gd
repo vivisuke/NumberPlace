@@ -36,6 +36,7 @@ const UNDO_ITEM_IX = 0
 const UNDO_ITEM_OLD = 1
 const UNDO_ITEM_NEW = 2
 
+var solvedStat = false		# クリア済み状態
 var paused = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
@@ -131,6 +132,9 @@ func _input(event):
 		update_cell_cursor()
 		update_NEmptyLabel()
 		check_duplicated()
+		if !solvedStat && is_solved():
+			shock_wave_timer = 0.0      # start shock wave
+			solvedStat = true
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
 		if event.as_text() == "W" :
@@ -145,7 +149,7 @@ func set_num_cursor(num):
 func is_solved():
 	return nEmpty == 0 && nDuplicated == 0
 func _process(delta):
-	if !is_solved() && !paused:	# undone クリア時はスキップ
+	if !is_solved() && !paused:
 		elapsedTime += delta
 		var sec = int(elapsedTime)
 		var h = sec / (60*60)
@@ -436,6 +440,7 @@ func gen_quest():
 	init_candidates()			# 各セルの候補数字計算
 	print_candidates()
 func gen_quest_greedy():
+	solvedStat = false
 	optGrade = $OptionButton.get_selected_id()
 	if true:
 		if rmix_list.empty():
