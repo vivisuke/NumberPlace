@@ -132,11 +132,11 @@ func _input(event):
 		update_cell_cursor()
 		update_NEmptyLabel()
 		check_duplicated()
-		$AudioNumClicked.play()
+		if $SoundButton.is_pressed(): $AudioNumClicked.play()
 		if !solvedStat && is_solved():
 			shock_wave_timer = 0.0      # start shock wave
 			solvedStat = true
-			$AudioSolved.play()
+			if $SoundButton.is_pressed(): $AudioSolved.play()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
 		if event.as_text() == "W" :
