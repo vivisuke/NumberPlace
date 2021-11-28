@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -30,6 +30,9 @@
 [ext_resource path="res://images/table_black.png" type="Texture" id=28]
 [ext_resource path="res://images/undo_gray.png" type="Texture" id=29]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=30]
+[ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=31]
+[ext_resource path="res://images/question_gray.png" type="Texture" id=32]
+[ext_resource path="res://images/table_gray.png" type="Texture" id=33]
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -310,8 +313,10 @@ margin_left = 77.0
 margin_top = 670.0
 margin_right = 125.0
 margin_bottom = 718.0
+disabled = true
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
+texture_disabled = ExtResource( 31 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -330,8 +335,10 @@ margin_left = 373.0
 margin_top = 750.0
 margin_right = 421.0
 margin_bottom = 798.0
+disabled = true
 texture_normal = ExtResource( 28 )
 texture_pressed = ExtResource( 27 )
+texture_disabled = ExtResource( 33 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -382,8 +389,10 @@ margin_left = 14.0
 margin_top = 670.0
 margin_right = 62.0
 margin_bottom = 718.0
+disabled = true
 texture_normal = ExtResource( 11 )
 texture_pressed = ExtResource( 10 )
+texture_disabled = ExtResource( 32 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
