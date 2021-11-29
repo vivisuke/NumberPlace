@@ -102,6 +102,8 @@ func _ready():
 	$OptionButton.add_item(" Easy")
 	$OptionButton.add_item(" Normal")
 	#gen_ans()
+	if g.settings.has("QuestLevel"):
+		$OptionButton.select(int(g.settings["QuestLevel"]))
 	gen_quest_greedy()
 	#cur_num = 1
 	#num_buttons[cur_num - 1].grab_focus()
@@ -203,7 +205,7 @@ func _process(delta):
 			print("CAN NOT SOLVE")
 			cell_bit = sv
 			for i in range(lst.size()):
-				clue_labels[lst[i]].text = bit_to_numstr(cell_bit[lst[i]])
+				clue_labels[lst[i]].text = "?"	#bit_to_numstr(cell_bit[lst[i]])
 			#var ix = xyToIX(x, y)
 			#clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			#ix = xyToIX(y, x)
@@ -217,6 +219,7 @@ func _process(delta):
 			print("can solve, nRemoved = ", nRemoved)
 		rmixix += 1
 		if rmixix == rmix_list.size() || optGrade == OPT_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
+			update_cell_labels()
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
@@ -407,6 +410,9 @@ func gen_ans_sub(ix : int, line_used):
 	return false;
 
 func gen_ans():		# 解答生成
+	for i in range(N_CELLS):
+		clue_labels[i].text = "?"
+		input_labels[i].text = ""
 	for i in range(box_used.size()): box_used[i] = 0
 	for i in range(cell_bit.size()): cell_bit[i] = 0
 	var t = []
@@ -419,7 +425,7 @@ func gen_ans():		# 解答生成
 	#print(cell_bit)
 	gen_ans_sub(N_HORZ, 0)
 	print_cells()
-	update_cell_labels()
+	#update_cell_labels()
 	for i in range(N_CELLS): input_labels[i].text = ""		# 入力ラベル全消去
 	pass
 func remove_clue_ix(ix):
@@ -468,6 +474,8 @@ func gen_quest():
 func gen_quest_greedy():
 	solvedStat = false
 	optGrade = $OptionButton.get_selected_id()
+	g.settings["QuestLevel"] = optGrade
+	saveSettings()
 	if true:
 		if rmix_list.empty():
 			clear_cell_cursor()
@@ -650,6 +658,7 @@ func _on_SolveButton_pressed():
 	print_candidates()
 	pass # Replace with function body.
 func can_solve():
+	var sv = cell_bit.duplicate()
 	clear_input()
 	init_candidates()
 	diffculty = 0
@@ -657,7 +666,9 @@ func can_solve():
 		var d = step_solve()
 		if d == 0: break
 		diffculty += d
-	return is_filled()
+	var f = is_filled()
+	cell_bit = sv
+	return f
 func is_filled():	# セルが全部埋まっているか？
 	for i in range(cell_bit.size()):
 		if cell_bit[i] == 0: return false
@@ -748,7 +759,6 @@ func _on_RestartButton_pressed():
 	update_all_status()
 	pass # Replace with function body.
 
-
 func _on_UndoButton_pressed():
 	undo_ix -= 1
 	var item = undo_stack[undo_ix]
@@ -757,7 +767,6 @@ func _on_UndoButton_pressed():
 	update_all_status()
 	pass
 
-
 func _on_RedoButton_pressed():
 	var item = undo_stack[undo_ix]
 	var txt = String(item[UNDO_ITEM_NEW]) if item[UNDO_ITEM_NEW] != 0 else ""
@@ -765,7 +774,6 @@ func _on_RedoButton_pressed():
 	undo_ix += 1
 	update_all_status()
 	pass
-
 
 func _on_SoundButton_pressed():
 	g.settings["Sound"] = $SoundButton.pressed
