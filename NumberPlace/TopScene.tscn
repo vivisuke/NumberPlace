@@ -1,12 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://fonts/arialbd.ttf" type="DynamicFontData" id=4]
-[ext_resource path="res://images/table_white.png" type="Texture" id=5]
 [ext_resource path="res://images/table_black.png" type="Texture" id=6]
-[ext_resource path="res://images/table_gray.png" type="Texture" id=7]
 [ext_resource path="res://TopScene.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
@@ -25,12 +22,23 @@ font_data = ExtResource( 2 )
 size = 24
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=7]
 size = 24
-font_data = ExtResource( 4 )
+font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
-font_data = ExtResource( 3 )
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.180392, 0.309804, 0.309804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 1, 0, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_size = 8
+shadow_offset = Vector2( 4, 4 )
 
 [node name="TopScene" type="Node2D"]
 script = ExtResource( 8 )
@@ -70,111 +78,63 @@ __meta__ = {
 }
 
 [node name="SeedLabel" type="Label" parent="."]
-margin_left = 51.0
-margin_top = 389.0
-margin_right = 123.0
-margin_bottom = 414.0
+margin_left = 21.0
+margin_top = 414.114
+margin_right = 219.0
+margin_bottom = 439.114
+rect_rotation = -0.0329332
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
-text = "Seed:"
+text = "問題名（空欄可）:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LineEdit" type="LineEdit" parent="."]
-margin_left = 123.0
-margin_top = 389.0
-margin_right = 463.0
-margin_bottom = 424.0
+margin_left = 21.0
+margin_top = 455.0
+margin_right = 477.0
+margin_bottom = 490.0
 custom_fonts/font = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
-margin_left = 51.0
-margin_top = 492.0
-margin_right = 236.0
-margin_bottom = 517.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 5 )
-text = "Difficulty Level:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CheckBox0" type="CheckBox" parent="."]
-margin_left = 264.0
-margin_top = 456.0
-margin_right = 396.0
-margin_bottom = 492.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "Beginner"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CheckBox1" type="CheckBox" parent="."]
-margin_left = 264.0
-margin_top = 492.0
-margin_right = 396.0
-margin_bottom = 528.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "Easy"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CheckBox2" type="CheckBox" parent="."]
-margin_left = 264.0
-margin_top = 528.0
-margin_right = 396.0
-margin_bottom = 564.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "Normal"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CreateButton" type="TextureButton" parent="."]
-margin_left = 222.0
-margin_top = 585.0
-margin_right = 270.0
-margin_bottom = 633.0
-texture_normal = ExtResource( 6 )
-texture_pressed = ExtResource( 5 )
-texture_disabled = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CreateButton"]
-margin_top = 46.0
-margin_right = 48.0
-margin_bottom = 65.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 6 )
-text = "create"
-align = 1
-
-[node name="HelpLabel" type="Label" parent="."]
+[node name="Button0" type="Button" parent="."]
 margin_left = 21.0
-margin_top = 751.0
-margin_right = 493.0
-margin_bottom = 832.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 5 )
-text = "※ Seed を入力（空欄可）、
-難易度レベルを選択し、
-下部の [create] ボタンを押してください。"
+margin_top = 516.0
+margin_right = 477.0
+margin_bottom = 570.0
+custom_fonts/font = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+text = "入門問題"
+icon = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="CheckBox0" to="." method="_on_CheckBox0_pressed"]
-[connection signal="pressed" from="CheckBox1" to="." method="_on_CheckBox1_pressed"]
-[connection signal="pressed" from="CheckBox2" to="." method="_on_CheckBox2_pressed"]
-[connection signal="pressed" from="CreateButton" to="." method="_on_CreateButton_pressed"]
+[node name="Button1" type="Button" parent="."]
+margin_left = 21.0
+margin_top = 592.0
+margin_right = 477.0
+margin_bottom = 646.0
+custom_fonts/font = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+text = "初級問題"
+icon = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 21.0
+margin_top = 669.0
+margin_right = 477.0
+margin_bottom = 723.0
+custom_fonts/font = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+text = "初中級問題"
+icon = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
