@@ -36,6 +36,8 @@ const UNDO_ITEM_IX = 0
 const UNDO_ITEM_OLD = 1
 const UNDO_ITEM_NEW = 2
 
+const SETTINGS_FILE_NAME = "user://settings.dat"
+
 var solvedStat = false		# クリア済み状態
 var paused = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
@@ -59,13 +61,22 @@ var input_labels = []		# 入力数字用ラベル配列
 var shock_wave_timer = -1
 var undo_ix = 0
 var undo_stack = []			# 要素：[ix old new]、old, new は 0～9 の数値、0 for 空欄
+#var settings = {}			# 設定辞書
 var ClueLabel = load("res://ClueLabel.tscn")
 var InputLabel = load("res://InputLabel.tscn")
 var rng = RandomNumberGenerator.new()
 
+onready var g = get_node("/root/Global")
+
 func _ready():
 	randomize()
 	rng.randomize()
+	var file = File.new()
+	if file.file_exists(g.settingsFileName):		# 設定ファイル
+		file.open(g.settingsFileName, File.READ)
+		g.settings = file.get_var()
+		file.close()
+		print(g.settings)
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
@@ -98,7 +109,13 @@ func _ready():
 	update_NEmptyLabel()
 	update_undo_redo()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
+	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass
+func saveSettings():
+	var file = File.new()
+	file.open(g.settingsFileName, File.WRITE)
+	file.store_var(g.settings)
+	file.close()
 func update_NEmptyLabel():
 	nEmpty = 0
 	for ix in range(N_CELLS):
@@ -749,3 +766,9 @@ func _on_RedoButton_pressed():
 	undo_ix += 1
 	update_all_status()
 	pass
+
+
+func _on_SoundButton_pressed():
+	g.settings["Sound"] = $SoundButton.pressed
+	saveSettings()
+	pass # Replace with function body.
