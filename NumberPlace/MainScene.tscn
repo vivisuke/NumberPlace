@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -26,19 +26,21 @@
 [ext_resource path="res://images/skip_next_white.png" type="Texture" id=24]
 [ext_resource path="res://images/pause_black.png" type="Texture" id=25]
 [ext_resource path="res://images/pause_white.png" type="Texture" id=26]
-[ext_resource path="res://images/table_white.png" type="Texture" id=27]
-[ext_resource path="res://images/table_black.png" type="Texture" id=28]
+[ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=27]
 [ext_resource path="res://images/undo_gray.png" type="Texture" id=29]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=30]
 [ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=31]
 [ext_resource path="res://images/question_gray.png" type="Texture" id=32]
-[ext_resource path="res://images/table_gray.png" type="Texture" id=33]
 [ext_resource path="res://images/lightblue53x53.png" type="Texture" id=34]
 [ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=35]
 [ext_resource path="res://sounds/kirakira-3.mp3" type="AudioStream" id=36]
 [ext_resource path="res://images/volume_up.png" type="Texture" id=37]
 [ext_resource path="res://images/volume_off_black.png" type="Texture" id=38]
 [ext_resource path="res://sounds/don.mp3" type="AudioStream" id=39]
+
+[sub_resource type="DynamicFont" id=18]
+size = 20
+font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=11]
 size = 18
@@ -127,20 +129,6 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="DynamicFont" id=13]
-size = 18
-font_data = ExtResource( 16 )
-
-[sub_resource type="StyleBoxFlat" id=14]
-bg_color = Color( 0.160784, 0.501961, 0.72549, 1 )
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color( 0.443137, 0.443137, 0.443137, 1 )
-shadow_size = 4
-shadow_offset = Vector2( 2, 2 )
-
 [sub_resource type="Shader" id=16]
 code = "shader_type canvas_item;
 
@@ -200,6 +188,20 @@ margin_bottom = 49.0
 hint_tooltip = "Back"
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="TitleBar"]
+margin_left = 49.0
+margin_top = 1.0
+margin_right = 500.0
+margin_bottom = 49.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 18 )
+text = "Title Text"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -321,9 +323,9 @@ align = 1
 
 [node name="RestartButton" type="TextureButton" parent="."]
 margin_left = 373.0
-margin_top = 590.0
+margin_top = 670.0
 margin_right = 421.0
-margin_bottom = 638.0
+margin_bottom = 718.0
 texture_normal = ExtResource( 21 )
 texture_pressed = ExtResource( 22 )
 __meta__ = {
@@ -340,9 +342,9 @@ text = "restart"
 align = 1
 
 [node name="PauseButton" type="TextureButton" parent="."]
-margin_left = 434.0
+margin_left = 373.0
 margin_top = 590.0
-margin_right = 482.0
+margin_right = 421.0
 margin_bottom = 638.0
 texture_normal = ExtResource( 25 )
 texture_pressed = ExtResource( 26 )
@@ -359,32 +361,53 @@ custom_fonts/font = SubResource( 12 )
 text = "pause"
 align = 1
 
-[node name="CreateButton" type="TextureButton" parent="."]
-margin_left = 373.0
-margin_top = 750.0
-margin_right = 421.0
-margin_bottom = 798.0
-disabled = true
-texture_normal = ExtResource( 28 )
-texture_pressed = ExtResource( 27 )
-texture_disabled = ExtResource( 33 )
+[node name="NextButton0" type="TextureButton" parent="."]
+margin_left = 435.0
+margin_top = 590.0
+margin_right = 483.0
+margin_bottom = 638.0
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="CreateButton"]
+[node name="Label" type="Label" parent="NextButton0"]
+margin_top = 46.0
+margin_right = 49.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "bigner"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NextButton1" type="TextureButton" parent="."]
+margin_left = 435.0
+margin_top = 670.0
+margin_right = 483.0
+margin_bottom = 718.0
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="NextButton1"]
 margin_top = 46.0
 margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "create"
+text = "easy"
 align = 1
 
-[node name="NextButton" type="TextureButton" parent="."]
-margin_left = 434.0
+[node name="NextButton2" type="TextureButton" parent="."]
+margin_left = 435.0
 margin_top = 750.0
-margin_right = 482.0
+margin_right = 483.0
 margin_bottom = 798.0
 texture_normal = ExtResource( 23 )
 texture_pressed = ExtResource( 24 )
@@ -392,13 +415,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="NextButton"]
+[node name="Label" type="Label" parent="NextButton2"]
 margin_top = 46.0
 margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "next"
+text = "normal"
 align = 1
 
 [node name="SolveButton" type="TextureButton" parent="."]
@@ -667,19 +690,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OptionButton" type="OptionButton" parent="."]
-margin_left = 373.0
-margin_top = 670.0
-margin_right = 484.0
-margin_bottom = 722.0
-custom_fonts/font = SubResource( 13 )
-custom_styles/normal = SubResource( 14 )
-text = "beginer"
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": ""
-}
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
@@ -707,7 +717,9 @@ stream = ExtResource( 36 )
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
-[connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
+[connection signal="pressed" from="NextButton0" to="." method="_on_NextButton0_pressed"]
+[connection signal="pressed" from="NextButton1" to="." method="_on_NextButton1_pressed"]
+[connection signal="pressed" from="NextButton2" to="." method="_on_NextButton2_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
 [connection signal="pressed" from="SoundButton" to="." method="_on_SoundButton_pressed"]

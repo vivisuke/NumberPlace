@@ -43,7 +43,7 @@ var paused = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
-var optGrade = -1			# 問題グレード、0: 入門、1:初級、2:ノーマル（初中級）
+#var optGrade = -1			# 問題グレード、0: 入門、1:初級、2:ノーマル（初中級）
 var diffculty = 0			# 難易度、フルハウス: 1, 隠れたシングル: 2, 裸のシングル: 10pnt？
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var num_used = []			# 各数字使用数（手がかり数字＋入力数字）
@@ -69,8 +69,13 @@ var rng = RandomNumberGenerator.new()
 onready var g = get_node("/root/Global")
 
 func _ready():
-	randomize()
 	rng.randomize()
+	print("g.qLevel = ", g.qLevel)
+	if g.qName == "":
+		gen_qName()
+	seed(g.qName.hash())
+	#print($TitleBar/Label.text)
+	$TitleBar/Label.text = titleText()
 	var file = File.new()
 	if file.file_exists(g.settingsFileName):		# 設定ファイル
 		file.open(g.settingsFileName, File.READ)
@@ -98,12 +103,12 @@ func _ready():
 	#
 	for i in range(N_HORZ):
 		num_buttons.push_back(get_node("Button%d" % (i+1)))
-	$OptionButton.add_item(" Beginner")
-	$OptionButton.add_item(" Easy")
-	$OptionButton.add_item(" Normal")
+	#$OptionButton.add_item(" Beginner")
+	#$OptionButton.add_item(" Easy")
+	#$OptionButton.add_item(" Normal")
 	#gen_ans()
-	if g.settings.has("QuestLevel"):
-		$OptionButton.select(int(g.settings["QuestLevel"]))
+	#if g.settings.has("QuestLevel"):
+	#	$OptionButton.select(int(g.settings["QuestLevel"]))
 	gen_quest_greedy()
 	#cur_num = 1
 	#num_buttons[cur_num - 1].grab_focus()
@@ -113,6 +118,18 @@ func _ready():
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass
+func gen_qName():
+	g.qName = ""
+	for i in range(15):
+		var r = rng.randi_range(0, 10+26-1)
+		if r < 10: g.qName += String(r+1)
+		else: g.qName += "%c" % (r - 10 + 0x61)		# 0x61 is 'a'
+func titleText() -> String:
+	var tt
+	if g.qLevel == 0: tt = "【入門】"
+	elif g.qLevel == 1: tt = "【初級】"
+	elif g.qLevel == 2: tt = "【初中級】"
+	return tt + g.qName
 func saveSettings():
 	var file = File.new()
 	file.open(g.settingsFileName, File.WRITE)
@@ -218,7 +235,7 @@ func _process(delta):
 			nRemoved += 1
 			print("can solve, nRemoved = ", nRemoved)
 		rmixix += 1
-		if rmixix == rmix_list.size() || optGrade == OPT_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
+		if rmixix == rmix_list.size() || g.qLevel == OPT_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
 			update_cell_labels()
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
@@ -235,6 +252,7 @@ func _process(delta):
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
 			print("diffculty = ", diffculty)
+			print("g.qLevel = ", g.qLevel)
 			print_cells()
 			elapsedTime = 0.0
 	if shock_wave_timer >= 0:
@@ -473,9 +491,9 @@ func gen_quest():
 	print_candidates()
 func gen_quest_greedy():
 	solvedStat = false
-	optGrade = $OptionButton.get_selected_id()
-	g.settings["QuestLevel"] = optGrade
-	saveSettings()
+	#optGrade = $OptionButton.get_selected_id()
+	#g.settings["QuestLevel"] = optGrade
+	#saveSettings()
 	if true:
 		if rmix_list.empty():
 			clear_cell_cursor()
@@ -639,7 +657,7 @@ func step_solve() -> int:
 		update_candidates(pb[0], pb[1])
 		#print_candidates()
 		return DFCLT_HIDDEN_SINGLE
-	if optGrade < OPT_NORMAL: return 0
+	if g.qLevel < OPT_NORMAL: return 0
 	pb = search_nakid_single()
 	#print("Nakid Single: ", pb)
 	if pb != []:
@@ -725,10 +743,25 @@ func _on_Button9_pressed():
 	num_button_pressed(9)
 	pass # Replace with function body.
 
-func _on_NextButton_pressed():
+func _on_NextButton0_pressed():
 	#print("sel id = ", $OptionButton.get_selected_id())
+	g.qLevel = 0
+	gen_qName()
+	$TitleBar/Label.text = titleText()
 	gen_quest_greedy()
 	#print("sel id = ", $OptionButton.get_selected_id())
+	pass # Replace with function body.
+func _on_NextButton1_pressed():
+	g.qLevel = 1
+	gen_qName()
+	$TitleBar/Label.text = titleText()
+	gen_quest_greedy()
+	pass # Replace with function body.
+func _on_NextButton2_pressed():
+	g.qLevel = 2
+	gen_qName()
+	$TitleBar/Label.text = titleText()
+	gen_quest_greedy()
 	pass # Replace with function body.
 
 func _on_PauseButton_pressed():
