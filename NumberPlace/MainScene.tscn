@@ -702,6 +702,7 @@ stream = ExtResource( 39 )
 [node name="AudioSolved" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 36 )
 
+[connection signal="pressed" from="TitleBar/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]

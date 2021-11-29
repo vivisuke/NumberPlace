@@ -779,3 +779,8 @@ func _on_SoundButton_pressed():
 	g.settings["Sound"] = $SoundButton.pressed
 	saveSettings()
 	pass # Replace with function body.
+
+
+func _on_BackButton_pressed():
+	get_tree().change_scene("res://TopScene.tscn")
+	pass # Replace with function body.
