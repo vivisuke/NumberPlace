@@ -184,7 +184,7 @@ func _process(delta):
 		sec -= m * 60
 		$TimeLabel.text = "%02d:%02d:%02d" % [h, m, sec]
 	#if cur_num != 0: set_num_cursor(cur_num)
-	if !rmix_list.empty():
+	if !rmix_list.empty():		# 問題自動生成中
 		var sv = cell_bit.duplicate()
 		var x = rmix_list[rmixix] % N_HORZ
 		var y = rmix_list[rmixix] / N_HORZ
@@ -714,15 +714,14 @@ func _on_Button9_pressed():
 	num_button_pressed(9)
 	pass # Replace with function body.
 
-
 func _on_NextButton_pressed():
 	#print("sel id = ", $OptionButton.get_selected_id())
 	gen_quest_greedy()
 	#print("sel id = ", $OptionButton.get_selected_id())
 	pass # Replace with function body.
 
-
 func _on_PauseButton_pressed():
+	if !rmix_list.empty(): return		# 問題自動生成中はポーズ禁止
 	paused = !paused
 	if paused:
 		for ix in range(N_CELLS):
