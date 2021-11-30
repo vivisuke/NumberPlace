@@ -200,12 +200,15 @@ func _input(event):
 			shock_wave_timer = 0.0      # start shock wave
 		var n = int(event.as_text())
 		if n >= 1 && n <= 9:
-			num_button_pressed(n)
+			num_button_pressed(n, true)
 	pass
 func set_num_cursor(num):
 	cur_num = num
-	if num != 0:
-		num_buttons[num - 1].grab_focus()
+	for i in range(num_buttons.size()):
+		num_buttons[i].pressed = (i + 1 == num)
+		
+	#if num != 0:
+	#	num_buttons[num - 1].grab_focus()
 func is_solved():
 	return nEmpty == 0 && nDuplicated == 0
 func _process(delta):
@@ -591,7 +594,7 @@ func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
 			return [ix, b]
 	return []
 func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
-	return []
+	# return []		# for test
 	# 3x3 ブロックで探索
 	if false:
 		for y0 in range(0, N_VERT, 3):
@@ -757,38 +760,35 @@ func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強�
 				$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 			else:
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
-func num_button_pressed(num):
+func num_button_pressed(num, button_pressed):
 	#cur_num = num
+	if button_pressed:
+		for i in range(num_buttons.size()):
+			#if i + 1 != num: num_buttons[i].pressed = false
+			num_buttons[i].pressed = (i + 1 == num)
+	if !button_pressed: num = 0		# toggled
 	set_num_cursor(num)
 	update_cell_cursor()
 	pass
 
-func _on_Button1_pressed():
-	num_button_pressed(1)
-	pass # Replace with function body.
-func _on_Button2_pressed():
-	num_button_pressed(2)
-func _on_Button3_pressed():
-	num_button_pressed(3)
-	pass # Replace with function body.
-func _on_Button4_pressed():
-	num_button_pressed(4)
-	pass # Replace with function body.
-func _on_Button5_pressed():
-	num_button_pressed(5)
-	pass # Replace with function body.
-func _on_Button6_pressed():
-	num_button_pressed(6)
-	pass # Replace with function body.
-func _on_Button7_pressed():
-	num_button_pressed(7)
-	pass # Replace with function body.
-func _on_Button8_pressed():
-	num_button_pressed(8)
-	pass # Replace with function body.
-func _on_Button9_pressed():
-	num_button_pressed(9)
-	pass # Replace with function body.
+func _on_Button1_toggled(button_pressed):
+	num_button_pressed(1, button_pressed)
+func _on_Button2_toggled(button_pressed):
+	num_button_pressed(2, button_pressed)
+func _on_Button3_toggled(button_pressed):
+	num_button_pressed(3, button_pressed)
+func _on_Button4_toggled(button_pressed):
+	num_button_pressed(4, button_pressed)
+func _on_Button5_toggled(button_pressed):
+	num_button_pressed(5, button_pressed)
+func _on_Button6_toggled(button_pressed):
+	num_button_pressed(6, button_pressed)
+func _on_Button7_toggled(button_pressed):
+	num_button_pressed(7, button_pressed)
+func _on_Button8_toggled(button_pressed):
+	num_button_pressed(8, button_pressed)
+func _on_Button9_toggled(button_pressed):
+	num_button_pressed(9, button_pressed)
 
 func _on_NextButton0_pressed():
 	#print("sel id = ", $OptionButton.get_selected_id())
@@ -837,7 +837,8 @@ func _on_RestartButton_pressed():
 		if input_labels[ix].text != "":
 			input_labels[ix].text = ""
 	update_all_status()
-	num_buttons[cur_num-1].grab_focus()
+	#num_buttons[cur_num-1].grab_focus()
+	num_button_pressed(cur_num, true)
 	pass # Replace with function body.
 
 func _on_UndoButton_pressed():
