@@ -1,10 +1,10 @@
 extends Node2D
 
-#enum {
-#	HORZ = 1,
-#	VERT,
-#	BOX
-#}
+enum {
+	HORZ = 1,
+	VERT,
+	BOX
+}
 
 const N_VERT = 9
 const N_HORZ = 9
@@ -22,6 +22,8 @@ const BIT_9 = 1<<8
 const ALL_BITS = (1<<N_HORZ) - 1
 const TILE_NONE = -1
 const TILE_CURSOR = 0
+const TILE_LTBLUE = 1					# 強調カーソル（薄青）
+const TILE_LTORANGE = 2					# 強調カーソル（薄橙）
 const COLOR_DUP = Color.red
 const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
@@ -280,7 +282,7 @@ func nEmpty():
 		if clue_labels[i].text == "": n += 1
 	return n
 func xyToIX(x, y) -> int: return x + y * N_HORZ
-func num_to_bit(n : int): return 1 << (n-1)
+func num_to_bit(n : int): return 1 << (n-1) if n != 0 else 0
 func bit_to_num(b):
 	var mask = 1
 	for i in range(N_HORZ):
@@ -537,7 +539,7 @@ func gen_quest_greedy():
 				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 				init_candidates()
 	pass
-func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
+func search_fullhouse() -> Array:	# [] for not found, [pos, bit, type], type: HORZ | VERT | BOX
 	var pos
 	for y in range(N_VERT):
 		var t = ALL_BITS
@@ -547,7 +549,7 @@ func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 			else:
 				t &= ~cell_bit[xyToIX(x, y)]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-			return [pos, t]
+			return [pos, t, HORZ]
 	for x in range(N_HORZ):
 		var t = ALL_BITS
 		for y in range(N_VERT):
@@ -556,7 +558,7 @@ func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 			else:
 				t &= ~cell_bit[xyToIX(x, y)]
 		if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-			return [pos, t]
+			return [pos, t, VERT]
 	for y0 in range(0, N_VERT, 3):
 		for x0 in range(0, N_HORZ, 3):
 			#var ix = xyToIX(x, y)
@@ -568,7 +570,7 @@ func search_fullhouse() -> Array:	# [] for not found, [pos, bit]
 					else:
 						t &= ~cell_bit[xyToIX(x0+h, y0+v)]
 				if t != 0 && (t & -t) == t:		# 1ビットだけ → フルハウス
-					return [pos, t]
+					return [pos, t, BOX]
 	return []
 func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
 	for ix in range(N_CELLS):
@@ -577,8 +579,10 @@ func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
 			return [ix, b]
 	return []
 func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
+	# 3x3 ブロックで探索
 	for y0 in range(0, N_VERT, 3):
 		for x0 in range(0, N_HORZ, 3):
+			# 可能なビットの数を数える
 			var b0 = 0
 			var b1 = 0
 			for v in range(3):
@@ -592,7 +596,7 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 				for v in range(3):
 					for h in range(3):
 						if (b0 & candidates_bit[xyToIX(x0+h, y0+v)]) != 0:
-							return [xyToIX(x0+h, y0+v), b0]
+							return [xyToIX(x0+h, y0+v), b0, BOX]
 				
 	return []
 func _on_TestButton_pressed():
@@ -820,9 +824,46 @@ func _on_BackButton_pressed():
 	get_tree().change_scene("res://TopScene.tscn")
 	pass # Replace with function body.
 
-
+func update_cell_bit():
+	for ix in range(N_CELLS):
+		cell_bit[ix] = num_to_bit(get_cell_numer(ix))
+func do_emphasize(ix : int, type):
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			$Board/TileMap.set_cell(x, y, -1)
+	var x = ix % N_HORZ
+	var y = ix / N_HORZ
+	if type == BOX:
+		x -= x % 3
+		y -= y % 3
+		for v in range(3):
+			for h in range(3):
+				$Board/TileMap.set_cell(x+h, y+v, TILE_LTORANGE)
+	elif type == HORZ:
+		for h in range(N_HORZ):
+			$Board/TileMap.set_cell(h, y, TILE_LTORANGE)
+	elif type == VERT:
+		for v in range(N_VERT):
+			$Board/TileMap.set_cell(x, v, TILE_LTORANGE)
 func _on_HintButton_pressed():
 	$HintLayer.show()
+	update_cell_bit()
+	init_candidates()
+	var fh = search_fullhouse()
+	if fh != []:
+		do_emphasize(fh[0], fh[2])
+		$HintLayer/Label.text = "薄橙で強調された箇所に\nフルハウスで決まる箇所があります。"
+		return
+	var hs = search_hidden_single()
+	if hs != []:
+		do_emphasize(hs[0], hs[2])
+		$HintLayer/Label.text = "薄橙で強調された箇所に\n隠れたシングルで決まる箇所があります。"
+		return
+	var ns = search_nakid_single()
+	if ns != []:
+		do_emphasize(ns[0], ns[2])
+		$HintLayer/Label.text = "薄橙で強調された箇所に\n裸のシングルで決まる箇所があります。"
+		return
 	pass # Replace with function body.
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -39,6 +39,7 @@
 [ext_resource path="res://images/volume_up.png" type="Texture" id=37]
 [ext_resource path="res://images/volume_off_black.png" type="Texture" id=38]
 [ext_resource path="res://sounds/don.mp3" type="AudioStream" id=39]
+[ext_resource path="res://images/lightorange.png" type="Texture" id=40]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -77,6 +78,20 @@ font_data = ExtResource( 16 )
 1/shape_one_way_margin = 0.0
 1/shapes = [  ]
 1/z_index = 0
+2/name = "lightorange.png 2"
+2/texture = ExtResource( 40 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 0, 0, 53, 53 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape_one_way = false
+2/shape_one_way_margin = 0.0
+2/shapes = [  ]
+2/z_index = 0
 
 [sub_resource type="DynamicFont" id=12]
 font_data = ExtResource( 27 )
@@ -745,6 +760,7 @@ stream = ExtResource( 39 )
 stream = ExtResource( 36 )
 
 [node name="HintLayer" type="ColorRect" parent="."]
+visible = false
 margin_top = 570.0
 margin_right = 500.0
 margin_bottom = 900.0
