@@ -590,7 +590,7 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 	# 3x3 ブロックで探索
 	for y0 in range(0, N_VERT, 3):
 		for x0 in range(0, N_HORZ, 3):
-			# 可能なビットの数を数える
+			# (x0, y0) の 3x3 ブロック内で、可能なビットの数を数える
 			var b0 = 0
 			var b1 = 0
 			for v in range(3):
@@ -598,17 +598,42 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 					var b = candidates_bit[xyToIX(x0+h, y0+v)]
 					b1 |= (b0 & b)
 					b0 ^= b
-			b0 &= ~b1
-			if b0 != 0:
-				b0 = b0 & -b0
+			b0 &= ~b1		# 隠れたシングルのビットがあるか
+			if b0 != 0:		# 隠れたシングルがある場合
+				b0 = b0 & -b0		# 最右ビットを取り出す
 				for v in range(3):
 					for h in range(3):
 						if (b0 & candidates_bit[xyToIX(x0+h, y0+v)]) != 0:
 							return [xyToIX(x0+h, y0+v), b0, BOX]
 				
-	# undone:
 	# 水平方向検索
+	for y in range(N_VERT):
+		var b0 = 0
+		var b1 = 0
+		for x in range(N_HORZ):
+			var b = candidates_bit[xyToIX(x, y)]
+			b1 |= (b0 & b)
+			b0 ^= b
+		b0 &= ~b1		# 隠れたシングルのビットがあるか
+		if b0 != 0:		# 隠れたシングルがある場合
+			b0 = b0 & -b0		# 最右ビットを取り出す
+			for x in range(N_HORZ):
+				if (b0 & candidates_bit[xyToIX(x, y)]) != 0:
+					return [xyToIX(x, y), b0, HORZ]
 	# 垂直方向検索
+	for x in range(N_HORZ):
+		var b0 = 0
+		var b1 = 0
+		for y in range(N_VERT):
+			var b = candidates_bit[xyToIX(x, y)]
+			b1 |= (b0 & b)
+			b0 ^= b
+		b0 &= ~b1		# 隠れたシングルのビットがあるか
+		if b0 != 0:		# 隠れたシングルがある場合
+			b0 = b0 & -b0		# 最右ビットを取り出す
+			for y in range(N_VERT):
+				if (b0 & candidates_bit[xyToIX(x, y)]) != 0:
+					return [xyToIX(x, y), b0, VERT]
 	return []
 func _on_TestButton_pressed():
 	#gen_quest()
@@ -870,11 +895,13 @@ func _on_HintButton_pressed():
 	if hs != []:
 		do_emphasize(hs[0], hs[2])
 		$HintLayer/Label.text = "薄橙で強調された箇所に\n隠れたシングルで決まる箇所があります。"
+		print(bit_to_numstr(hs[1]))
 		return
 	var ns = search_nakid_single()
 	if ns != []:
-		do_emphasize(ns[0], ns[2])
+		#do_emphasize(ns[0], ns[2])
 		$HintLayer/Label.text = "薄橙で強調された箇所に\n裸のシングルで決まる箇所があります。"
+		print(bit_to_numstr(ns[1]))
 		return
 	pass # Replace with function body.
 
