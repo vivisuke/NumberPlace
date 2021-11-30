@@ -42,7 +42,8 @@ const SETTINGS_FILE_NAME = "user://settings.dat"
 
 var solvedStat = false		# クリア済み状態
 var paused = false
-var restarted = false
+var hint_showed = false
+#var restarted = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
@@ -153,6 +154,9 @@ func push_to_undo_stack(item):
 	undo_ix += 1
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
+		if hint_showed:
+			close_help()
+			return
 		if cur_num == 0: return
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
 		print(mp)
@@ -185,6 +189,9 @@ func _input(event):
 			if $SoundButton.is_pressed(): $AudioSolved.play()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
+		if hint_showed:
+			close_help()
+			return
 		if event.as_text() == "W" :
 			shock_wave_timer = 0.0      # start shock wave
 		var n = int(event.as_text())
@@ -851,6 +858,7 @@ func do_emphasize(ix : int, type):
 			$Board/TileMap.set_cell(x, v, TILE_LTORANGE)
 func _on_HintButton_pressed():
 	$HintLayer.show()
+	hint_showed = true
 	update_cell_bit()
 	init_candidates()
 	var fh = search_fullhouse()
@@ -870,9 +878,11 @@ func _on_HintButton_pressed():
 		return
 	pass # Replace with function body.
 
-
-func _on_CloseButton_pressed():
+func close_help():
 	$HintLayer.hide()
+	hint_showed = false
 	update_cell_cursor()
 	set_num_cursor(cur_num)
+func _on_CloseButton_pressed():
+	close_help()
 	pass # Replace with function body.
