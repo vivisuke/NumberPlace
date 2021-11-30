@@ -22,8 +22,9 @@ const BIT_9 = 1<<8
 const ALL_BITS = (1<<N_HORZ) - 1
 const TILE_NONE = -1
 const TILE_CURSOR = 0
-const TILE_LTBLUE = 1					# 強調カーソル（薄青）
-const TILE_LTORANGE = 2					# 強調カーソル（薄橙）
+const TILE_LTBLUE = 1				# 強調カーソル（薄青）
+const TILE_LTORANGE = 2				# 強調カーソル（薄橙）
+const TILE_PINK = 3					# 強調カーソル（薄ピンク）
 const COLOR_DUP = Color.red
 const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
@@ -37,6 +38,9 @@ const N_EMPTY_BEGINNER = 32
 const UNDO_ITEM_IX = 0
 const UNDO_ITEM_OLD = 1
 const UNDO_ITEM_NEW = 2
+const IX_POS = 0
+const IX_BIT = 1
+const IX_TYPE = 2
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
 
@@ -154,13 +158,13 @@ func push_to_undo_stack(item):
 	undo_ix += 1
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
+		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
+		print(mp)
+		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
 		if hint_showed:
 			close_help()
 			return
 		if cur_num == 0: return
-		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
-		print(mp)
-		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
 		var ix = xyToIX(mp.x, mp.y)
 		if clue_labels[ix].text != "":
 			pass
@@ -189,7 +193,7 @@ func _input(event):
 			if $SoundButton.is_pressed(): $AudioSolved.play()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
-		if hint_showed:
+		if event.as_text() != "Alt" && hint_showed:
 			close_help()
 			return
 		if event.as_text() == "W" :
@@ -587,25 +591,27 @@ func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
 			return [ix, b]
 	return []
 func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
+	return []
 	# 3x3 ブロックで探索
-	for y0 in range(0, N_VERT, 3):
-		for x0 in range(0, N_HORZ, 3):
-			# (x0, y0) の 3x3 ブロック内で、可能なビットの数を数える
-			var b0 = 0
-			var b1 = 0
-			for v in range(3):
-				for h in range(3):
-					var b = candidates_bit[xyToIX(x0+h, y0+v)]
-					b1 |= (b0 & b)
-					b0 ^= b
-			b0 &= ~b1		# 隠れたシングルのビットがあるか
-			if b0 != 0:		# 隠れたシングルがある場合
-				b0 = b0 & -b0		# 最右ビットを取り出す
+	if false:
+		for y0 in range(0, N_VERT, 3):
+			for x0 in range(0, N_HORZ, 3):
+				# (x0, y0) の 3x3 ブロック内で、可能なビットの数を数える
+				var b0 = 0
+				var b1 = 0
 				for v in range(3):
 					for h in range(3):
-						if (b0 & candidates_bit[xyToIX(x0+h, y0+v)]) != 0:
-							return [xyToIX(x0+h, y0+v), b0, BOX]
-				
+						var b = candidates_bit[xyToIX(x0+h, y0+v)]
+						b1 |= (b0 & b)
+						b0 ^= b
+				b0 &= ~b1		# 隠れたシングルのビットがあるか
+				if b0 != 0:		# 隠れたシングルがある場合
+					b0 = b0 & -b0		# 最右ビットを取り出す
+					for v in range(3):
+						for h in range(3):
+							if (b0 & candidates_bit[xyToIX(x0+h, y0+v)]) != 0:
+								return [xyToIX(x0+h, y0+v), b0, BOX]
+
 	# 水平方向検索
 	for y in range(N_VERT):
 		var b0 = 0
@@ -693,18 +699,18 @@ func step_solve() -> int:
 	pb = search_hidden_single()
 	#print("Hidden Single: ", pb)
 	if pb != []:
-		cell_bit[pb[0]] = pb[1]
+		cell_bit[pb[IX_POS]] = pb[IX_BIT]
 		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
-		update_candidates(pb[0], pb[1])
+		update_candidates(pb[IX_POS], pb[IX_BIT])
 		#print_candidates()
 		return DFCLT_HIDDEN_SINGLE
 	if g.qLevel < OPT_NORMAL: return 0
 	pb = search_nakid_single()
 	#print("Nakid Single: ", pb)
 	if pb != []:
-		cell_bit[pb[0]] = pb[1]
+		cell_bit[pb[IX_POS]] = pb[IX_BIT]
 		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
-		update_candidates(pb[0], pb[1])
+		update_candidates(pb[IX_POS], pb[IX_BIT])
 		#print_candidates()
 		return DFCLT_NAKID_SINGLE
 	return 0
@@ -863,24 +869,39 @@ func _on_BackButton_pressed():
 func update_cell_bit():
 	for ix in range(N_CELLS):
 		cell_bit[ix] = num_to_bit(get_cell_numer(ix))
-func do_emphasize(ix : int, type):
+func reset_TileMap():
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, -1)
+func do_emphasize_hvb(ix : int):
+	reset_TileMap()
+	var x = ix % N_HORZ
+	var y = ix / N_HORZ
+	var x0 = x - x % 3
+	var y0 = y - y % 3
+	for v in range(3):
+		for h in range(3):
+			$Board/TileMap.set_cell(x0+h, y0+v, TILE_PINK)
+	for h in range(N_HORZ):
+		$Board/TileMap.set_cell(h, y, TILE_PINK)
+	for v in range(N_VERT):
+		$Board/TileMap.set_cell(x, v, TILE_PINK)
+func do_emphasize(ix : int, type):
+	reset_TileMap()
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
 	if type == BOX:
-		x -= x % 3
-		y -= y % 3
+		var x0 = x - x % 3
+		var y0 = y - y % 3
 		for v in range(3):
 			for h in range(3):
-				$Board/TileMap.set_cell(x+h, y+v, TILE_LTORANGE)
-	elif type == HORZ:
+				$Board/TileMap.set_cell(x0+h, y0+v, TILE_PINK)
+	if type == HORZ:
 		for h in range(N_HORZ):
-			$Board/TileMap.set_cell(h, y, TILE_LTORANGE)
-	elif type == VERT:
+			$Board/TileMap.set_cell(h, y, TILE_PINK)
+	if type == VERT:
 		for v in range(N_VERT):
-			$Board/TileMap.set_cell(x, v, TILE_LTORANGE)
+			$Board/TileMap.set_cell(x, v, TILE_PINK)
 func _on_HintButton_pressed():
 	$HintLayer.show()
 	hint_showed = true
@@ -888,20 +909,20 @@ func _on_HintButton_pressed():
 	init_candidates()
 	var fh = search_fullhouse()
 	if fh != []:
-		do_emphasize(fh[0], fh[2])
-		$HintLayer/Label.text = "薄橙で強調された箇所に\nフルハウスで決まる箇所があります。"
+		do_emphasize(fh[IX_POS], fh[IX_TYPE])
+		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「フルハウス」で決まる箇所があります。"
 		return
 	var hs = search_hidden_single()
 	if hs != []:
-		do_emphasize(hs[0], hs[2])
-		$HintLayer/Label.text = "薄橙で強調された箇所に\n隠れたシングルで決まる箇所があります。"
-		print(bit_to_numstr(hs[1]))
+		do_emphasize(hs[IX_POS], hs[IX_TYPE])
+		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。"
+		print(bit_to_numstr(hs[IX_BIT]))
 		return
 	var ns = search_nakid_single()
 	if ns != []:
-		#do_emphasize(ns[0], ns[2])
-		$HintLayer/Label.text = "薄橙で強調された箇所に\n裸のシングルで決まる箇所があります。"
-		print(bit_to_numstr(ns[1]))
+		do_emphasize_hvb(ns[IX_POS])
+		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。"
+		print(bit_to_numstr(ns[IX_BIT]))
 		return
 	pass # Replace with function body.
 
