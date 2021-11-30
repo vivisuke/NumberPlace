@@ -824,3 +824,8 @@ func _on_BackButton_pressed():
 func _on_HintButton_pressed():
 	$HintLayer.show()
 	pass # Replace with function body.
+
+
+func _on_TextureButton_pressed():
+	$HintLayer.hide()
+	pass # Replace with function body.

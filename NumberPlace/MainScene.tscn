@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -27,10 +27,12 @@
 [ext_resource path="res://images/pause_black.png" type="Texture" id=25]
 [ext_resource path="res://images/pause_white.png" type="Texture" id=26]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=27]
+[ext_resource path="res://images/close_black.png" type="Texture" id=28]
 [ext_resource path="res://images/undo_gray.png" type="Texture" id=29]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=30]
 [ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=31]
 [ext_resource path="res://images/question_gray.png" type="Texture" id=32]
+[ext_resource path="res://images/close_white.png" type="Texture" id=33]
 [ext_resource path="res://images/lightblue53x53.png" type="Texture" id=34]
 [ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=35]
 [ext_resource path="res://sounds/kirakira-3.mp3" type="AudioStream" id=36]
@@ -159,6 +161,10 @@ shader_param/center = Vector2( 0.5, 0.5 )
 shader_param/force = 0.024
 shader_param/size = 2.0
 shader_param/tichness = 0.1
+
+[sub_resource type="DynamicFont" id=19]
+size = 24
+font_data = ExtResource( 27 )
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -739,11 +745,66 @@ stream = ExtResource( 39 )
 stream = ExtResource( 36 )
 
 [node name="HintLayer" type="ColorRect" parent="."]
-visible = false
 margin_top = 570.0
 margin_right = 500.0
 margin_bottom = 900.0
 color = Color( 0.501961, 0.752941, 0.501961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="HintLayer"]
+anchor_right = 0.83
+anchor_bottom = 0.061
+margin_left = 435.0
+margin_right = 68.0
+margin_bottom = 27.87
+texture_normal = ExtResource( 28 )
+texture_pressed = ExtResource( 33 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HintLayer/TextureButton"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "閉じる"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="HintLayer"]
+margin_left = 14.0
+margin_right = 62.0
+margin_bottom = 48.0
+texture = ExtResource( 7 )
+
+[node name="Label" type="Label" parent="HintLayer/TextureRect"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "ヒント"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HintLayer"]
+margin_left = 14.0
+margin_top = 85.0
+margin_right = 483.0
+margin_bottom = 226.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 19 )
+text = "あーだ
+こーだ
+なんとか"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -769,3 +830,4 @@ __meta__ = {
 [connection signal="pressed" from="Button7" to="." method="_on_Button7_pressed"]
 [connection signal="pressed" from="Button8" to="." method="_on_Button8_pressed"]
 [connection signal="pressed" from="Button9" to="." method="_on_Button9_pressed"]
+[connection signal="pressed" from="HintLayer/TextureButton" to="." method="_on_TextureButton_pressed"]
