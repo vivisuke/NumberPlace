@@ -193,7 +193,8 @@ func _input(event):
 	pass
 func set_num_cursor(num):
 	cur_num = num
-	num_buttons[num - 1].grab_focus()
+	if num != 0:
+		num_buttons[num - 1].grab_focus()
 func is_solved():
 	return nEmpty == 0 && nDuplicated == 0
 func _process(delta):
@@ -598,6 +599,9 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 						if (b0 & candidates_bit[xyToIX(x0+h, y0+v)]) != 0:
 							return [xyToIX(x0+h, y0+v), b0, BOX]
 				
+	# undone:
+	# 水平方向検索
+	# 垂直方向検索
 	return []
 func _on_TestButton_pressed():
 	#gen_quest()
@@ -867,6 +871,8 @@ func _on_HintButton_pressed():
 	pass # Replace with function body.
 
 
-func _on_TextureButton_pressed():
+func _on_CloseButton_pressed():
 	$HintLayer.hide()
+	update_cell_cursor()
+	set_num_cursor(cur_num)
 	pass # Replace with function body.
