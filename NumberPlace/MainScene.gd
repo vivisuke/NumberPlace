@@ -40,6 +40,7 @@ const SETTINGS_FILE_NAME = "user://settings.dat"
 
 var solvedStat = false		# クリア済み状態
 var paused = false
+var restarted = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
@@ -790,6 +791,7 @@ func _on_RestartButton_pressed():
 		if input_labels[ix].text != "":
 			input_labels[ix].text = ""
 	update_all_status()
+	num_buttons[cur_num-1].grab_focus()
 	pass # Replace with function body.
 
 func _on_UndoButton_pressed():
