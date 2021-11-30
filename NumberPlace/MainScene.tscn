@@ -77,7 +77,7 @@ font_data = ExtResource( 16 )
 1/z_index = 0
 
 [sub_resource type="DynamicFont" id=12]
-font_data = ExtResource( 16 )
+font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -297,8 +297,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "undo"
+text = "戻す"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="RedoButton" type="TextureButton" parent="."]
 margin_left = 77.0
@@ -318,8 +321,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "redo"
+text = "進める"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="RestartButton" type="TextureButton" parent="."]
 margin_left = 373.0
@@ -338,8 +344,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "restart"
+text = "再挑戦"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PauseButton" type="TextureButton" parent="."]
 margin_left = 373.0
@@ -358,8 +367,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "pause"
+text = "ポーズ"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="NextButton0" type="TextureButton" parent="."]
 margin_left = 435.0
@@ -374,11 +386,11 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="NextButton0"]
 margin_top = 46.0
-margin_right = 49.0
+margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "bigner"
+text = "入門"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -401,8 +413,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "easy"
+text = "初級"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="NextButton2" type="TextureButton" parent="."]
 margin_left = 435.0
@@ -421,8 +436,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "normal"
+text = "初中級"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SolveButton" type="TextureButton" parent="."]
 visible = false
@@ -455,15 +473,17 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "help"
+text = "遊び方"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HintButton" type="TextureButton" parent="."]
 margin_left = 77.0
 margin_top = 670.0
 margin_right = 125.0
 margin_bottom = 718.0
-disabled = true
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 texture_disabled = ExtResource( 31 )
@@ -477,8 +497,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "hint"
+text = "ヒント"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SoundButton" type="TextureButton" parent="."]
 margin_left = 14.0
@@ -498,8 +521,11 @@ margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "Sound"
+text = "効果音"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Button1" type="Button" parent="."]
 anchor_left = 26.0
@@ -712,6 +738,16 @@ stream = ExtResource( 39 )
 [node name="AudioSolved" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 36 )
 
+[node name="HintLayer" type="ColorRect" parent="."]
+visible = false
+margin_top = 570.0
+margin_right = 500.0
+margin_bottom = 900.0
+color = Color( 0.501961, 0.752941, 0.501961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="TitleBar/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_UndoButton_pressed"]
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
@@ -722,6 +758,7 @@ stream = ExtResource( 36 )
 [connection signal="pressed" from="NextButton2" to="." method="_on_NextButton2_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
+[connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="pressed" from="SoundButton" to="." method="_on_SoundButton_pressed"]
 [connection signal="pressed" from="Button1" to="." method="_on_Button1_pressed"]
 [connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]

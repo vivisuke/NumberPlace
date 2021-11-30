@@ -130,7 +130,7 @@ func titleText() -> String:
 	if g.qLevel == 0: tt = "【入門】"
 	elif g.qLevel == 1: tt = "【初級】"
 	elif g.qLevel == 2: tt = "【初中級】"
-	return tt + g.qName
+	return tt + "“" + g.qName + "”"
 func saveSettings():
 	var file = File.new()
 	file.open(g.settingsFileName, File.WRITE)
@@ -818,4 +818,9 @@ func _on_SoundButton_pressed():
 
 func _on_BackButton_pressed():
 	get_tree().change_scene("res://TopScene.tscn")
+	pass # Replace with function body.
+
+
+func _on_HintButton_pressed():
+	$HintLayer.show()
 	pass # Replace with function body.
