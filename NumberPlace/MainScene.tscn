@@ -858,7 +858,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NextButton" type="TextureButton" parent="HintLayer"]
+[node name="NextHintButton" type="TextureButton" parent="HintLayer"]
 margin_left = 304.0
 margin_right = 352.0
 margin_bottom = 48.0
@@ -868,7 +868,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CloseButton" type="TextureButton" parent="HintLayer"]
+[node name="CloseHintButton" type="TextureButton" parent="HintLayer"]
 anchor_right = 0.83
 anchor_bottom = 0.061
 margin_left = 435.0
@@ -880,7 +880,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="HintLayer/CloseButton"]
+[node name="Label" type="Label" parent="HintLayer/CloseHintButton"]
 margin_top = 46.0
 margin_right = 48.0
 margin_bottom = 65.0
@@ -927,4 +927,4 @@ __meta__ = {
 [connection signal="toggled" from="Button7" to="." method="_on_Button7_toggled"]
 [connection signal="toggled" from="Button8" to="." method="_on_Button8_toggled"]
 [connection signal="toggled" from="Button9" to="." method="_on_Button9_toggled"]
-[connection signal="pressed" from="HintLayer/CloseButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="HintLayer/CloseHintButton" to="." method="_on_CloseButton_pressed"]

@@ -43,11 +43,24 @@ const IX_POS = 0
 const IX_BIT = 1
 const IX_TYPE = 2
 
+const HINT_FULLHOUSE = [
+	"淡紅色で強調された箇所に、\n「フルハウス」で決まる箇所があります。",
+	"「フルハウス」とは縦・横・3x3ブロックのいずれかに空欄がひとつだけのことです。",
+	"この場合、空欄に入られるのは %d だけです。",
+]
+const HINT_NAKID_SINGLE = [
+	"明黄色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。",
+]
+const HINT_HIDDEN_SINGLE = [
+	"明黄色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。",
+]
+
 const SETTINGS_FILE_NAME = "user://settings.dat"
 
 var solvedStat = false		# クリア済み状態
 var paused = false
 var hint_showed = false
+var hint_texts = []			# ヒントテキスト配列
 #var restarted = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
 var nEmpty = 0				# 空欄数
@@ -924,32 +937,39 @@ func hint_hidden_single() -> bool:
 	var hs = search_hidden_single()
 	if hs == []: return false
 	do_emphasize(hs[IX_POS], hs[IX_TYPE])
-	$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。"
+	#$HintLayer/Label.text = 
+	hint_texts = HINT_HIDDEN_SINGLE
 	print(bit_to_numstr(hs[IX_BIT]))
 	return true
 func hint_nakid_single():
 	var ns = search_nakid_single()
 	if ns == []: return false
 	do_emphasize(ns[IX_POS], CELL)
-	$HintLayer/Label.text = "明黄色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。"
+	#$HintLayer/Label.text = 
+	hint_texts = HINT_NAKID_SINGLE
 	print(bit_to_numstr(ns[IX_BIT]))
 	return true
-func _on_HintButton_pressed():
-	$HintLayer.show()
+func show_hint():
 	hint_showed = true
+	$HintLayer.show()
+	$HintLayer/Label.text = hint_texts[0]
+func _on_HintButton_pressed():
 	update_cell_bit()
 	init_candidates()
 	var fh = search_fullhouse()
 	if fh != []:
 		do_emphasize(fh[IX_POS], fh[IX_TYPE])
-		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「フルハウス」で決まる箇所があります。"
-		return
-	if cur_num != 0:	# 数字ボタン選択時
-		if hint_hidden_single(): return
-		if hint_nakid_single(): return
+		#$HintLayer/Label.text = 
+		hint_texts = HINT_FULLHOUSE
 	else:
-		if hint_nakid_single(): return
-		if hint_hidden_single(): return
+		if cur_num != 0:	# 数字ボタン選択時
+			if !hint_hidden_single():
+				hint_nakid_single()
+		else:
+			if !hint_nakid_single():
+				hint_hidden_single()
+	if hint_texts != []:
+		show_hint()
 	pass # Replace with function body.
 
 func close_hint():
