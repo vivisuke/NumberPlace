@@ -164,7 +164,7 @@ func _input(event):
 		print(mp)
 		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
 		if hint_showed:
-			close_help()
+			close_hint()
 			return
 		var ix = xyToIX(mp.x, mp.y)
 		if clue_labels[ix].text != "":
@@ -205,7 +205,7 @@ func _input(event):
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
 		if event.as_text() != "Alt" && hint_showed:
-			close_help()
+			close_hint()
 			return
 		if event.as_text() == "W" :
 			shock_wave_timer = 0.0      # start shock wave
@@ -952,11 +952,11 @@ func _on_HintButton_pressed():
 		if hint_hidden_single(): return
 	pass # Replace with function body.
 
-func close_help():
+func close_hint():
 	$HintLayer.hide()
 	hint_showed = false
 	update_cell_cursor()
 	set_num_cursor(cur_num)
 func _on_CloseButton_pressed():
-	close_help()
+	close_hint()
 	pass # Replace with function body.
