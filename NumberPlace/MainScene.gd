@@ -172,7 +172,8 @@ func _input(event):
 		else:
 			if cur_num == 0:			# 数字ボタン非選択の場合
 				clear_cell_cursor()
-				$Board/TileMap.set_cellv(mp, TILE_CURSOR)
+				#$Board/TileMap.set_cellv(mp, TILE_CURSOR)
+				do_emphasize(ix, CELL)
 				return
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
@@ -893,6 +894,7 @@ func do_emphasize(ix : int, type):
 	if type == VERT || type == CELL:
 		for v in range(N_VERT):
 			$Board/TileMap.set_cell(x, v, TILE_PINK)
+	$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 func _on_HintButton_pressed():
 	$HintLayer.show()
 	hint_showed = true
