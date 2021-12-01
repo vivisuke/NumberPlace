@@ -164,11 +164,15 @@ func _input(event):
 		if hint_showed:
 			close_help()
 			return
-		if cur_num == 0: return
 		var ix = xyToIX(mp.x, mp.y)
 		if clue_labels[ix].text != "":
+			# undone: 手がかり数字ボタン選択
 			pass
 		else:
+			if cur_num == 0:			# 数字ボタン非選択の場合
+				clear_cell_cursor()
+				$Board/TileMap.set_cellv(mp, TILE_CURSOR)
+				return
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
 				push_to_undo_stack([ix, int(cur_num), 0])
@@ -202,13 +206,6 @@ func _input(event):
 		if n >= 1 && n <= 9:
 			num_button_pressed(n, true)
 	pass
-func set_num_cursor(num):
-	cur_num = num
-	for i in range(num_buttons.size()):
-		num_buttons[i].pressed = (i + 1 == num)
-		
-	#if num != 0:
-	#	num_buttons[num - 1].grab_focus()
 func is_solved():
 	return nEmpty == 0 && nDuplicated == 0
 func _process(delta):
@@ -258,8 +255,8 @@ func _process(delta):
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
-			cur_num = 1
-			set_num_cursor(cur_num)
+			#cur_num = 1
+			set_num_cursor(1)
 			#num_buttons[cur_num - 1].grab_focus()
 			update_all_status()
 			#update_cell_cursor()
@@ -359,7 +356,7 @@ func print_box_used():
 	for i in range(box_used.size()):
 		txt += "%03x " % box_used[i]
 	print(txt)
-func update_num_buttons_disabled():
+func update_num_buttons_disabled():		# 使い切った数字ボタンをディセーブル
 	#var nUsed = []		# 各数字の使用数 [0] for EMPTY
 	for i in range(N_HORZ+1): num_used[i] = 0
 	for ix in range(N_CELLS):
@@ -760,14 +757,19 @@ func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強�
 				$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 			else:
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
+func set_num_cursor(num):
+	cur_num = num
+	for i in range(num_buttons.size()):
+		num_buttons[i].pressed = (i + 1 == num)
 func num_button_pressed(num, button_pressed):
 	#cur_num = num
 	if button_pressed:
-		for i in range(num_buttons.size()):
-			#if i + 1 != num: num_buttons[i].pressed = false
-			num_buttons[i].pressed = (i + 1 == num)
-	if !button_pressed: num = 0		# toggled
-	set_num_cursor(num)
+		set_num_cursor(num)
+		#for i in range(num_buttons.size()):
+		#	#if i + 1 != num: num_buttons[i].pressed = false
+		#	num_buttons[i].pressed = (i + 1 == num)
+	else:
+		cur_num = 0		# toggled
 	update_cell_cursor()
 	pass
 
