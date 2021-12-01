@@ -769,15 +769,21 @@ func set_num_cursor(num):
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i + 1 == num)
 func num_button_pressed(num, button_pressed):
-	#cur_num = num
-	if button_pressed:
-		set_num_cursor(num)
-		#for i in range(num_buttons.size()):
-		#	#if i + 1 != num: num_buttons[i].pressed = false
-		#	num_buttons[i].pressed = (i + 1 == num)
+	if cur_cell_ix >= 0:
+		if button_pressed:
+			input_labels[cur_cell_ix].text = String(num)
+			num_buttons[num-1].pressed = false
+			update_all_status()
 	else:
-		cur_num = 0		# toggled
-	update_cell_cursor()
+		#cur_num = num
+		if button_pressed:
+			set_num_cursor(num)
+			#for i in range(num_buttons.size()):
+			#	#if i + 1 != num: num_buttons[i].pressed = false
+			#	num_buttons[i].pressed = (i + 1 == num)
+		else:
+			cur_num = 0		# toggled
+		update_cell_cursor()
 	pass
 
 func _on_Button1_toggled(button_pressed):
