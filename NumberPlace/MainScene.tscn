@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -41,6 +41,10 @@
 [ext_resource path="res://sounds/don.mp3" type="AudioStream" id=39]
 [ext_resource path="res://images/lightorange.png" type="Texture" id=40]
 [ext_resource path="res://images/pink53x53.png" type="Texture" id=41]
+[ext_resource path="res://images/navigate_next_white.png" type="Texture" id=42]
+[ext_resource path="res://images/navigate_before_black.png" type="Texture" id=43]
+[ext_resource path="res://images/navigate_before_white.png" type="Texture" id=44]
+[ext_resource path="res://images/navigate_next_black.png" type="Texture" id=45]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -182,6 +186,10 @@ shader_param/center = Vector2( 0.5, 0.5 )
 shader_param/force = 0.024
 shader_param/size = 2.0
 shader_param/tichness = 0.1
+
+[sub_resource type="DynamicFont" id=20]
+size = 24
+font_data = ExtResource( 16 )
 
 [sub_resource type="DynamicFont" id=19]
 size = 24
@@ -802,11 +810,60 @@ stream = ExtResource( 39 )
 stream = ExtResource( 36 )
 
 [node name="HintLayer" type="ColorRect" parent="."]
-visible = false
 margin_top = 570.0
 margin_right = 500.0
 margin_bottom = 900.0
 color = Color( 0.501961, 0.752941, 0.501961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="HintLayer"]
+margin_left = 14.0
+margin_right = 62.0
+margin_bottom = 48.0
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HintLayer/TextureRect"]
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "ヒント"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PrevButton" type="TextureButton" parent="HintLayer"]
+margin_left = 144.0
+margin_right = 196.0
+margin_bottom = 48.0
+texture_normal = ExtResource( 43 )
+texture_pressed = ExtResource( 44 )
+
+[node name="PageLabel" type="Label" parent="HintLayer"]
+margin_top = 11.0
+margin_right = 500.0
+margin_bottom = 39.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 20 )
+text = "1/4"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NextButton" type="TextureButton" parent="HintLayer"]
+margin_left = 304.0
+margin_right = 352.0
+margin_bottom = 48.0
+texture_normal = ExtResource( 45 )
+texture_pressed = ExtResource( 42 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -830,24 +887,6 @@ margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "閉じる"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="HintLayer"]
-margin_left = 14.0
-margin_right = 62.0
-margin_bottom = 48.0
-texture = ExtResource( 7 )
-
-[node name="Label" type="Label" parent="HintLayer/TextureRect"]
-margin_top = 46.0
-margin_right = 48.0
-margin_bottom = 65.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "ヒント"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
