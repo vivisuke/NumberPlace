@@ -758,12 +758,19 @@ func clear_cell_cursor():
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, TILE_NONE)
 func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強調
-	for y in range(N_VERT):
-		for x in range(N_HORZ):
-			if cur_num != 0 && get_cell_numer(xyToIX(x, y)) == cur_num:
-				$Board/TileMap.set_cell(x, y, TILE_CURSOR)
-			else:
+	if cur_num != 0:
+		for y in range(N_VERT):
+			for x in range(N_HORZ):
+				if cur_num != 0 && get_cell_numer(xyToIX(x, y)) == cur_num:
+					$Board/TileMap.set_cell(x, y, TILE_CURSOR)
+				else:
+					$Board/TileMap.set_cell(x, y, TILE_NONE)
+	else:
+		for y in range(N_VERT):
+			for x in range(N_HORZ):
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
+		if cur_cell_ix >= 0:
+			do_emphasize(cur_cell_ix, CELL)
 func set_num_cursor(num):
 	cur_num = num
 	for i in range(num_buttons.size()):
@@ -774,10 +781,10 @@ func num_button_pressed(num, button_pressed):
 			var old = get_cell_numer(cur_cell_ix)
 			if num == old:		# 同じ数字を入れる → 削除
 				push_to_undo_stack([cur_cell_ix, old, 0])
-				input_labels[cur_cell_ix].text = String(num)
+				input_labels[cur_cell_ix].text = ""
 			else:
 				push_to_undo_stack([cur_cell_ix, old, num])
-				input_labels[cur_cell_ix].text = ""
+				input_labels[cur_cell_ix].text = String(num)
 			num_buttons[num-1].pressed = false
 			update_all_status()
 	else:		# セルが選択されていない場合
