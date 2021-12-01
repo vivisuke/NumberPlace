@@ -182,7 +182,7 @@ func _input(event):
 				return
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
-				push_to_undo_stack([ix, int(cur_num), 0])
+				push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
 				input_labels[ix].text = ""
 			else:
 				push_to_undo_stack([ix, int(input_labels[ix].text), int(cur_num)])
@@ -769,12 +769,18 @@ func set_num_cursor(num):
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i + 1 == num)
 func num_button_pressed(num, button_pressed):
-	if cur_cell_ix >= 0:
+	if cur_cell_ix >= 0:		# セルが選択されている場合
 		if button_pressed:
-			input_labels[cur_cell_ix].text = String(num)
+			var old = get_cell_numer(cur_cell_ix)
+			if num == old:		# 同じ数字を入れる → 削除
+				push_to_undo_stack([cur_cell_ix, old, 0])
+				input_labels[cur_cell_ix].text = String(num)
+			else:
+				push_to_undo_stack([cur_cell_ix, old, num])
+				input_labels[cur_cell_ix].text = ""
 			num_buttons[num-1].pressed = false
 			update_all_status()
-	else:
+	else:		# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
 			set_num_cursor(num)
@@ -905,7 +911,22 @@ func do_emphasize(ix : int, type):
 	if type == VERT || type == CELL:
 		for v in range(N_VERT):
 			$Board/TileMap.set_cell(x, v, TILE_PINK)
-	$Board/TileMap.set_cell(x, y, TILE_CURSOR)
+	if type == CELL:
+		$Board/TileMap.set_cell(x, y, TILE_CURSOR)
+func hint_hidden_single() -> bool:
+	var hs = search_hidden_single()
+	if hs == []: return false
+	do_emphasize(hs[IX_POS], hs[IX_TYPE])
+	$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。"
+	print(bit_to_numstr(hs[IX_BIT]))
+	return true
+func hint_nakid_single():
+	var ns = search_nakid_single()
+	if ns == []: return false
+	do_emphasize(ns[IX_POS], CELL)
+	$HintLayer/Label.text = "明黄色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。"
+	print(bit_to_numstr(ns[IX_BIT]))
+	return true
 func _on_HintButton_pressed():
 	$HintLayer.show()
 	hint_showed = true
@@ -916,18 +937,12 @@ func _on_HintButton_pressed():
 		do_emphasize(fh[IX_POS], fh[IX_TYPE])
 		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「フルハウス」で決まる箇所があります。"
 		return
-	var hs = search_hidden_single()
-	if hs != []:
-		do_emphasize(hs[IX_POS], hs[IX_TYPE])
-		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。"
-		print(bit_to_numstr(hs[IX_BIT]))
-		return
-	var ns = search_nakid_single()
-	if ns != []:
-		do_emphasize(ns[IX_POS], CELL)
-		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。"
-		print(bit_to_numstr(ns[IX_BIT]))
-		return
+	if cur_num != 0:	# 数字ボタン選択時
+		if hint_hidden_single(): return
+		if hint_nakid_single(): return
+	else:
+		if hint_nakid_single(): return
+		if hint_hidden_single(): return
 	pass # Replace with function body.
 
 func close_help():
