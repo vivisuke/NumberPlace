@@ -63,6 +63,7 @@ var box_used = []			# 各3x3ブロックの使用済みビット
 var rmix_list = []			# 削除位置リスト
 var rmixix					# 次に削除する要素位置
 var cur_num = 0				# 選択されている数字ボタン、0 for 選択無し
+var cur_cell_ix = -1		# 選択されているセルインデックス、-1 for 選択無し
 var nRemoved
 #var line_used_bits
 var clue_labels = []		# 手がかり数字用ラベル配列
@@ -172,8 +173,12 @@ func _input(event):
 		else:
 			if cur_num == 0:			# 数字ボタン非選択の場合
 				clear_cell_cursor()
-				#$Board/TileMap.set_cellv(mp, TILE_CURSOR)
-				do_emphasize(ix, CELL)
+				if ix == cur_cell_ix:
+					cur_cell_ix = -1
+				else:
+					cur_cell_ix = ix
+					#$Board/TileMap.set_cellv(mp, TILE_CURSOR)
+					do_emphasize(ix, CELL)
 				return
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
