@@ -3,7 +3,8 @@ extends Node2D
 enum {
 	HORZ = 1,
 	VERT,
-	BOX
+	BOX,
+	CELL,
 }
 
 const N_VERT = 9
@@ -876,33 +877,20 @@ func reset_TileMap():
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, -1)
-func do_emphasize_hvb(ix : int):
-	reset_TileMap()
-	var x = ix % N_HORZ
-	var y = ix / N_HORZ
-	var x0 = x - x % 3
-	var y0 = y - y % 3
-	for v in range(3):
-		for h in range(3):
-			$Board/TileMap.set_cell(x0+h, y0+v, TILE_PINK)
-	for h in range(N_HORZ):
-		$Board/TileMap.set_cell(h, y, TILE_PINK)
-	for v in range(N_VERT):
-		$Board/TileMap.set_cell(x, v, TILE_PINK)
 func do_emphasize(ix : int, type):
 	reset_TileMap()
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
-	if type == BOX:
+	if type == BOX || type == CELL:
 		var x0 = x - x % 3
 		var y0 = y - y % 3
 		for v in range(3):
 			for h in range(3):
 				$Board/TileMap.set_cell(x0+h, y0+v, TILE_PINK)
-	if type == HORZ:
+	if type == HORZ || type == CELL:
 		for h in range(N_HORZ):
 			$Board/TileMap.set_cell(h, y, TILE_PINK)
-	if type == VERT:
+	if type == VERT || type == CELL:
 		for v in range(N_VERT):
 			$Board/TileMap.set_cell(x, v, TILE_PINK)
 func _on_HintButton_pressed():
@@ -923,7 +911,7 @@ func _on_HintButton_pressed():
 		return
 	var ns = search_nakid_single()
 	if ns != []:
-		do_emphasize_hvb(ns[IX_POS])
+		do_emphasize(ns[IX_POS], CELL)
 		$HintLayer/Label.text = "淡紅色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。"
 		print(bit_to_numstr(ns[IX_BIT]))
 		return
