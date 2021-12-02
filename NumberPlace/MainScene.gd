@@ -193,7 +193,6 @@ func _input(event):
 		if clue_labels[ix].text != "":
 			# undone: 手がかり数字ボタン選択
 			num_button_pressed(int(clue_labels[ix].text), true)
-			pass
 		else:
 			if cur_num == 0:			# 数字ボタン非選択の場合
 				clear_cell_cursor()
@@ -217,7 +216,7 @@ func _input(event):
 		update_NEmptyLabel()
 		check_duplicated()
 		if $SoundButton.is_pressed():
-			if num_used[cur_num] >= 9:
+			if cur_num != 0 && num_used[cur_num] >= 9:
 				$AudioNumCompleted.play()
 			else:
 				$AudioNumClicked.play()
