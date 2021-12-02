@@ -192,6 +192,7 @@ func _input(event):
 		var ix = xyToIX(mp.x, mp.y)
 		if clue_labels[ix].text != "":
 			# undone: 手がかり数字ボタン選択
+			num_button_pressed(int(clue_labels[ix].text), true)
 			pass
 		else:
 			if cur_num == 0:			# 数字ボタン非選択の場合
