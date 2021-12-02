@@ -50,9 +50,11 @@ const HINT_FULLHOUSE = [
 ]
 const HINT_NAKID_SINGLE = [
 	"明黄色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。",
+	"「裸のシングル」とは",
 ]
 const HINT_HIDDEN_SINGLE = [
 	"明黄色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。",
+	"「隠れたシングル」とは",
 ]
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
@@ -60,6 +62,7 @@ const SETTINGS_FILE_NAME = "user://settings.dat"
 var solvedStat = false		# クリア済み状態
 var paused = false
 var hint_showed = false
+var hint_ix = 0				# 0, 1, 2, ...
 var hint_texts = []			# ヒントテキスト配列
 #var restarted = false
 var elapsedTime = 0.0   	# 経過時間（単位：秒）
@@ -951,10 +954,18 @@ func hint_nakid_single():
 	return true
 func show_hint():
 	hint_showed = true
+	hint_ix = 0
 	$HintLayer.show()
 	$HintLayer/Label.text = hint_texts[0]
 	$HintLayer/PageLabel.text = "1/%d" % hint_texts.size()
 	$HintLayer/PrevHintButton.disabled = true
+	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 1
+func hint_prev_next_page(d):
+	hint_ix += d
+	$HintLayer/Label.text = hint_texts[hint_ix]
+	$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix+1), hint_texts.size()]
+	$HintLayer/PrevHintButton.disabled = hint_ix == 0
+	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 1
 func _on_HintButton_pressed():
 	update_cell_bit()
 	init_candidates()
@@ -984,7 +995,6 @@ func _on_CloseHintButton_pressed():
 	pass # Replace with function body.
 
 func _on_PrevHintButton_pressed():
-	pass # Replace with function body.
-
+	hint_prev_next_page(-1)
 func _on_NextHintButton_pressed():
-	pass # Replace with function body.
+	hint_prev_next_page(1)
