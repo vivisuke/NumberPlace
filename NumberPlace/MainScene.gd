@@ -198,7 +198,7 @@ func _input(event):
 				else:
 					cur_cell_ix = ix
 					#$Board/TileMap.set_cellv(mp, TILE_CURSOR)
-					do_emphasize(ix, CELL)
+					do_emphasize(ix, CELL, false)
 				return
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
@@ -790,7 +790,7 @@ func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強�
 			for x in range(N_HORZ):
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
 		if cur_cell_ix >= 0:
-			do_emphasize(cur_cell_ix, CELL)
+			do_emphasize(cur_cell_ix, CELL, false)
 func set_num_cursor(num):
 	cur_num = num
 	for i in range(num_buttons.size()):
@@ -922,7 +922,7 @@ func reset_TileMap():
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, -1)
-func do_emphasize(ix : int, type):
+func do_emphasize(ix : int, type, fullhouse):
 	reset_TileMap()
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
@@ -938,12 +938,12 @@ func do_emphasize(ix : int, type):
 	if type == VERT || type == CELL:
 		for v in range(N_VERT):
 			$Board/TileMap.set_cell(x, v, TILE_PINK)
-	if type == CELL:
+	if type == CELL || fullhouse:
 		$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 func hint_hidden_single() -> bool:
 	var hs = search_hidden_single()
 	if hs == []: return false
-	do_emphasize(hs[IX_POS], hs[IX_TYPE])
+	do_emphasize(hs[IX_POS], hs[IX_TYPE], false)
 	hint_numstr = bit_to_numstr(hs[IX_BIT])
 	hint_texts = HINT_HIDDEN_SINGLE
 	print(bit_to_numstr(hs[IX_BIT]))
@@ -951,7 +951,7 @@ func hint_hidden_single() -> bool:
 func hint_nakid_single():
 	var ns = search_nakid_single()
 	if ns == []: return false
-	do_emphasize(ns[IX_POS], CELL)
+	do_emphasize(ns[IX_POS], CELL, false)
 	hint_numstr = bit_to_numstr(ns[IX_BIT])
 	hint_texts = HINT_NAKID_SINGLE
 	print(bit_to_numstr(ns[IX_BIT]))
@@ -975,7 +975,7 @@ func _on_HintButton_pressed():
 	init_candidates()
 	var fh = search_fullhouse()
 	if fh != []:
-		do_emphasize(fh[IX_POS], fh[IX_TYPE])
+		do_emphasize(fh[IX_POS], fh[IX_TYPE], true)
 		hint_numstr = bit_to_numstr(fh[IX_BIT])
 		hint_texts = HINT_FULLHOUSE
 	else:
