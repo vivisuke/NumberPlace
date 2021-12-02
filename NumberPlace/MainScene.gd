@@ -47,16 +47,18 @@ const HINT_FULLHOUSE = [
 	"強調された箇所に、「フルハウス」\nで決まる箇所があります。",
 	"「フルハウス」とは縦・横・3x3ブロック\nのいずれかに空欄がひとつだけの状態の\nことです。",
 	"この場合、空欄に入れることができるのは、\n“%d”だけです。",
-	"したがって、強調された部分の空欄には\n“%d”が入ります。",
+	"したがって、明黄色強調された部分の空欄\nには“%d”が入ります。",
 ]
 const HINT_NAKID_SINGLE = [
 	"強調された箇所に、「裸のシングル」\nで決まる箇所があります。",
 	"「裸のシングル」とは、関連する\n縦・横・3x3ブロックに特定の数字以外\nが全部ある状態のことです。",
-	""
+	"この場合、強調された部分に“%d”\n以外の数字が全部あります。 ",
+	"したがって、明黄色強調された部分の\n空欄には“%d”が入ります。",
 ]
 const HINT_HIDDEN_SINGLE = [
 	"強調された箇所に、「隠れたシングル」\nで決まる箇所があります。",
 	"「隠れたシングル」とは、強調された領域\nに入れることができる数字が一つだけ\nの状態のことです。",
+	"",
 ]
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
@@ -64,6 +66,7 @@ const SETTINGS_FILE_NAME = "user://settings.dat"
 var solvedStat = false		# クリア済み状態
 var paused = false
 var hint_showed = false
+var in_button_pressed = false	# ボタン押下処理中
 #var hint_num				# ヒントで確定する数字、[1, 9]
 var hint_numstr				# ヒントで確定する数字、[1, 9]
 var hint_ix = 0				# 0, 1, 2, ...
@@ -796,6 +799,8 @@ func set_num_cursor(num):
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i + 1 == num)
 func num_button_pressed(num, button_pressed):
+	if in_button_pressed: return		# ボタン押下処理中の場合
+	in_button_pressed = true
 	if cur_cell_ix >= 0:		# セルが選択されている場合
 		if button_pressed:
 			var old = get_cell_numer(cur_cell_ix)
@@ -817,6 +822,7 @@ func num_button_pressed(num, button_pressed):
 		else:
 			cur_num = 0		# toggled
 		update_cell_cursor()
+	in_button_pressed = false
 	pass
 
 func _on_Button1_toggled(button_pressed):
