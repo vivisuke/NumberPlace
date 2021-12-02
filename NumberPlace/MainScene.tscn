@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -45,6 +45,8 @@
 [ext_resource path="res://images/navigate_before_black.png" type="Texture" id=43]
 [ext_resource path="res://images/navigate_before_white.png" type="Texture" id=44]
 [ext_resource path="res://images/navigate_next_black.png" type="Texture" id=45]
+[ext_resource path="res://images/navigate_next_gray.png" type="Texture" id=46]
+[ext_resource path="res://images/navigate_before_gray.png" type="Texture" id=47]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -810,6 +812,7 @@ stream = ExtResource( 39 )
 stream = ExtResource( 36 )
 
 [node name="HintLayer" type="ColorRect" parent="."]
+visible = false
 margin_top = 570.0
 margin_right = 500.0
 margin_bottom = 900.0
@@ -839,12 +842,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PrevButton" type="TextureButton" parent="HintLayer"]
+[node name="PrevHintButton" type="TextureButton" parent="HintLayer"]
 margin_left = 144.0
 margin_right = 196.0
 margin_bottom = 48.0
 texture_normal = ExtResource( 43 )
 texture_pressed = ExtResource( 44 )
+texture_disabled = ExtResource( 47 )
 
 [node name="PageLabel" type="Label" parent="HintLayer"]
 margin_top = 11.0
@@ -864,6 +868,7 @@ margin_right = 352.0
 margin_bottom = 48.0
 texture_normal = ExtResource( 45 )
 texture_pressed = ExtResource( 42 )
+texture_disabled = ExtResource( 46 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -927,4 +932,6 @@ __meta__ = {
 [connection signal="toggled" from="Button7" to="." method="_on_Button7_toggled"]
 [connection signal="toggled" from="Button8" to="." method="_on_Button8_toggled"]
 [connection signal="toggled" from="Button9" to="." method="_on_Button9_toggled"]
-[connection signal="pressed" from="HintLayer/CloseHintButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="HintLayer/PrevHintButton" to="." method="_on_PrevHintButton_pressed"]
+[connection signal="pressed" from="HintLayer/NextHintButton" to="." method="_on_NextHintButton_pressed"]
+[connection signal="pressed" from="HintLayer/CloseHintButton" to="." method="_on_CloseHintButton_pressed"]

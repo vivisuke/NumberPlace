@@ -953,6 +953,8 @@ func show_hint():
 	hint_showed = true
 	$HintLayer.show()
 	$HintLayer/Label.text = hint_texts[0]
+	$HintLayer/PageLabel.text = "1/%d" % hint_texts.size()
+	$HintLayer/PrevHintButton.disabled = true
 func _on_HintButton_pressed():
 	update_cell_bit()
 	init_candidates()
@@ -977,6 +979,12 @@ func close_hint():
 	hint_showed = false
 	update_cell_cursor()
 	set_num_cursor(cur_num)
-func _on_CloseButton_pressed():
+func _on_CloseHintButton_pressed():
 	close_hint()
+	pass # Replace with function body.
+
+func _on_PrevHintButton_pressed():
+	pass # Replace with function body.
+
+func _on_NextHintButton_pressed():
 	pass # Replace with function body.
