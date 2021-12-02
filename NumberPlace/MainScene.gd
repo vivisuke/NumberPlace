@@ -44,17 +44,19 @@ const IX_BIT = 1
 const IX_TYPE = 2
 
 const HINT_FULLHOUSE = [
-	"淡紅色で強調された箇所に、\n「フルハウス」で決まる箇所があります。",
-	"「フルハウス」とは縦・横・3x3ブロックのいずれかに空欄がひとつだけのことです。",
-	"この場合、空欄に入られるのは %d だけです。",
+	"強調された箇所に、「フルハウス」\nで決まる箇所があります。",
+	"「フルハウス」とは縦・横・3x3ブロック\nのいずれかに空欄がひとつだけの状態の\nことです。",
+	"この場合、空欄に入れることができるのは、\n“%d”だけです。",
+	"したがって、強調された部分の空欄には\n“%d”が入ります。",
 ]
 const HINT_NAKID_SINGLE = [
-	"明黄色で強調された箇所に、\n「裸のシングル」で決まる箇所があります。",
-	"「裸のシングル」とは",
+	"強調された箇所に、「裸のシングル」\nで決まる箇所があります。",
+	"「裸のシングル」とは、関連する\n縦・横・3x3ブロックに特定の数字以外\nが全部ある状態のことです。",
+	""
 ]
 const HINT_HIDDEN_SINGLE = [
-	"明黄色で強調された箇所に、\n「隠れたシングル」で決まる箇所があります。",
-	"「隠れたシングル」とは",
+	"強調された箇所に、「隠れたシングル」\nで決まる箇所があります。",
+	"「隠れたシングル」とは、強調された領域\nに入れることができる数字が一つだけ\nの状態のことです。",
 ]
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
@@ -62,6 +64,8 @@ const SETTINGS_FILE_NAME = "user://settings.dat"
 var solvedStat = false		# クリア済み状態
 var paused = false
 var hint_showed = false
+#var hint_num				# ヒントで確定する数字、[1, 9]
+var hint_numstr				# ヒントで確定する数字、[1, 9]
 var hint_ix = 0				# 0, 1, 2, ...
 var hint_texts = []			# ヒントテキスト配列
 #var restarted = false
@@ -940,7 +944,7 @@ func hint_hidden_single() -> bool:
 	var hs = search_hidden_single()
 	if hs == []: return false
 	do_emphasize(hs[IX_POS], hs[IX_TYPE])
-	#$HintLayer/Label.text = 
+	hint_numstr = bit_to_numstr(hs[IX_BIT])
 	hint_texts = HINT_HIDDEN_SINGLE
 	print(bit_to_numstr(hs[IX_BIT]))
 	return true
@@ -948,7 +952,7 @@ func hint_nakid_single():
 	var ns = search_nakid_single()
 	if ns == []: return false
 	do_emphasize(ns[IX_POS], CELL)
-	#$HintLayer/Label.text = 
+	hint_numstr = bit_to_numstr(ns[IX_BIT])
 	hint_texts = HINT_NAKID_SINGLE
 	print(bit_to_numstr(ns[IX_BIT]))
 	return true
@@ -962,7 +966,7 @@ func show_hint():
 	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 1
 func hint_prev_next_page(d):
 	hint_ix += d
-	$HintLayer/Label.text = hint_texts[hint_ix]
+	$HintLayer/Label.text = hint_texts[hint_ix].replace("%d", hint_numstr)
 	$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix+1), hint_texts.size()]
 	$HintLayer/PrevHintButton.disabled = hint_ix == 0
 	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 1
@@ -972,7 +976,7 @@ func _on_HintButton_pressed():
 	var fh = search_fullhouse()
 	if fh != []:
 		do_emphasize(fh[IX_POS], fh[IX_TYPE])
-		#$HintLayer/Label.text = 
+		hint_numstr = bit_to_numstr(fh[IX_BIT])
 		hint_texts = HINT_FULLHOUSE
 	else:
 		if cur_num != 0:	# 数字ボタン選択時
