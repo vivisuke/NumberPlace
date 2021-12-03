@@ -44,21 +44,22 @@ const IX_BIT = 1
 const IX_TYPE = 2
 
 const HINT_FULLHOUSE = [
-	"強調された箇所に、「フルハウス」\nで決まる箇所があります。",
-	"「フルハウス」とは縦・横・3x3ブロック\nのいずれかに空欄がひとつだけの状態の\nことです。",
-	"この場合、空欄に入れることができるのは、\n“%d”だけです。",
-	"したがって、明黄色強調された部分の空欄\nには“%d”が入ります。",
+	"強調された箇所に、「フルハウス」\nで決まる箇所があります。", false,
+	"「フルハウス」とは縦・横・3x3ブロック\nのいずれかに空欄がひとつだけの状態の\nことです。", false,
+	"この場合、空欄に入れることができるのは、\n“%d”だけです。", false,
+	"したがって、明黄色強調された部分の空欄\nには“%d”が入ります。", false,
 ]
 const HINT_NAKID_SINGLE = [
-	"強調された箇所に、「裸のシングル」\nで決まる箇所があります。",
-	"「裸のシングル」とは、関連する\n縦・横・3x3ブロックに特定の数字以外\nが全部ある状態のことです。",
-	"この場合、強調された部分に“%d”\n以外の数字が全部あります。 ",
-	"したがって、明黄色強調された部分の\n空欄には“%d”が入ります。",
+	"強調された箇所に、「裸のシングル」\nで決まる箇所があります。", false,
+	"「裸のシングル」とは、関連する\n縦・横・3x3ブロックに特定の数字以外\nが全部ある状態のことです。", false,
+	"この場合、強調された部分に“%d”\n以外の数字が全部あります。 ", false,
+	"したがって、明黄色強調された部分の\n空欄には“%d”が入ります。", false,
 ]
 const HINT_HIDDEN_SINGLE = [
-	"強調された箇所に、「隠れたシングル」\nで決まる箇所があります。",
-	"「隠れたシングル」とは、強調された領域\nに入れることができる数字が一つだけ\nの状態のことです。",
-	"",
+	"強調された箇所に、「隠れたシングル」\nで決まる箇所があります。", false,
+	"「隠れたシングル」とは、ある数字が\n強調された領域の一箇所にしか入れる\nことができない状態のことです。", false,
+	"この場合、バツの場所に“%d”を入れる\nことが出来ません。", true,
+	"したがって、残った空欄には“%d”が\n入ります。", true, 
 ]
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
@@ -960,6 +961,14 @@ func hint_hidden_single() -> bool:
 	hint_numstr = bit_to_numstr(hs[IX_BIT])
 	hint_texts = HINT_HIDDEN_SINGLE
 	print(bit_to_numstr(hs[IX_BIT]))
+	g.hint_pos = hs[IX_POS]
+	g.hint_bit = hs[IX_BIT]
+	g.hint_type = hs[IX_TYPE]
+	g.cell_bit = cell_bit
+	g.candidates_bit = candidates_bit
+	#var hg = $Board/HintGuide
+	#print(hg)
+	$Board/HintGuide.update()		# 再描画
 	return true
 func hint_nakid_single():
 	var ns = search_nakid_single()
@@ -974,15 +983,19 @@ func show_hint():
 	hint_ix = 0
 	$HintLayer.show()
 	$HintLayer/Label.text = hint_texts[0]
-	$HintLayer/PageLabel.text = "1/%d" % hint_texts.size()
+	$HintLayer/PageLabel.text = "1/%d" % (hint_texts.size()/2)
 	$HintLayer/PrevHintButton.disabled = true
-	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 1
+	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 2
+	g.show_hint_guide = hint_texts[hint_ix + 1]
+	$Board/HintGuide.update()
 func hint_prev_next_page(d):
-	hint_ix += d
+	hint_ix += d * 2
 	$HintLayer/Label.text = hint_texts[hint_ix].replace("%d", hint_numstr)
-	$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix+1), hint_texts.size()]
+	$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix/2+1), (hint_texts.size()/2)]
 	$HintLayer/PrevHintButton.disabled = hint_ix == 0
-	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 1
+	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 2
+	g.show_hint_guide = hint_texts[hint_ix + 1]
+	$Board/HintGuide.update()
 func _on_HintButton_pressed():
 	update_cell_bit()
 	init_candidates()
@@ -1007,6 +1020,8 @@ func close_hint():
 	hint_showed = false
 	update_cell_cursor()
 	set_num_cursor(cur_num)
+	g.show_hint_guide = false
+	$Board/HintGuide.update()
 func _on_CloseHintButton_pressed():
 	close_hint()
 	pass # Replace with function body.

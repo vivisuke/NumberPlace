@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -47,6 +47,7 @@
 [ext_resource path="res://images/navigate_next_black.png" type="Texture" id=45]
 [ext_resource path="res://images/navigate_next_gray.png" type="Texture" id=46]
 [ext_resource path="res://images/navigate_before_gray.png" type="Texture" id=47]
+[ext_resource path="res://HintGuide.gd" type="Script" id=48]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -301,6 +302,15 @@ margin_right = 477.0
 margin_bottom = 477.0
 color = Color( 1, 1, 1, 0 )
 script = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HintGuide" type="ColorRect" parent="Board"]
+margin_right = 477.0
+margin_bottom = 477.0
+color = Color( 1, 1, 1, 0 )
+script = ExtResource( 48 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
