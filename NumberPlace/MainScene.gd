@@ -111,6 +111,9 @@ func _ready():
 	seed(g.qName.hash())
 	#print($TitleBar/Label.text)
 	$TitleBar/Label.text = titleText()
+	#$Board/HintGuide.hide()
+	g.show_hint_guide = false
+	$Board/HintGuide.update()
 	var file = File.new()
 	if file.file_exists(g.settingsFileName):		# 設定ファイル
 		file.open(g.settingsFileName, File.READ)
