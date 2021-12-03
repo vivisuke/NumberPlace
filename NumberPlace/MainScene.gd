@@ -87,6 +87,7 @@ var rmix_list = []			# 削除位置リスト
 var rmixix					# 次に削除する要素位置
 var cur_num = 0				# 選択されている数字ボタン、0 for 選択無し
 var cur_cell_ix = -1		# 選択されているセルインデックス、-1 for 選択無し
+var input_num = 0			# 入力された数字
 var nRemoved
 #var line_used_bits
 var clue_labels = []		# 手がかり数字用ラベル配列
@@ -181,6 +182,12 @@ func push_to_undo_stack(item):
 		undo_stack.resize(undo_ix)
 	undo_stack.push_back(item)
 	undo_ix += 1
+func sound_effect():
+	if $SoundButton.is_pressed():
+		if input_num != 0 && num_used[input_num] >= 9:
+			$AudioNumCompleted.play()
+		else:
+			$AudioNumClicked.play()
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
@@ -189,6 +196,7 @@ func _input(event):
 		if hint_showed:
 			close_hint()
 			return
+		input_num = 0
 		var ix = xyToIX(mp.x, mp.y)
 		if clue_labels[ix].text != "":
 			# undone: 手がかり数字ボタン選択
@@ -208,18 +216,15 @@ func _input(event):
 				push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
 				input_labels[ix].text = ""
 			else:
-				push_to_undo_stack([ix, int(input_labels[ix].text), int(cur_num)])
+				input_num = int(cur_num)
+				push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
 				input_labels[ix].text = num_str
 		update_undo_redo()
 		update_num_buttons_disabled()
 		update_cell_cursor()
 		update_NEmptyLabel()
 		check_duplicated()
-		if $SoundButton.is_pressed():
-			if cur_num != 0 && num_used[cur_num] >= 9:
-				$AudioNumCompleted.play()
-			else:
-				$AudioNumClicked.play()
+		sound_effect()
 		if !solvedStat && is_solved():
 			$CanvasLayer/ColorRect.show()
 			shock_wave_timer = 0.0      # start shock wave
@@ -798,7 +803,7 @@ func set_num_cursor(num):
 	cur_num = num
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i + 1 == num)
-func num_button_pressed(num, button_pressed):
+func num_button_pressed(num : int, button_pressed):
 	if in_button_pressed: return		# ボタン押下処理中の場合
 	in_button_pressed = true
 	if cur_cell_ix >= 0:		# セルが選択されている場合
@@ -808,10 +813,12 @@ func num_button_pressed(num, button_pressed):
 				push_to_undo_stack([cur_cell_ix, old, 0])
 				input_labels[cur_cell_ix].text = ""
 			else:
+				input_num = num
 				push_to_undo_stack([cur_cell_ix, old, num])
 				input_labels[cur_cell_ix].text = String(num)
 			num_buttons[num-1].pressed = false
 			update_all_status()
+			sound_effect()
 	else:		# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
