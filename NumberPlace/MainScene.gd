@@ -991,6 +991,7 @@ func hint_prev_next_page(d):
 	g.show_hint_guide = hint_texts[hint_ix + 1]
 	$Board/HintGuide.update()
 func _on_HintButton_pressed():
+	hint_texts = []
 	update_cell_bit()
 	init_candidates()
 	var fh = search_fullhouse()
