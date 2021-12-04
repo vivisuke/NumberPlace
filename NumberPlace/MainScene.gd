@@ -225,7 +225,7 @@ func _input(event):
 				input_labels[ix].text = num_str
 		update_undo_redo()
 		update_num_buttons_disabled()
-		update_cell_cursor()
+		update_cell_cursor(cur_num)
 		update_NEmptyLabel()
 		check_duplicated()
 		sound_effect()
@@ -317,7 +317,7 @@ func _process(delta):
 	pass
 func update_all_status():
 	update_undo_redo()
-	update_cell_cursor()
+	update_cell_cursor(cur_num)
 	update_NEmptyLabel()
 	update_num_buttons_disabled()
 	check_duplicated()
@@ -790,11 +790,11 @@ func clear_cell_cursor():
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, TILE_NONE)
-func update_cell_cursor():		# 選択数字ボタンと同じ数字セルを強調
-	if cur_num != 0:
+func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを強調
+	if num != 0:
 		for y in range(N_VERT):
 			for x in range(N_HORZ):
-				if cur_num != 0 && get_cell_numer(xyToIX(x, y)) == cur_num:
+				if num != 0 && get_cell_numer(xyToIX(x, y)) == num:
 					$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 				else:
 					$Board/TileMap.set_cell(x, y, TILE_NONE)
@@ -833,7 +833,7 @@ func num_button_pressed(num : int, button_pressed):
 			#	num_buttons[i].pressed = (i + 1 == num)
 		else:
 			cur_num = 0		# toggled
-		update_cell_cursor()
+		update_cell_cursor(cur_num)
 	in_button_pressed = false
 	pass
 
@@ -1022,10 +1022,12 @@ func _on_HintButton_pressed():
 func close_hint():
 	$HintLayer.hide()
 	hint_showed = false
-	update_cell_cursor()
 	set_num_cursor(cur_num)
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
+	if cur_num != 0:
+		cur_num = bit_to_num(g.hint_bit)
+	update_cell_cursor(cur_num)
 func _on_CloseHintButton_pressed():
 	close_hint()
 	pass # Replace with function body.
