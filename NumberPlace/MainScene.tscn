@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -51,6 +51,9 @@
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
+font_data = ExtResource( 27 )
+
+[sub_resource type="DynamicFont" id=21]
 font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=11]
@@ -250,8 +253,8 @@ margin_top = 58.0
 margin_right = 109.0
 margin_bottom = 79.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 11 )
-text = "dfclt: 0"
+custom_fonts/font = SubResource( 21 )
+text = "難易度: 0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -376,9 +379,9 @@ __meta__ = {
 
 [node name="RestartButton" type="TextureButton" parent="."]
 margin_left = 373.0
-margin_top = 670.0
+margin_top = 590.0
 margin_right = 421.0
-margin_bottom = 718.0
+margin_bottom = 638.0
 texture_normal = ExtResource( 21 )
 texture_pressed = ExtResource( 22 )
 __meta__ = {
@@ -398,9 +401,9 @@ __meta__ = {
 }
 
 [node name="PauseButton" type="TextureButton" parent="."]
-margin_left = 373.0
+margin_left = 435.0
 margin_top = 590.0
-margin_right = 421.0
+margin_right = 483.0
 margin_bottom = 638.0
 texture_normal = ExtResource( 25 )
 texture_pressed = ExtResource( 26 )
@@ -420,53 +423,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NextButton0" type="TextureButton" parent="."]
-margin_left = 435.0
-margin_top = 590.0
-margin_right = 483.0
-margin_bottom = 638.0
-texture_normal = ExtResource( 23 )
-texture_pressed = ExtResource( 24 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="NextButton0"]
-margin_top = 46.0
-margin_right = 48.0
-margin_bottom = 65.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "入門"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NextButton1" type="TextureButton" parent="."]
-margin_left = 435.0
-margin_top = 670.0
-margin_right = 483.0
-margin_bottom = 718.0
-texture_normal = ExtResource( 23 )
-texture_pressed = ExtResource( 24 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="NextButton1"]
-margin_top = 46.0
-margin_right = 48.0
-margin_bottom = 65.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "初級"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NextButton2" type="TextureButton" parent="."]
+[node name="NextButton" type="TextureButton" parent="."]
 margin_left = 435.0
 margin_top = 750.0
 margin_right = 483.0
@@ -477,13 +434,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="NextButton2"]
+[node name="Label" type="Label" parent="NextButton"]
 margin_top = 46.0
 margin_right = 48.0
 margin_bottom = 65.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
-text = "初中級"
+text = "次問題"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -952,9 +909,7 @@ __meta__ = {
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
-[connection signal="pressed" from="NextButton0" to="." method="_on_NextButton0_pressed"]
-[connection signal="pressed" from="NextButton1" to="." method="_on_NextButton1_pressed"]
-[connection signal="pressed" from="NextButton2" to="." method="_on_NextButton2_pressed"]
+[connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]

@@ -302,7 +302,7 @@ func _process(delta):
 			#update_num_buttons_disabled()
 			#update_NEmptyLabel()
 			#check_duplicated()
-			$DfcltLabel.text = "dfclt: %.1f" % (diffculty/10.0)
+			$DfcltLabel.text = "難易度: %.1f" % (diffculty/10.0)
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
 			print("diffculty = ", diffculty)
@@ -856,26 +856,10 @@ func _on_Button8_toggled(button_pressed):
 func _on_Button9_toggled(button_pressed):
 	num_button_pressed(9, button_pressed)
 
-func _on_NextButton0_pressed():
-	#print("sel id = ", $OptionButton.get_selected_id())
-	g.qLevel = 0
+func _on_NextButton_pressed():
 	gen_qName()
 	$TitleBar/Label.text = titleText()
 	gen_quest_greedy()
-	#print("sel id = ", $OptionButton.get_selected_id())
-	pass # Replace with function body.
-func _on_NextButton1_pressed():
-	g.qLevel = 1
-	gen_qName()
-	$TitleBar/Label.text = titleText()
-	gen_quest_greedy()
-	pass # Replace with function body.
-func _on_NextButton2_pressed():
-	g.qLevel = 2
-	gen_qName()
-	$TitleBar/Label.text = titleText()
-	gen_quest_greedy()
-	pass # Replace with function body.
 
 func _on_PauseButton_pressed():
 	if !rmix_list.empty(): return		# 問題自動生成中はポーズ禁止
