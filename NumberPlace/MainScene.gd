@@ -192,6 +192,11 @@ func sound_effect():
 			$AudioNumCompleted.play()
 		else:
 			$AudioNumClicked.play()
+func on_solved():
+	$CanvasLayer/ColorRect.show()
+	shock_wave_timer = 0.0      # start shock wave
+	solvedStat = true
+	if $SoundButton.is_pressed(): $AudioSolved.play()
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
@@ -230,10 +235,7 @@ func _input(event):
 		check_duplicated()
 		sound_effect()
 		if !solvedStat && is_solved():
-			$CanvasLayer/ColorRect.show()
-			shock_wave_timer = 0.0      # start shock wave
-			solvedStat = true
-			if $SoundButton.is_pressed(): $AudioSolved.play()
+			on_solved()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
 		if event.as_text() != "Alt" && hint_showed:
@@ -804,7 +806,7 @@ func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを�
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
 		if cur_cell_ix >= 0:
 			do_emphasize(cur_cell_ix, CELL, false)
-func set_num_cursor(num):
+func set_num_cursor(num):	# 当該ボタンだけを選択状態に
 	cur_num = num
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i + 1 == num)
@@ -824,6 +826,8 @@ func num_button_pressed(num : int, button_pressed):
 			num_buttons[num-1].pressed = false
 			update_all_status()
 			sound_effect()
+			if !solvedStat && is_solved():
+				on_solved()
 	else:		# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
@@ -1014,7 +1018,8 @@ func close_hint():
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
 	if cur_num != 0:
-		cur_num = bit_to_num(g.hint_bit)
+		#cur_num = bit_to_num(g.hint_bit)
+		set_num_cursor(bit_to_num(g.hint_bit))
 	else:
 		cur_cell_ix = g.hint_pos
 	update_cell_cursor(cur_num)

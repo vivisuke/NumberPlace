@@ -107,7 +107,7 @@ margin_right = 477.0
 margin_bottom = 570.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
-text = "入門問題"
+text = "入門問題を生成"
 icon = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -120,7 +120,7 @@ margin_right = 477.0
 margin_bottom = 646.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
-text = "初級問題"
+text = "初級問題を生成"
 icon = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -133,7 +133,7 @@ margin_right = 477.0
 margin_bottom = 723.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
-text = "初中級問題"
+text = "初中級問題を生成"
 icon = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
