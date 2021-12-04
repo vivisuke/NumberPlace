@@ -632,7 +632,7 @@ func search_nakid_single() -> Array:	# [] for not found, [pos, bit]
 func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 	# return []		# for test
 	# 3x3 ブロックで探索
-	if true:		# for Test
+	if true:		# false for Test
 		for y0 in range(0, N_VERT, 3):
 			for x0 in range(0, N_HORZ, 3):
 				# (x0, y0) の 3x3 ブロック内で、可能なビットの数を数える
@@ -652,7 +652,7 @@ func search_hidden_single() -> Array:	# [] for not found, [pos, bit]
 								return [xyToIX(x0+h, y0+v), b0, BOX]
 
 	# 水平方向検索
-	if true:		# for Test
+	if true:		# false for Test
 		for y in range(N_VERT):
 			var b0 = 0
 			var b1 = 0
