@@ -860,6 +860,19 @@ texture_normal = ExtResource( 43 )
 texture_pressed = ExtResource( 44 )
 texture_disabled = ExtResource( 47 )
 
+[node name="Label" type="Label" parent="HintLayer/PrevHintButton"]
+margin_left = -5.0
+margin_top = 46.0
+margin_right = 59.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "前ページ"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="PageLabel" type="Label" parent="HintLayer"]
 margin_top = 11.0
 margin_right = 500.0
@@ -879,6 +892,19 @@ margin_bottom = 48.0
 texture_normal = ExtResource( 45 )
 texture_pressed = ExtResource( 42 )
 texture_disabled = ExtResource( 46 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HintLayer/NextHintButton"]
+margin_left = -5.0
+margin_top = 46.0
+margin_right = 59.0
+margin_bottom = 65.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "次ページ"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
