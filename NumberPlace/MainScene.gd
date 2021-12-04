@@ -105,10 +105,10 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	rng.randomize()
-	print("g.qLevel = ", g.qLevel)
+	print("g.qLevel = ", g.qLevel)		# 問題難易度レベル、0, 1, 2
 	if g.qName == "":
 		gen_qName()
-	seed(g.qName.hash())
+	seed((g.qName+String(g.qLevel)).hash())
 	#print($TitleBar/Label.text)
 	$TitleBar/Label.text = titleText()
 	#$Board/HintGuide.hide()
