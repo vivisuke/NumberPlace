@@ -981,6 +981,8 @@ func hint_nakid_single():
 	hint_numstr = bit_to_numstr(ns[IX_BIT])
 	hint_texts = HINT_NAKID_SINGLE
 	print(bit_to_numstr(ns[IX_BIT]))
+	g.hint_pos = ns[IX_POS]
+	g.hint_bit = ns[IX_BIT]
 	return true
 func show_hint():
 	hint_showed = true
@@ -1005,6 +1007,8 @@ func _on_HintButton_pressed():
 	init_candidates()
 	var fh = search_fullhouse()
 	if fh != []:
+		g.hint_pos = fh[IX_POS]
+		g.hint_bit = fh[IX_BIT]
 		do_emphasize(fh[IX_POS], fh[IX_TYPE], true)
 		hint_numstr = bit_to_numstr(fh[IX_BIT])
 		hint_texts = HINT_FULLHOUSE
@@ -1027,6 +1031,8 @@ func close_hint():
 	$Board/HintGuide.update()
 	if cur_num != 0:
 		cur_num = bit_to_num(g.hint_bit)
+	else:
+		cur_cell_ix = g.hint_pos
 	update_cell_cursor(cur_num)
 func _on_CloseHintButton_pressed():
 	close_hint()
