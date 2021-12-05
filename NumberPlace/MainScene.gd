@@ -46,6 +46,9 @@ const IX_TYPE = 2
 const HINT_DUPLICATED = [
 	"縦横3x3ブロックに重複した数字（赤色）\nがあり、ヒントを表示できません。", false
 ]
+const HINT_MISTAKE = [
+	"間違って入っている数字があるため\nヒントを表示できません。", false
+]
 const HINT_FULLHOUSE = [
 	"強調された箇所に、「フルハウス」\nで決まる箇所があります。\n※「フルハウス」の説明は次ページ", false,
 	"「フルハウス」とは縦・横・3x3ブロック\nのいずれかに空欄がひとつだけの状態の\nことです。", false,
@@ -1011,12 +1014,19 @@ func hint_prev_next_page(d):
 	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 2
 	g.show_hint_guide = hint_texts[hint_ix + 1]
 	$Board/HintGuide.update()
+func is_no_mistake():		# 間違って入っている数字が無いか？
+	for ix in range(N_CELLS):
+		var n = get_cell_numer(ix)
+		if n != 0 && bit_to_num(ans_bit[ix]) != n: return false
+	return true
 func _on_HintButton_pressed():
 	hint_texts = []
 	update_cell_bit()
 	init_candidates()
 	if nDuplicated != 0:
 		hint_texts = HINT_DUPLICATED
+	elif !is_no_mistake():
+		hint_texts = HINT_MISTAKE
 	else:
 		var fh = search_fullhouse()
 		if fh != []:
