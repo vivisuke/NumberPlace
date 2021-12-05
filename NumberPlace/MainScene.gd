@@ -43,6 +43,9 @@ const IX_POS = 0
 const IX_BIT = 1
 const IX_TYPE = 2
 
+const HINT_DUPLICATED = [
+	"縦横3x3ブロックに重複した数字（赤色）\nがあり、ヒントを表示できません。", false
+]
 const HINT_FULLHOUSE = [
 	"強調された箇所に、「フルハウス」\nで決まる箇所があります。\n※「フルハウス」の説明は次ページ", false,
 	"「フルハウス」とは縦・横・3x3ブロック\nのいずれかに空欄がひとつだけの状態の\nことです。", false,
@@ -50,7 +53,7 @@ const HINT_FULLHOUSE = [
 	"したがって、明黄色強調された部分の空欄\nには“%d”が入ります。", false,
 ]
 const HINT_NAKID_SINGLE = [
-	"強調された箇所に、「裸のシングル」\nで決まる箇所があります。\n※「裸のシング」の説明は次ページ", false,
+	"強調された箇所に、「裸のシングル」\nで決まる箇所があります。\n※「裸のシングル」の説明は次ページ", false,
 	"「裸のシングル」とは、関連する\n縦・横・3x3ブロックに特定の数字以外\nが全部ある状態のことです。", false,
 	"この場合、強調された部分に“%d”\n以外の数字が全部あります。 ", false,
 	"したがって、明黄色強調された部分の\n空欄には“%d”が入ります。", false,
@@ -80,6 +83,7 @@ var nDuplicated = 0			# 重複数字数
 var diffculty = 0			# 難易度、フルハウス: 1, 隠れたシングル: 2, 裸のシングル: 10pnt？
 var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
 var num_used = []			# 各数字使用数（手がかり数字＋入力数字）
+var ans_bit = []			# 解答の各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var candidates_bit = []		# 入力可能ビット論理和
 var column_used = []		# 各カラムの使用済みビット
@@ -516,6 +520,7 @@ func gen_ans():		# 解答生成
 	gen_ans_sub(N_HORZ, 0)
 	print_cells()
 	#update_cell_labels()
+	ans_bit = cell_bit.duplicate()
 	for i in range(N_CELLS): input_labels[i].text = ""		# 入力ラベル全消去
 	pass
 func remove_clue_ix(ix):
@@ -1010,20 +1015,23 @@ func _on_HintButton_pressed():
 	hint_texts = []
 	update_cell_bit()
 	init_candidates()
-	var fh = search_fullhouse()
-	if fh != []:
-		g.hint_pos = fh[IX_POS]
-		g.hint_bit = fh[IX_BIT]
-		do_emphasize(fh[IX_POS], fh[IX_TYPE], true)
-		hint_numstr = bit_to_numstr(fh[IX_BIT])
-		hint_texts = HINT_FULLHOUSE
+	if nDuplicated != 0:
+		hint_texts = HINT_DUPLICATED
 	else:
-		if cur_num != 0:	# 数字ボタン選択時
-			if !hint_hidden_single():
-				hint_nakid_single()
+		var fh = search_fullhouse()
+		if fh != []:
+			g.hint_pos = fh[IX_POS]
+			g.hint_bit = fh[IX_BIT]
+			do_emphasize(fh[IX_POS], fh[IX_TYPE], true)
+			hint_numstr = bit_to_numstr(fh[IX_BIT])
+			hint_texts = HINT_FULLHOUSE
 		else:
-			if !hint_nakid_single():
-				hint_hidden_single()
+			if cur_num != 0:	# 数字ボタン選択時
+				if !hint_hidden_single():
+					hint_nakid_single()
+			else:
+				if !hint_nakid_single():
+					hint_hidden_single()
 	if hint_texts != []:
 		show_hint()
 	pass # Replace with function body.
