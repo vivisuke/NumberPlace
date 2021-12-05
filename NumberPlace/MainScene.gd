@@ -114,12 +114,7 @@ func _ready():
 	#$Board/HintGuide.hide()
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
-	var file = File.new()
-	if file.file_exists(g.settingsFileName):		# 設定ファイル
-		file.open(g.settingsFileName, File.READ)
-		g.settings = file.get_var()
-		file.close()
-		print(g.settings)
+	load_settings()
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
 	column_used.resize(N_HORZ)
@@ -168,10 +163,22 @@ func titleText() -> String:
 	elif g.qLevel == 1: tt = "【初級】"
 	elif g.qLevel == 2: tt = "【初中級】"
 	return tt + "“" + g.qName + "”"
-func saveSettings():
+func load_settings():
 	var file = File.new()
-	file.open(g.settingsFileName, File.WRITE)
+	if file.file_exists(g.SettingsFileName):		# 設定ファイル
+		file.open(g.SettingsFileName, File.READ)
+		g.settings = file.get_var()
+		file.close()
+		#print(g.settings)
+func save_settings():
+	var file = File.new()
+	file.open(g.SettingsFileName, File.WRITE)
 	file.store_var(g.settings)
+	file.close()
+func save_stats():
+	var file = File.new()
+	file.open(g.StatsFileName, File.WRITE)
+	file.store_var(g.stats)
 	file.close()
 func update_NEmptyLabel():
 	nEmpty = 0
@@ -197,6 +204,15 @@ func on_solved():
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
 	if $SoundButton.is_pressed(): $AudioSolved.play()
+	if g.stats[g.qLevel].has("NSolved"):
+		g.stats[g.qLevel]["NSolved"] += 1
+	else:
+		g.stats[g.qLevel]["NSolved"] = 1
+	if g.stats[g.qLevel].has("TotalSec"):
+		g.stats[g.qLevel]["TotalSec"] += int(elapsedTime)
+	else:
+		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
+	save_stats()
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
@@ -549,7 +565,7 @@ func gen_quest_greedy():
 	solvedStat = false
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
-	#saveSettings()
+	#save_settings()
 	if true:
 		if rmix_list.empty():
 			clear_cell_cursor()
@@ -913,7 +929,7 @@ func _on_RedoButton_pressed():
 
 func _on_SoundButton_pressed():
 	g.settings["Sound"] = $SoundButton.pressed
-	saveSettings()
+	save_settings()
 	pass # Replace with function body.
 
 

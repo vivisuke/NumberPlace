@@ -1,6 +1,7 @@
 extends Node2D
 
 var settings = {}		# 設定辞書
+var stats = []			# 各問題レベルごとの統計情報（問題クリア数、トータルタイム（単位：秒））
 var qLevel = 0			# 問題レベル [0, 1, 2]
 var qName = ""			# 問題名
 
@@ -11,7 +12,8 @@ var hint_type : int = -1
 var candidates_bit = []		# 入力可能ビット論理和
 var cell_bit = []			# 現在の状態
 
-const settingsFileName = "user://NumberPlace_stgs.dat"
+const SettingsFileName	= "user://NumberPlace_stgs.dat"
+const StatsFileName		= "user://NumberPlace_stats.dat"
 
 func _ready():
 	pass # Replace with function body.
