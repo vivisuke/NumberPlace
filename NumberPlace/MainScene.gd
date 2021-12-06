@@ -929,6 +929,7 @@ func _on_PauseButton_pressed():
 func _on_RestartButton_pressed():
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "":
+			add_falling_char(input_labels[ix].text, ix)
 			input_labels[ix].text = ""
 	update_all_status()
 	#num_buttons[cur_num-1].grab_focus()
