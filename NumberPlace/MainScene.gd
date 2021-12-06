@@ -224,6 +224,8 @@ func on_solved():
 	save_stats()
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
+		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
+				return
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
 		print(mp)
 		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
