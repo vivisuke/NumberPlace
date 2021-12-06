@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=70 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -57,7 +57,10 @@
 size = 20
 font_data = ExtResource( 27 )
 
-[sub_resource type="DynamicFont" id=21]
+[sub_resource type="DynamicFont" id=22]
+font_data = ExtResource( 27 )
+
+[sub_resource type="DynamicFont" id=23]
 font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=11]
@@ -121,6 +124,10 @@ font_data = ExtResource( 16 )
 3/shape_one_way_margin = 0.0
 3/shapes = [  ]
 3/z_index = 0
+
+[sub_resource type="DynamicFont" id=21]
+size = 18
+font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=12]
 font_data = ExtResource( 27 )
@@ -257,7 +264,7 @@ margin_top = 58.0
 margin_right = 109.0
 margin_bottom = 79.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 21 )
+custom_fonts/font = SubResource( 22 )
 text = "難易度: 0"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -269,7 +276,7 @@ margin_top = 58.0
 margin_right = 487.0
 margin_bottom = 79.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 23 )
 text = "#spc: 0"
 align = 1
 __meta__ = {
@@ -333,11 +340,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="MessLabel" type="Label" parent="."]
+margin_left = 14.0
+margin_top = 565.0
+margin_right = 134.0
+margin_bottom = 590.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 21 )
+text = "メッセージ"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="UndoButton" type="TextureButton" parent="."]
 margin_left = 14.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 62.0
-margin_bottom = 638.0
+margin_bottom = 643.0
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 18 )
 texture_disabled = ExtResource( 29 )
@@ -359,9 +378,9 @@ __meta__ = {
 
 [node name="RedoButton" type="TextureButton" parent="."]
 margin_left = 77.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 125.0
-margin_bottom = 638.0
+margin_bottom = 643.0
 texture_normal = ExtResource( 20 )
 texture_pressed = ExtResource( 19 )
 texture_disabled = ExtResource( 30 )
@@ -383,9 +402,9 @@ __meta__ = {
 
 [node name="RestartButton" type="TextureButton" parent="."]
 margin_left = 373.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 421.0
-margin_bottom = 638.0
+margin_bottom = 643.0
 texture_normal = ExtResource( 21 )
 texture_pressed = ExtResource( 22 )
 __meta__ = {
@@ -406,9 +425,9 @@ __meta__ = {
 
 [node name="PauseButton" type="TextureButton" parent="."]
 margin_left = 435.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 483.0
-margin_bottom = 638.0
+margin_bottom = 643.0
 texture_normal = ExtResource( 25 )
 texture_pressed = ExtResource( 26 )
 __meta__ = {
@@ -429,9 +448,9 @@ __meta__ = {
 
 [node name="NextButton" type="TextureButton" parent="."]
 margin_left = 435.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 483.0
-margin_bottom = 798.0
+margin_bottom = 803.0
 texture_normal = ExtResource( 23 )
 texture_pressed = ExtResource( 24 )
 __meta__ = {
@@ -452,9 +471,9 @@ __meta__ = {
 
 [node name="DeselectButton" type="TextureButton" parent="."]
 margin_left = 373.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 421.0
-margin_bottom = 798.0
+margin_bottom = 803.0
 texture_normal = ExtResource( 47 )
 texture_pressed = ExtResource( 49 )
 __meta__ = {
@@ -488,9 +507,9 @@ __meta__ = {
 
 [node name="HelpButton" type="TextureButton" parent="."]
 margin_left = 78.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 126.0
-margin_bottom = 798.0
+margin_bottom = 803.0
 disabled = true
 texture_normal = ExtResource( 11 )
 texture_pressed = ExtResource( 10 )
@@ -513,9 +532,9 @@ __meta__ = {
 
 [node name="CheckButton" type="TextureButton" parent="."]
 margin_left = 14.0
-margin_top = 670.0
+margin_top = 675.0
 margin_right = 62.0
-margin_bottom = 718.0
+margin_bottom = 723.0
 texture_normal = ExtResource( 51 )
 texture_pressed = ExtResource( 50 )
 texture_disabled = ExtResource( 52 )
@@ -538,9 +557,9 @@ __meta__ = {
 
 [node name="HintButton" type="TextureButton" parent="."]
 margin_left = 77.0
-margin_top = 670.0
+margin_top = 675.0
 margin_right = 125.0
-margin_bottom = 718.0
+margin_bottom = 723.0
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 texture_disabled = ExtResource( 31 )
@@ -562,9 +581,9 @@ __meta__ = {
 
 [node name="SoundButton" type="TextureButton" parent="."]
 margin_left = 14.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 62.0
-margin_bottom = 798.0
+margin_bottom = 803.0
 toggle_mode = true
 texture_normal = ExtResource( 38 )
 texture_pressed = ExtResource( 37 )
@@ -590,9 +609,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 144.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 196.0
-margin_bottom = 642.0
+margin_bottom = 647.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -615,9 +634,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 224.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 276.0
-margin_bottom = 642.0
+margin_bottom = 647.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -640,9 +659,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 304.0
-margin_top = 590.0
+margin_top = 595.0
 margin_right = 356.0
-margin_bottom = 642.0
+margin_bottom = 647.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -665,9 +684,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 144.0
-margin_top = 670.0
+margin_top = 675.0
 margin_right = 196.0
-margin_bottom = 722.0
+margin_bottom = 727.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -690,9 +709,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 224.0
-margin_top = 670.0
+margin_top = 675.0
 margin_right = 276.0
-margin_bottom = 722.0
+margin_bottom = 727.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -715,9 +734,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 304.0
-margin_top = 670.0
+margin_top = 675.0
 margin_right = 356.0
-margin_bottom = 722.0
+margin_bottom = 727.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -740,9 +759,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 144.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 196.0
-margin_bottom = 802.0
+margin_bottom = 807.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -765,9 +784,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 224.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 276.0
-margin_bottom = 802.0
+margin_bottom = 807.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -790,9 +809,9 @@ anchor_top = 26.0
 anchor_right = 26.0
 anchor_bottom = 26.0
 margin_left = 304.0
-margin_top = 750.0
+margin_top = 755.0
 margin_right = 356.0
-margin_bottom = 802.0
+margin_bottom = 807.0
 custom_colors/font_color_disabled = Color( 0.501961, 0.501961, 0.501961, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )

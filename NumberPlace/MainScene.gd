@@ -120,6 +120,7 @@ func _ready():
 	seed((g.qName+String(g.qLevel)).hash())
 	#print($TitleBar/Label.text)
 	$TitleBar/Label.text = titleText()
+	$MessLabel.text = ""
 	#$Board/HintGuide.hide()
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
@@ -259,11 +260,12 @@ func _input(event):
 				input_num = int(cur_num)
 				push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
 				input_labels[ix].text = num_str
-		update_undo_redo()
-		update_num_buttons_disabled()
-		update_cell_cursor(cur_num)
-		update_NEmptyLabel()
-		check_duplicated()
+		#update_undo_redo()
+		#update_num_buttons_disabled()
+		#update_cell_cursor(cur_num)
+		#update_NEmptyLabel()
+		#check_duplicated()
+		update_all_status()
 		sound_effect()
 		if !solvedStat && is_solved():
 			on_solved()
@@ -356,6 +358,7 @@ func update_all_status():
 	check_duplicated()
 	$HintButton.disabled = solvedStat
 	$CheckButton.disabled = solvedStat
+	$MessLabel.text = ""
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
@@ -1096,8 +1099,15 @@ func _on_DeselectButton_pressed():
 	update_cell_cursor(0)
 	#cur_num = 0
 	set_num_cursor(0)
+	update_all_status()
 func _on_CheckButton_pressed():
+	var err = false
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "" && input_labels[ix].text != bit_to_numstr(ans_bit[ix]):
+			err = true
 			input_labels[ix].add_color_override("font_color", COLOR_INCORRECT)
+	if err:
+		$MessLabel.text = "間違って入っている数字（赤色）があります。"
+	else:
+		$MessLabel.text = "間違って入っている数字はありません。"
 	pass # Replace with function body.
