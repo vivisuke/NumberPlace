@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -46,7 +46,9 @@
 [ext_resource path="res://images/circle_before_black.png" type="Texture" id=44]
 [ext_resource path="res://images/circle_next_black.png" type="Texture" id=45]
 [ext_resource path="res://images/circle_next_gray.png" type="Texture" id=46]
+[ext_resource path="res://images/deselect_black.png" type="Texture" id=47]
 [ext_resource path="res://HintGuide.gd" type="Script" id=48]
+[ext_resource path="res://images/deselect_white.png" type="Texture" id=49]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -341,9 +343,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="UndoButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "戻す"
@@ -365,9 +367,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="RedoButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "進める"
@@ -388,9 +390,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="RestartButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "再挑戦"
@@ -411,9 +413,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="PauseButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "ポーズ"
@@ -434,12 +436,36 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="NextButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "次問題"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeselectButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 750.0
+margin_right = 421.0
+margin_bottom = 798.0
+texture_normal = ExtResource( 47 )
+texture_pressed = ExtResource( 49 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DeselectButton"]
+margin_left = -9.0
+margin_top = 48.0
+margin_right = 55.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "選択解除"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -471,9 +497,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="HelpButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "遊び方"
@@ -495,9 +521,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="HintButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "ヒント"
@@ -519,9 +545,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="SoundButton"]
-margin_top = 46.0
+margin_top = 48.0
 margin_right = 48.0
-margin_bottom = 65.0
+margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "効果音"
@@ -909,6 +935,7 @@ __meta__ = {
 [connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
+[connection signal="pressed" from="DeselectButton" to="." method="_on_DeselectButton_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]

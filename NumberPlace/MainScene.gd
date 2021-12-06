@@ -1083,3 +1083,8 @@ func _on_PrevHintButton_pressed():
 	hint_prev_next_page(-1)
 func _on_NextHintButton_pressed():
 	hint_prev_next_page(1)
+func _on_DeselectButton_pressed():
+	cur_cell_ix = -1
+	update_cell_cursor(0)
+	#cur_num = 0
+	set_num_cursor(0)
