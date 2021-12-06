@@ -4,6 +4,7 @@ var settings = {}		# 設定辞書
 var stats = []			# 各問題レベルごとの統計情報（問題クリア数、トータルタイム（単位：秒））
 var qLevel = 0			# 問題レベル [0, 1, 2]
 var qName = ""			# 問題名
+var qRandom = true		# ランダム生成問題か？
 
 var show_hint_guide = false
 var hint_pos : int = -1			# ヒントで数字が入る位置

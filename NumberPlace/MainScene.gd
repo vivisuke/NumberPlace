@@ -160,6 +160,7 @@ func _ready():
 	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass
 func gen_qName():
+	g.qRandom = true
 	g.qName = ""
 	for i in range(15):
 		var r = rng.randi_range(0, 10+26-1)
@@ -901,6 +902,7 @@ func _on_Button9_toggled(button_pressed):
 	num_button_pressed(9, button_pressed)
 
 func _on_NextButton_pressed():
+	g.qRandom = true
 	gen_qName()
 	$TitleBar/Label.text = titleText()
 	gen_quest_greedy()

@@ -19,7 +19,8 @@ func _ready():
 			var mnts = avg / 60
 			txt += "%02d:%02d" % [mnts, sec]
 		buttons[i].get_node("TimeLabel").text = txt
-	$LineEdit.text = g.qName
+	if !g.qRandom:
+		$LineEdit.text = g.qName
 	pass # Replace with function body.
 
 func load_stats():
@@ -35,6 +36,7 @@ func to_MainScene(qLevel):
 	print($LineEdit.text)
 	g.qLevel = qLevel
 	g.qName = $LineEdit.text
+	g.qRandom = $LineEdit.text == ""
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
 
