@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -49,6 +49,8 @@
 [ext_resource path="res://images/deselect_black.png" type="Texture" id=47]
 [ext_resource path="res://HintGuide.gd" type="Script" id=48]
 [ext_resource path="res://images/deselect_white.png" type="Texture" id=49]
+[ext_resource path="res://images/done_white.png" type="Texture" id=50]
+[ext_resource path="res://images/done_black.png" type="Texture" id=51]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -484,10 +486,10 @@ __meta__ = {
 }
 
 [node name="HelpButton" type="TextureButton" parent="."]
-margin_left = 14.0
-margin_top = 670.0
-margin_right = 62.0
-margin_bottom = 718.0
+margin_left = 78.0
+margin_top = 750.0
+margin_right = 126.0
+margin_bottom = 798.0
 disabled = true
 texture_normal = ExtResource( 11 )
 texture_pressed = ExtResource( 10 )
@@ -503,6 +505,30 @@ margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "遊び方"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckButton" type="TextureButton" parent="."]
+margin_left = 14.0
+margin_top = 670.0
+margin_right = 62.0
+margin_bottom = 718.0
+texture_normal = ExtResource( 51 )
+texture_pressed = ExtResource( 50 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CheckButton"]
+margin_left = -8.0
+margin_top = 48.0
+margin_right = 56.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "チェック"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -938,6 +964,7 @@ __meta__ = {
 [connection signal="pressed" from="DeselectButton" to="." method="_on_DeselectButton_pressed"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
+[connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="pressed" from="SoundButton" to="." method="_on_SoundButton_pressed"]
 [connection signal="toggled" from="Button1" to="." method="_on_Button1_toggled"]

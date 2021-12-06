@@ -26,6 +26,7 @@ const TILE_CURSOR = 0
 const TILE_LTBLUE = 1				# 強調カーソル（薄青）
 const TILE_LTORANGE = 2				# 強調カーソル（薄橙）
 const TILE_PINK = 3					# 強調カーソル（薄ピンク）
+const COLOR_INCORRECT = Color.red
 const COLOR_DUP = Color.red
 const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
@@ -1092,3 +1093,8 @@ func _on_DeselectButton_pressed():
 	update_cell_cursor(0)
 	#cur_num = 0
 	set_num_cursor(0)
+func _on_CheckButton_pressed():
+	for ix in range(N_CELLS):
+		if input_labels[ix].text != "" && input_labels[ix].text != bit_to_numstr(ans_bit[ix]):
+			input_labels[ix].add_color_override("font_color", COLOR_INCORRECT)
+	pass # Replace with function body.
