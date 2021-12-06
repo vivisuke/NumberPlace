@@ -244,11 +244,12 @@ func _input(event):
 					#$Board/TileMap.set_cellv(mp, TILE_CURSOR)
 					do_emphasize(ix, CELL, false)
 				return
+			if input_labels[ix].text != "":
+				add_falling_char(input_labels[ix].text, ix)
 			var num_str = String(cur_num)
 			if input_labels[ix].text == num_str:
 				push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
 				input_labels[ix].text = ""
-				add_falling_char(num_str, ix)
 			else:
 				input_num = int(cur_num)
 				push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
@@ -853,9 +854,10 @@ func num_button_pressed(num : int, button_pressed):
 	if cur_cell_ix >= 0:		# セルが選択されている場合
 		if button_pressed:
 			var old = get_cell_numer(cur_cell_ix)
+			if old != 0:
+				add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
 			if num == old:		# 同じ数字を入れる → 削除
 				push_to_undo_stack([cur_cell_ix, old, 0])
-				add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
 				input_labels[cur_cell_ix].text = ""
 			else:
 				input_num = num
