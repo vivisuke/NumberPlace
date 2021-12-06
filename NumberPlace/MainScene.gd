@@ -223,6 +223,7 @@ func on_solved():
 	else:
 		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
 	save_stats()
+	update_all_status()
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
@@ -353,6 +354,7 @@ func update_all_status():
 	update_NEmptyLabel()
 	update_num_buttons_disabled()
 	check_duplicated()
+	$HintButton.disabled = solvedStat
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
