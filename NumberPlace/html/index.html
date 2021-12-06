@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
-	<title>ユーザがワンクリックで問題を作れるナンプレ</title>
+	<title>さくさくナンプレ</title>
 </head>
 <body bgcolor="lightgray" style="padding: 32px 32px 32px 32px" >
 <div align="center">
@@ -21,12 +21,28 @@
 </div>
 
 <div align="center">
-<h1>ユーザがワンクリックで問題を作れるナンプレ（仮）</h1>
-<p>「ユーザがワンクリックで問題を作れるナンプレ（仮）」は、ユーザがワンクリックで問題を作ることができるナンプレアプリです
+<h1><small>ユーザがワンクリックで問題を作れる</small><br>「さくさくナンプレ」</h1>
+<p>「さくさくナンプレ」は、ユーザがワンクリックで問題を作ることができるナンプレ パズル アプリです
 （ルール詳細は <a href="#rule">ここ</a> を参照）。<br>
 「数独」「Sudoku」「Number Place」などとも呼ばれます。</p>
 <small><p>※「数独」は 株式会社ニコリ の登録商標です。</p></small>
 </div>
+
+<h2>■ パズル画面操作方法</h2>
+<ul>
+<li>空欄に数字を入れる方法には、以下の２つの方法があります。</li>
+	<ul>
+	<li>数字ボタンを選択 → 空欄をクリック</li>
+	<li>空欄を選択 → 数位ボタンを押下</li>
+	</ul>
+<li>数字ボタン・セルの選択を解除するには、その数字ボタンまたはセルをクリックします。</li>
+<li>入れた数字を消すには、同じ数字を再度入れます。<br>数字を入れた直後であれば 戻す（undo）ボタンを押してもOKです。</li>
+<li>ポーズボタンを押すと、数字がすべて“？”表示になり、タイマーのカウントがストップします。<br>
+再度ポーズボタンを押すと、ポーズが解除されます。</li>
+<li>再挑戦ボタンを押すと、入力した数字をすべて削除し現問題を最初から解き直すことができます。</li>
+<li>次問題ボタンを押すと、現在の難易度レベルと同じ問題をランダムに生成します。</li>
+</ul>
+
 	
 <div align="center">
 <iframe src="NumberPlace.html" width="500" height="900"></iframe>
@@ -34,6 +50,52 @@
 <p>　</p>
 
 <h2 id="rule">■ ルール説明</h2>
+<p>ナンプレは下図のように、9x9 の盤面に、1～9 の数字を縦・横・3x3ブロック内で重ならない（同じ数字が無い）ように入れていくパズルです。<br>
+ひとつの重なり無しにすべての空欄に数字を入れると、問題クリアとなります。</p>
+
+<p>
+<img src="quest-001.png" alt="" width = "300"/>
+　　→　　
+<img src="quest-002.png" alt="" width = "300"/>
+</p>
+
+<p>例えば、下図のように１行に同じ数字（この場合は7、赤で強調）が２つあると間違いとなります。</p>
+<img src="duplicated-001.png" alt="" width = "300"/>
+<p>上図は横方向の例ですが、縦方向も同様です。<br>
+また、盤面の太線で区切られた 3x3ブロック内も数字が重なる（同じ数字がある）と間違いとなります。</p>
+
+<h2>■ 解法テクニック</h2>
+<p>本アプリでは、候補数字（メモ数字とも呼ばれる）を使わなくても適用できる解法テクニックを初級解法テクニックと呼びます。<br>
+初級解法テクニックには「フルハウス」「裸のシングル」「隠れたシングル」の３つがあります。</p>
+<h3>フルハウス</h3>
+<h3>裸のシングル</h3>
+<h3>隠れたシングル</h3>
+
+<p>　</p>
+
+<div align="center">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Godot -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0951055350914265"
+     data-ad-slot="3195980457"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<p>　</p>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-213833-1', 'auto');
+  ga('send', 'pageview');
+</script>
 
 </body>
 </html>

@@ -106,6 +106,7 @@ var undo_stack = []			# 要素：[ix old new]、old, new は 0～9 の数値、0
 #var settings = {}			# 設定辞書
 var ClueLabel = load("res://ClueLabel.tscn")
 var InputLabel = load("res://InputLabel.tscn")
+var FallingChar = load("res://FallingChar.tscn")
 var rng = RandomNumberGenerator.new()
 
 onready var g = get_node("/root/Global")
@@ -247,6 +248,7 @@ func _input(event):
 			if input_labels[ix].text == num_str:
 				push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
 				input_labels[ix].text = ""
+				add_falling_char(num_str, ix)
 			else:
 				input_num = int(cur_num)
 				push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
@@ -834,6 +836,17 @@ func set_num_cursor(num):	# 当該ボタンだけを選択状態に
 	cur_num = num
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i + 1 == num)
+func add_falling_char(num_str, ix : int):
+	var fc = FallingChar.instance()
+	var x = ix % N_HORZ
+	var y = ix / N_HORZ
+	fc.position = $Board.rect_position + Vector2(x*CELL_WIDTH, y*CELL_WIDTH)
+	fc.get_node("Label").text = num_str
+	var th = rng.randf_range(0, 3.1415926535*2)
+	fc.linear_velocity = Vector2(cos(th), sin(th))*100
+	fc.angular_velocity = rng.randf_range(0, 1)
+	add_child(fc)
+
 func num_button_pressed(num : int, button_pressed):
 	if in_button_pressed: return		# ボタン押下処理中の場合
 	in_button_pressed = true
@@ -842,6 +855,7 @@ func num_button_pressed(num : int, button_pressed):
 			var old = get_cell_numer(cur_cell_ix)
 			if num == old:		# 同じ数字を入れる → 削除
 				push_to_undo_stack([cur_cell_ix, old, 0])
+				add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
 				input_labels[cur_cell_ix].text = ""
 			else:
 				input_num = num
