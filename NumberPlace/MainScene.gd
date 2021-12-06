@@ -355,6 +355,7 @@ func update_all_status():
 	update_num_buttons_disabled()
 	check_duplicated()
 	$HintButton.disabled = solvedStat
+	$CheckButton.disabled = solvedStat
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)

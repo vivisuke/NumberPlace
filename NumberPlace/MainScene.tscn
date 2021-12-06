@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -51,6 +51,7 @@
 [ext_resource path="res://images/deselect_white.png" type="Texture" id=49]
 [ext_resource path="res://images/done_white.png" type="Texture" id=50]
 [ext_resource path="res://images/done_black.png" type="Texture" id=51]
+[ext_resource path="res://images/done_gray.png" type="Texture" id=52]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -517,6 +518,7 @@ margin_right = 62.0
 margin_bottom = 718.0
 texture_normal = ExtResource( 51 )
 texture_pressed = ExtResource( 50 )
+texture_disabled = ExtResource( 52 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
