@@ -250,6 +250,7 @@ func _input(event):
 					cur_cell_ix = ix
 					#$Board/TileMap.set_cellv(mp, TILE_CURSOR)
 					do_emphasize(ix, CELL, false)
+				update_all_status()
 				return
 			if input_labels[ix].text != "":
 				add_falling_char(input_labels[ix].text, ix)
@@ -363,6 +364,8 @@ func update_all_status():
 		$MessLabel.text = ""
 	elif cur_num != 0:
 		$MessLabel.text = "現数字（%d）を入れるセルをクリックしてください。" % cur_num
+	elif cur_cell_ix >= 0:
+		$MessLabel.text = "セルに入れる数字ボタンをクリックしてください。"
 	else:
 		$MessLabel.text = ""
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
