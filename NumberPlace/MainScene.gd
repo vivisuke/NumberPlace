@@ -32,6 +32,7 @@ const COLOR_CLUE = Color.black
 const COLOR_INPUT = Color("#2980b9")	# VELIZE HOLE
 const DFCLT_FULLHOUSE = 1
 const DFCLT_HIDDEN_SINGLE = 2
+const DFCLT_HIDDEN_SINGLE_LINE = 5
 const DFCLT_NAKID_SINGLE = 10
 const OPT_BEGINNER = 0
 const OPT_EASY = 1
@@ -800,7 +801,7 @@ func step_solve() -> int:
 		#input_labels[pb[0]].text = String(bit_to_num(pb[1]))
 		update_candidates(pb[IX_POS], pb[IX_BIT])
 		#print_candidates()
-		return DFCLT_HIDDEN_SINGLE
+		return DFCLT_HIDDEN_SINGLE if pb[IX_TYPE] == BOX else DFCLT_HIDDEN_SINGLE_LINE
 	if g.qLevel < OPT_NORMAL: return 0
 	pb = search_nakid_single()
 	#print("Nakid Single: ", pb)
