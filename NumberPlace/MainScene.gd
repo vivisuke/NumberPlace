@@ -944,6 +944,7 @@ func _on_PauseButton_pressed():
 				cell_bit[ix] = 0
 		for i in range(N_HORZ):
 			num_buttons[i].disabled = true
+		$MessLabel.text = "ポーズ中です。解除にはポーズボタンを押してください。"
 	else:
 		for ix in range(N_CELLS):
 			if clue_labels[ix].text != "":
@@ -954,6 +955,7 @@ func _on_PauseButton_pressed():
 	pass # Replace with function body.
 
 func _on_RestartButton_pressed():
+	if paused: return		# ポーズ中
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "":
 			add_falling_char(input_labels[ix].text, ix)
@@ -1064,6 +1066,7 @@ func is_no_mistake():		# 間違って入っている数字が無いか？
 		if n != 0 && bit_to_num(ans_bit[ix]) != n: return false
 	return true
 func _on_HintButton_pressed():
+	if paused: return		# ポーズ中
 	$MessLabel.text = ""
 	hint_texts = []
 	update_cell_bit()
@@ -1118,6 +1121,7 @@ func _on_DeselectButton_pressed():
 	set_num_cursor(0)
 	update_all_status()
 func _on_CheckButton_pressed():
+	if paused: return		# ポーズ中
 	var err = false
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "" && input_labels[ix].text != bit_to_numstr(ans_bit[ix]):
