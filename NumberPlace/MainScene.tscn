@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=74 format=2]
 
 [ext_resource path="res://TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://MainScene.gd" type="Script" id=2]
@@ -52,6 +52,10 @@
 [ext_resource path="res://images/done_white.png" type="Texture" id=50]
 [ext_resource path="res://images/done_black.png" type="Texture" id=51]
 [ext_resource path="res://images/done_gray.png" type="Texture" id=52]
+[ext_resource path="res://images/1-9.png" type="Texture" id=53]
+[ext_resource path="res://images/edit_black.png" type="Texture" id=54]
+[ext_resource path="res://images/edit_cand_black.png" type="Texture" id=55]
+[ext_resource path="res://images/auto_candidates_white.png" type="Texture" id=56]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -312,7 +316,6 @@ cell_size = Vector2( 54, 54 )
 format = 1
 
 [node name="MemoTileMap" type="TileMap" parent="Board"]
-tile_set = SubResource( 8 )
 cell_size = Vector2( 18, 18 )
 format = 1
 
@@ -579,6 +582,54 @@ margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "ヒント"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MemoButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 685.0
+margin_right = 421.0
+margin_bottom = 733.0
+toggle_mode = true
+texture_normal = ExtResource( 54 )
+texture_pressed = ExtResource( 55 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="MemoButton"]
+margin_top = 48.0
+margin_right = 48.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "メモ"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AutoMemoButton" type="TextureButton" parent="."]
+margin_left = 437.0
+margin_top = 685.0
+margin_right = 485.0
+margin_bottom = 733.0
+texture_normal = ExtResource( 53 )
+texture_pressed = ExtResource( 56 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="AutoMemoButton"]
+margin_left = -9.0
+margin_top = 48.0
+margin_right = 55.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "自動メモ"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
