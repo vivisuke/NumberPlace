@@ -260,9 +260,9 @@ __meta__ = {
 
 [node name="DfcltLabel" type="Label" parent="."]
 margin_left = 14.0
-margin_top = 58.0
+margin_top = 60.0
 margin_right = 109.0
-margin_bottom = 79.0
+margin_bottom = 81.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 22 )
 text = "難易度: 0"
@@ -272,9 +272,9 @@ __meta__ = {
 
 [node name="NEmptyLabel" type="Label" parent="."]
 margin_left = 14.0
-margin_top = 58.0
+margin_top = 60.0
 margin_right = 487.0
-margin_bottom = 79.0
+margin_bottom = 81.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 23 )
 text = "#spc: 0"
@@ -285,9 +285,9 @@ __meta__ = {
 
 [node name="TimeLabel" type="Label" parent="."]
 margin_left = 415.0
-margin_top = 58.0
+margin_top = 60.0
 margin_right = 487.0
-margin_bottom = 79.0
+margin_bottom = 81.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 11 )
 text = "00:00:00"
@@ -342,9 +342,9 @@ __meta__ = {
 
 [node name="MessLabel" type="Label" parent="."]
 margin_left = 14.0
-margin_top = 565.0
+margin_top = 562.0
 margin_right = 134.0
-margin_bottom = 590.0
+margin_bottom = 587.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 21 )
 text = "メッセージ"

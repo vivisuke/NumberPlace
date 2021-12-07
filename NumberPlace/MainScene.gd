@@ -367,7 +367,7 @@ func update_all_status():
 	elif cur_cell_ix >= 0:
 		$MessLabel.text = "セルに入れる数字ボタンをクリックしてください。"
 	else:
-		$MessLabel.text = ""
+		$MessLabel.text = "数字ボタンまたは空セルをクリックしてください。"
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
