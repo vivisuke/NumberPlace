@@ -230,6 +230,7 @@ func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
 				return
+		if paused: return
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
 		print(mp)
 		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
@@ -273,6 +274,7 @@ func _input(event):
 			on_solved()
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
+		if paused: return
 		if event.as_text() != "Alt" && hint_showed:
 			close_hint()
 			return
@@ -869,6 +871,7 @@ func add_falling_char(num_str, ix : int):
 
 func num_button_pressed(num : int, button_pressed):
 	if in_button_pressed: return		# ボタン押下処理中の場合
+	if paused: return			# ポーズ中
 	in_button_pressed = true
 	if cur_cell_ix >= 0:		# セルが選択されている場合
 		if button_pressed:
