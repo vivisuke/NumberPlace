@@ -311,6 +311,11 @@ tile_set = SubResource( 8 )
 cell_size = Vector2( 54, 54 )
 format = 1
 
+[node name="MemoTileMap" type="TileMap" parent="Board"]
+tile_set = SubResource( 8 )
+cell_size = Vector2( 18, 18 )
+format = 1
+
 [node name="Grid" type="ColorRect" parent="Board"]
 margin_right = 477.0
 margin_bottom = 477.0
