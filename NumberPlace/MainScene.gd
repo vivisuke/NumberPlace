@@ -364,6 +364,8 @@ func update_all_status():
 	$CheckButton.disabled = solvedStat
 	if solvedStat:
 		$MessLabel.text = ""
+	elif paused:
+		$MessLabel.text = "ポーズ中です。解除にはポーズボタンを押してください。"
 	elif cur_num != 0:
 		$MessLabel.text = "現数字（%d）を入れるセルをクリックしてください。" % cur_num
 	elif cur_cell_ix >= 0:
@@ -841,7 +843,7 @@ func clear_cell_cursor():
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, TILE_NONE)
 func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを強調
-	if num != 0:
+	if num != 0 && !paused:
 		for y in range(N_VERT):
 			for x in range(N_HORZ):
 				if num != 0 && get_cell_numer(xyToIX(x, y)) == num:
@@ -945,14 +947,13 @@ func _on_PauseButton_pressed():
 				cell_bit[ix] = 0
 		for i in range(N_HORZ):
 			num_buttons[i].disabled = true
-		$MessLabel.text = "ポーズ中です。解除にはポーズボタンを押してください。"
 	else:
 		for ix in range(N_CELLS):
 			if clue_labels[ix].text != "":
 				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			elif input_labels[ix].text != "":
 				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
-		update_all_status()
+	update_all_status()
 	pass # Replace with function body.
 
 func _on_RestartButton_pressed():
@@ -1003,6 +1004,7 @@ func reset_TileMap():
 			$Board/TileMap.set_cell(x, y, -1)
 func do_emphasize(ix : int, type, fullhouse):
 	reset_TileMap()
+	if paused: return
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
 	if type == BOX || type == CELL:
