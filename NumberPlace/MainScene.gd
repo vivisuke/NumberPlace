@@ -72,8 +72,9 @@ const HINT_HIDDEN_SINGLE = [
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
 
+var qCreating = false		# 問題生成中
 var solvedStat = false		# クリア済み状態
-var paused = false
+var paused = false			# ポーズ状態
 var hint_showed = false
 var in_button_pressed = false	# ボタン押下処理中
 #var hint_num				# ヒントで確定する数字、[1, 9]
@@ -330,6 +331,7 @@ func _process(delta):
 			print("can solve, nRemoved = ", nRemoved)
 		rmixix += 1
 		if rmixix == rmix_list.size() || g.qLevel == OPT_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
+			qCreating = false
 			update_cell_labels()
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
@@ -363,7 +365,9 @@ func update_all_status():
 	check_duplicated()
 	$HintButton.disabled = solvedStat
 	$CheckButton.disabled = solvedStat
-	if solvedStat:
+	if qCreating:
+		$MessLabel.text = "問題生成中..."
+	elif solvedStat:
 		var n = g.stats[g.qLevel]["NSolved"]
 		var avg : int = int(g.stats[g.qLevel]["TotalSec"] / n)
 		var sec = avg % 60
@@ -602,6 +606,8 @@ func gen_quest():
 	init_candidates()			# 各セルの候補数字計算
 	print_candidates()
 func gen_quest_greedy():
+	qCreating = true
+	$MessLabel.text = "問題生成中..."
 	solvedStat = false
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
