@@ -2,7 +2,7 @@ extends ColorRect
 
 const N_VERT = 9
 const N_HORZ = 9
-const CELL_WIDTH = 53
+const CELL_WIDTH = 54
 const BOX_WIDTH = CELL_WIDTH * 3
 const BOARD_WIDTH = CELL_WIDTH * N_HORZ
 const bgcol = Color("e0e0e0")

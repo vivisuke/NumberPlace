@@ -2,7 +2,7 @@ extends ColorRect
 
 const N_VERT = 9
 const N_HORZ = 9
-const CELL_WIDTH = 53
+const CELL_WIDTH = 54
 const BOARD_WIDTH = CELL_WIDTH * N_HORZ
 
 func _ready():
