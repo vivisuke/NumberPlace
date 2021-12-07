@@ -363,7 +363,12 @@ func update_all_status():
 	$HintButton.disabled = solvedStat
 	$CheckButton.disabled = solvedStat
 	if solvedStat:
-		$MessLabel.text = ""
+		var n = g.stats[g.qLevel]["NSolved"]
+		var avg : int = int(g.stats[g.qLevel]["TotalSec"] / n)
+		var sec = avg % 60
+		var mnts = avg / 60
+		var txt = "%02d:%02d" % [mnts, sec]
+		$MessLabel.text = "グッジョブ！ クリア回数: %d、平均: %s" % [n, txt]
 	elif paused:
 		$MessLabel.text = "ポーズ中です。解除にはポーズボタンを押してください。"
 	elif cur_num != 0:
