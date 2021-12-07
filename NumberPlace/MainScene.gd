@@ -120,7 +120,7 @@ func _ready():
 	seed((g.qName+String(g.qLevel)).hash())
 	#print($TitleBar/Label.text)
 	$TitleBar/Label.text = titleText()
-	$MessLabel.text = ""
+	#$MessLabel.text = ""
 	#$Board/HintGuide.hide()
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
@@ -156,8 +156,9 @@ func _ready():
 	#cur_num = 1
 	#num_buttons[cur_num - 1].grab_focus()
 	#update_cell_cursor()
-	update_NEmptyLabel()
-	update_undo_redo()
+	#update_NEmptyLabel()
+	#update_undo_redo()
+	update_all_status()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass
@@ -358,7 +359,12 @@ func update_all_status():
 	check_duplicated()
 	$HintButton.disabled = solvedStat
 	$CheckButton.disabled = solvedStat
-	$MessLabel.text = ""
+	if solvedStat:
+		$MessLabel.text = ""
+	elif cur_num != 0:
+		$MessLabel.text = "現数字（%d）を入れるセルをクリックしてください。" % cur_num
+	else:
+		$MessLabel.text = ""
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
@@ -889,6 +895,7 @@ func num_button_pressed(num : int, button_pressed):
 			cur_num = 0		# toggled
 		update_cell_cursor(cur_num)
 	in_button_pressed = false
+	update_all_status()
 	pass
 
 func _on_Button1_toggled(button_pressed):
