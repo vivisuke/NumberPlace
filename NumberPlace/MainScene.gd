@@ -942,12 +942,15 @@ func _on_PauseButton_pressed():
 				input_labels[ix].text = "?"
 			else:
 				cell_bit[ix] = 0
+		for i in range(N_HORZ):
+			num_buttons[i].disabled = true
 	else:
 		for ix in range(N_CELLS):
 			if clue_labels[ix].text != "":
 				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			elif input_labels[ix].text != "":
 				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
+		update_all_status()
 	pass # Replace with function body.
 
 func _on_RestartButton_pressed():
