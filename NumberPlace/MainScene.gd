@@ -924,6 +924,7 @@ func _on_Button9_toggled(button_pressed):
 	num_button_pressed(9, button_pressed)
 
 func _on_NextButton_pressed():
+	if paused: return		# ポーズ中
 	g.qRandom = true
 	gen_qName()
 	$TitleBar/Label.text = titleText()
@@ -966,6 +967,7 @@ func _on_RestartButton_pressed():
 	pass # Replace with function body.
 
 func _on_UndoButton_pressed():
+	if paused: return		# ポーズ中
 	undo_ix -= 1
 	var item = undo_stack[undo_ix]
 	var txt = String(item[UNDO_ITEM_OLD]) if item[UNDO_ITEM_OLD] != 0 else ""
@@ -974,6 +976,7 @@ func _on_UndoButton_pressed():
 	pass
 
 func _on_RedoButton_pressed():
+	if paused: return		# ポーズ中
 	var item = undo_stack[undo_ix]
 	var txt = String(item[UNDO_ITEM_NEW]) if item[UNDO_ITEM_NEW] != 0 else ""
 	input_labels[item[UNDO_ITEM_IX]].text = txt
@@ -1115,6 +1118,7 @@ func _on_PrevHintButton_pressed():
 func _on_NextHintButton_pressed():
 	hint_prev_next_page(1)
 func _on_DeselectButton_pressed():
+	if paused: return		# ポーズ中
 	cur_cell_ix = -1
 	update_cell_cursor(0)
 	#cur_num = 0
