@@ -1048,6 +1048,7 @@ func is_no_mistake():		# 間違って入っている数字が無いか？
 		if n != 0 && bit_to_num(ans_bit[ix]) != n: return false
 	return true
 func _on_HintButton_pressed():
+	$MessLabel.text = ""
 	hint_texts = []
 	update_cell_bit()
 	init_candidates()

@@ -852,9 +852,9 @@ stream = ExtResource( 36 )
 
 [node name="HintLayer" type="ColorRect" parent="."]
 visible = false
-margin_top = 570.0
+margin_top = 560.0
 margin_right = 500.0
-margin_bottom = 900.0
+margin_bottom = 890.0
 color = Color( 0.501961, 0.752941, 0.501961, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -862,8 +862,9 @@ __meta__ = {
 
 [node name="TextureRect" type="TextureRect" parent="HintLayer"]
 margin_left = 14.0
+margin_top = 10.0
 margin_right = 62.0
-margin_bottom = 48.0
+margin_bottom = 58.0
 texture = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -883,11 +884,15 @@ __meta__ = {
 
 [node name="PrevHintButton" type="TextureButton" parent="HintLayer"]
 margin_left = 144.0
+margin_top = 10.0
 margin_right = 196.0
-margin_bottom = 48.0
+margin_bottom = 58.0
 texture_normal = ExtResource( 44 )
 texture_pressed = ExtResource( 43 )
 texture_disabled = ExtResource( 46 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="HintLayer/PrevHintButton"]
 margin_left = -5.0
@@ -903,9 +908,9 @@ __meta__ = {
 }
 
 [node name="PageLabel" type="Label" parent="HintLayer"]
-margin_top = 11.0
+margin_top = 20.0
 margin_right = 500.0
-margin_bottom = 39.0
+margin_bottom = 48.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 20 )
 text = "1/4"
@@ -916,8 +921,9 @@ __meta__ = {
 
 [node name="NextHintButton" type="TextureButton" parent="HintLayer"]
 margin_left = 304.0
+margin_top = 10.0
 margin_right = 352.0
-margin_bottom = 48.0
+margin_bottom = 58.0
 texture_normal = ExtResource( 45 )
 texture_pressed = ExtResource( 42 )
 texture_disabled = ExtResource( 46 )
@@ -942,8 +948,9 @@ __meta__ = {
 anchor_right = 0.83
 anchor_bottom = 0.061
 margin_left = 435.0
+margin_top = 10.0
 margin_right = 68.0
-margin_bottom = 27.87
+margin_bottom = 37.87
 texture_normal = ExtResource( 28 )
 texture_pressed = ExtResource( 33 )
 __meta__ = {
@@ -964,9 +971,9 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="HintLayer"]
 margin_left = 14.0
-margin_top = 85.0
+margin_top = 95.0
 margin_right = 483.0
-margin_bottom = 226.0
+margin_bottom = 236.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 19 )
 text = "あーだ
