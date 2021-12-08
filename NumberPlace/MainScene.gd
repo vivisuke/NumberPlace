@@ -77,6 +77,7 @@ var qCreating = false		# 問題生成中
 var solvedStat = false		# クリア済み状態
 var paused = false			# ポーズ状態
 var hint_showed = false
+var memo_mode = false		# メモ（候補数字）エディットモード
 var in_button_pressed = false	# ボタン押下処理中
 #var hint_num				# ヒントで確定する数字、[1, 9]
 var hint_numstr				# ヒントで確定する数字、[1, 9]
@@ -276,17 +277,25 @@ func _input(event):
 				update_all_status()
 				return
 			# 数字ボタン選択状態の場合 → セルにその数字を入れる or メモ数字反転
-			if input_labels[ix].text != "":
-				add_falling_char(input_labels[ix].text, ix)
-			var num_str = String(cur_num)
-			if input_labels[ix].text == num_str:
-				push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
-				input_labels[ix].text = ""
+			if !memo_mode:
+				if input_labels[ix].text != "":
+					add_falling_char(input_labels[ix].text, ix)
+				var num_str = String(cur_num)
+				if input_labels[ix].text == num_str:
+					push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
+					input_labels[ix].text = ""
+				else:
+					input_num = int(cur_num)
+					push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
+					input_labels[ix].text = num_str
+				for i in range(N_HORZ): memo_labels[ix][i].text = ""	# メモ数字削除
 			else:
-				input_num = int(cur_num)
-				push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
-				input_labels[ix].text = num_str
-			for i in range(N_HORZ): memo_labels[ix][i].text = ""	# メモ数字削除
+				if get_cell_numer(ix) != 0:
+					return		# 空欄でない場合
+				if memo_labels[ix][cur_num-1].text == "":
+					memo_labels[ix][cur_num-1].text = String(cur_num)
+				else:
+					memo_labels[ix][cur_num-1].text = ""
 		#update_undo_redo()
 		#update_num_buttons_disabled()
 		#update_cell_cursor(cur_num)
@@ -930,23 +939,31 @@ func num_button_pressed(num : int, button_pressed):
 	in_button_pressed = true
 	if cur_cell_ix >= 0:		# セルが選択されている場合
 		if button_pressed:
-			var old = get_cell_numer(cur_cell_ix)
-			if old != 0:
-				add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
-			if num == old:		# 同じ数字を入れる → 削除
-				push_to_undo_stack([cur_cell_ix, old, 0])
-				input_labels[cur_cell_ix].text = ""
+			if !memo_mode:
+				var old = get_cell_numer(cur_cell_ix)
+				if old != 0:
+					add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
+				if num == old:		# 同じ数字を入れる → 削除
+					push_to_undo_stack([cur_cell_ix, old, 0])
+					input_labels[cur_cell_ix].text = ""
+				else:
+					input_num = num
+					push_to_undo_stack([cur_cell_ix, old, num])
+					input_labels[cur_cell_ix].text = String(num)
+				for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
+				num_buttons[num-1].pressed = false
+				update_all_status()
+				sound_effect()
+				if !solvedStat && is_solved():
+					on_solved()
 			else:
-				input_num = num
-				push_to_undo_stack([cur_cell_ix, old, num])
-				input_labels[cur_cell_ix].text = String(num)
-			for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
-			num_buttons[num-1].pressed = false
-			update_all_status()
-			sound_effect()
-			if !solvedStat && is_solved():
-				on_solved()
-	else:		# セルが選択されていない場合
+				if get_cell_numer(cur_cell_ix) != 0:
+					return		# 空欄でない場合
+				if memo_labels[cur_cell_ix][num-1].text == "":
+					memo_labels[cur_cell_ix][num-1].text = String(num)
+				else:
+					memo_labels[cur_cell_ix][num-1].text = ""
+	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
 			set_num_cursor(num)
@@ -1025,6 +1042,8 @@ func _on_RestartButton_pressed():
 			input_labels[ix].text = ""
 		for i in range(N_HORZ):
 			memo_labels[ix][i].text = ""
+	undo_stack = []
+	undo_ix = 0
 	update_all_status()
 	#num_buttons[cur_num-1].grab_focus()
 	num_button_pressed(cur_num, true)
@@ -1220,4 +1239,10 @@ func _on_AutoMemoButton_pressed():
 					memo_labels[ix][i].text = ""
 				mask <<= 1
 	update_all_status()
+	pass # Replace with function body.
+
+
+func _on_MemoButton_toggled(button_pressed):
+	memo_mode = button_pressed
+	print(memo_mode)
 	pass # Replace with function body.
