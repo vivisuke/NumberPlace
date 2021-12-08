@@ -880,12 +880,21 @@ func clear_cell_cursor():
 			$Board/TileMap.set_cell(x, y, TILE_NONE)
 func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを強調
 	if num != 0 && !paused:
+		var num_str = String(num)
 		for y in range(N_VERT):
 			for x in range(N_HORZ):
-				if num != 0 && get_cell_numer(xyToIX(x, y)) == num:
+				var ix = xyToIX(x, y)
+				if num != 0 && get_cell_numer(ix) == num:
 					$Board/TileMap.set_cell(x, y, TILE_CURSOR)
 				else:
 					$Board/TileMap.set_cell(x, y, TILE_NONE)
+				for v in range(3):
+					for h in range(3):
+						var n = v * 3 + h + 1
+						var t = TILE_NONE
+						if memo_labels[ix][n-1].text == num_str:
+							t = TILE_CURSOR
+						$Board/MemoTileMap.set_cell(x*3+h, y*3+v, t)
 	else:
 		for y in range(N_VERT):
 			for x in range(N_HORZ):
