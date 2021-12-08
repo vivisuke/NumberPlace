@@ -1201,4 +1201,5 @@ func _on_AutoMemoButton_pressed():
 				else:
 					memo_labels[ix][i].text = ""
 				mask <<= 1
+	update_all_status()
 	pass # Replace with function body.
