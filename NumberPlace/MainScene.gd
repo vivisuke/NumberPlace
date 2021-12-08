@@ -938,8 +938,8 @@ func num_button_pressed(num : int, button_pressed):
 	if paused: return			# ポーズ中
 	in_button_pressed = true
 	if cur_cell_ix >= 0:		# セルが選択されている場合
-		if button_pressed:
-			if !memo_mode:
+		if !memo_mode:
+			if button_pressed:
 				var old = get_cell_numer(cur_cell_ix)
 				if old != 0:
 					add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
@@ -956,12 +956,12 @@ func num_button_pressed(num : int, button_pressed):
 				sound_effect()
 				if !solvedStat && is_solved():
 					on_solved()
+		else:		# メモ数字エディットモード
+			if get_cell_numer(cur_cell_ix) != 0:
+				return		# 空欄でない場合
+			if memo_labels[cur_cell_ix][num-1].text == "":
+				memo_labels[cur_cell_ix][num-1].text = String(num)
 			else:
-				if get_cell_numer(cur_cell_ix) != 0:
-					return		# 空欄でない場合
-				if memo_labels[cur_cell_ix][num-1].text == "":
-					memo_labels[cur_cell_ix][num-1].text = String(num)
-				else:
 					memo_labels[cur_cell_ix][num-1].text = ""
 	else:	# セルが選択されていない場合
 		#cur_num = num
