@@ -248,6 +248,13 @@ func on_solved():
 		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
 	save_stats()
 	update_all_status()
+func remove_all_memo():
+	for ix in range(N_CELLS):
+		for i in range(N_HORZ):
+			memo_labels[ix][i].text = ""
+	for v in range(N_VERT*3):
+		for h in range(N_HORZ*3):
+			$Board/MemoTileMap.set_cell(h, v, TILE_NONE)
 func remove_memo_num(ix : int, num : int):
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
@@ -1014,6 +1021,7 @@ func _on_NextButton_pressed():
 	g.qRandom = true
 	gen_qName()
 	$TitleBar/Label.text = titleText()
+	remove_all_memo()
 	gen_quest_greedy()
 
 func _on_PauseButton_pressed():
