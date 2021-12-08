@@ -8,7 +8,7 @@ enum {
 const N_VERT = 9
 const N_HORZ = 9
 const N_CELLS = N_HORZ * N_VERT
-const CELL_WIDTH = 53
+const CELL_WIDTH = 54
 
 const R = 22
 const HD = 16

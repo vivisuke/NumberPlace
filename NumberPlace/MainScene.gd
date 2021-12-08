@@ -177,7 +177,7 @@ func init_labels():
 					label = MemoLabel.instance()
 					lst.push_back(label)
 					label.rect_position = Vector2(px + CELL_WIDTH3*h, py + CELL_WIDTH3*v)
-					label.text = String(v*3+h+1)
+					label.text = ""		# String(v*3+h+1)
 					$Board.add_child(label)
 			memo_labels.push_back(lst)
 					
