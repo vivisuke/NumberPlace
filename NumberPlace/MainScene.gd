@@ -248,6 +248,17 @@ func on_solved():
 		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
 	save_stats()
 	update_all_status()
+func remove_memo_num(ix : int, num : int):
+	var x = ix % N_HORZ
+	var y = ix / N_HORZ
+	for h in range(N_HORZ):
+		memo_labels[xyToIX(h, y)][num-1].text = ""
+		memo_labels[xyToIX(x, h)][num-1].text = ""
+	var x0 = x - x % 3
+	var y0 = y - y % 3
+	for v in range(3):
+		for h in range(3):
+			memo_labels[xyToIX(x0 + h, y0 + v)][num-1].text = ""
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
@@ -281,15 +292,16 @@ func _input(event):
 				if input_labels[ix].text != "":
 					add_falling_char(input_labels[ix].text, ix)
 				var num_str = String(cur_num)
-				if input_labels[ix].text == num_str:
+				if input_labels[ix].text == num_str:	# 同じ数字が入っていれば消去
 					push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
 					input_labels[ix].text = ""
-				else:
+				else:	# 上書き
 					input_num = int(cur_num)
 					push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
 					input_labels[ix].text = num_str
+					remove_memo_num(ix, cur_num)
 				for i in range(N_HORZ): memo_labels[ix][i].text = ""	# メモ数字削除
-			else:
+			else:	# メモ数字エディットモード
 				if get_cell_numer(ix) != 0:
 					return		# 空欄でない場合
 				if memo_labels[ix][cur_num-1].text == "":
@@ -950,6 +962,7 @@ func num_button_pressed(num : int, button_pressed):
 					input_num = num
 					push_to_undo_stack([cur_cell_ix, old, num])
 					input_labels[cur_cell_ix].text = String(num)
+					remove_memo_num(cur_cell_ix, num)
 				for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
 				num_buttons[num-1].pressed = false
 				update_all_status()
