@@ -11,6 +11,7 @@ const N_VERT = 9
 const N_HORZ = 9
 const N_CELLS = N_HORZ * N_VERT
 const CELL_WIDTH = 54
+const CELL_WIDTH3 = CELL_WIDTH/3
 const BIT_1 = 1
 const BIT_2 = 1<<1
 const BIT_3 = 1<<2
@@ -103,12 +104,14 @@ var nRemoved
 #var line_used_bits
 var clue_labels = []		# 手がかり数字用ラベル配列
 var input_labels = []		# 入力数字用ラベル配列
+var memo_labels = []		# メモ（候補数字）用ラベル配列（２次元）
 var shock_wave_timer = -1
 var undo_ix = 0
 var undo_stack = []			# 要素：[ix old new]、old, new は 0～9 の数値、0 for 空欄
 #var settings = {}			# 設定辞書
 var ClueLabel = load("res://ClueLabel.tscn")
 var InputLabel = load("res://InputLabel.tscn")
+var MemoLabel = load("res://MemoLabel.tscn")
 var FallingChar = load("res://FallingChar.tscn")
 var rng = RandomNumberGenerator.new()
 
@@ -132,19 +135,7 @@ func _ready():
 	column_used.resize(N_HORZ)
 	box_used.resize(N_HORZ)
 	num_used.resize(N_HORZ + 1)		# +1 for 0
-	# 手がかり数字、入力数字用 Label 生成
-	for y in range(N_VERT):
-		for x in range(N_HORZ):
-			var label = ClueLabel.instance()
-			clue_labels.push_back(label)
-			label.rect_position = Vector2(x*CELL_WIDTH, y*CELL_WIDTH+2)
-			label.text = String((x+y)%9 + 1)
-			$Board.add_child(label)
-			label = InputLabel.instance()
-			input_labels.push_back(label)
-			label.rect_position = Vector2(x*CELL_WIDTH, y*CELL_WIDTH+2)
-			label.text = ""
-			$Board.add_child(label)
+	init_labels()
 	#
 	for i in range(N_HORZ):
 		num_buttons.push_back(get_node("Button%d" % (i+1)))
@@ -164,6 +155,32 @@ func _ready():
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
 	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass
+func init_labels():
+	# 手がかり数字、入力数字用 Label 生成
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			var px = x * CELL_WIDTH
+			var py = y * CELL_WIDTH
+			var label = ClueLabel.instance()
+			clue_labels.push_back(label)
+			label.rect_position = Vector2(px, py + 2)
+			label.text = String((x+y)%9 + 1)
+			$Board.add_child(label)
+			label = InputLabel.instance()
+			input_labels.push_back(label)
+			label.rect_position = Vector2(px, py + 2)
+			label.text = ""
+			$Board.add_child(label)
+			var lst = []
+			for v in range(3):
+				for h in range(3):
+					label = MemoLabel.instance()
+					lst.push_back(label)
+					label.rect_position = Vector2(px + CELL_WIDTH3*h, py + CELL_WIDTH3*v)
+					label.text = String(v*3+h+1)
+					$Board.add_child(label)
+			memo_labels.push_back(lst)
+					
 func gen_qName():
 	g.qRandom = true
 	g.qName = ""
