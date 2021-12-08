@@ -254,7 +254,8 @@ func _input(event):
 		if paused: return
 		var mp = $Board/TileMap.world_to_map($Board/TileMap.get_local_mouse_position())
 		print(mp)
-		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT: return
+		if mp.x < 0 || mp.x >= N_HORZ || mp.y < 0 || mp.y >= N_VERT:
+			return		# 盤面セル以外の場合
 		if hint_showed:
 			close_hint()
 			return
@@ -274,6 +275,7 @@ func _input(event):
 					do_emphasize(ix, CELL, false)
 				update_all_status()
 				return
+			# 数字ボタン選択状態の場合 → セルにその数字を入れる or メモ数字反転
 			if input_labels[ix].text != "":
 				add_falling_char(input_labels[ix].text, ix)
 			var num_str = String(cur_num)
@@ -284,6 +286,7 @@ func _input(event):
 				input_num = int(cur_num)
 				push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
 				input_labels[ix].text = num_str
+			for i in range(N_HORZ): memo_labels[ix][i].text = ""	# メモ数字削除
 		#update_undo_redo()
 		#update_num_buttons_disabled()
 		#update_cell_cursor(cur_num)
@@ -937,6 +940,7 @@ func num_button_pressed(num : int, button_pressed):
 				input_num = num
 				push_to_undo_stack([cur_cell_ix, old, num])
 				input_labels[cur_cell_ix].text = String(num)
+			for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
 			num_buttons[num-1].pressed = false
 			update_all_status()
 			sound_effect()
