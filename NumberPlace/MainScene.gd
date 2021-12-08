@@ -105,6 +105,7 @@ var nRemoved
 var clue_labels = []		# 手がかり数字用ラベル配列
 var input_labels = []		# 入力数字用ラベル配列
 var memo_labels = []		# メモ（候補数字）用ラベル配列（２次元）
+var memo_text = []			# ポーズ復活時用ラベルテキスト配列（２次元）
 var shock_wave_timer = -1
 var undo_ix = 0
 var undo_stack = []			# 要素：[ix old new]、old, new は 0～9 の数値、0 for 空欄
@@ -132,6 +133,7 @@ func _ready():
 	load_settings()
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
+	memo_text.resize(N_CELLS)
 	column_used.resize(N_HORZ)
 	box_used.resize(N_HORZ)
 	num_used.resize(N_HORZ + 1)		# +1 for 0
@@ -899,6 +901,9 @@ func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを�
 		for y in range(N_VERT):
 			for x in range(N_HORZ):
 				$Board/TileMap.set_cell(x, y, TILE_NONE)
+				for v in range(3):
+					for h in range(3):
+						$Board/MemoTileMap.set_cell(x*3+h, y*3+v, TILE_NONE)
 		if cur_cell_ix >= 0:
 			do_emphasize(cur_cell_ix, CELL, false)
 func set_num_cursor(num):	# 当該ボタンだけを選択状態に
@@ -990,6 +995,11 @@ func _on_PauseButton_pressed():
 				input_labels[ix].text = "?"
 			else:
 				cell_bit[ix] = 0
+			var lst = []
+			for i in range(N_HORZ):
+				lst.push_back(memo_labels[ix][i].text)
+				memo_labels[ix][i].text = ""
+			memo_text[ix] = lst
 		for i in range(N_HORZ):
 			num_buttons[i].disabled = true
 	else:
@@ -998,6 +1008,8 @@ func _on_PauseButton_pressed():
 				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			elif input_labels[ix].text != "":
 				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
+			for i in range(N_HORZ):
+				memo_labels[ix][i].text = memo_text[ix][i]
 	update_all_status()
 	pass # Replace with function body.
 
