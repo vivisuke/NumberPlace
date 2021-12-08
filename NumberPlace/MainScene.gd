@@ -494,7 +494,14 @@ func update_input_labels():		# clue_labels
 				input_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			ix += 1
 	
-func init_candidates():		# 各セルの候補数字計算
+func init_cell_bit():		# clue_labels, input_labels から 各セルの cell_bit 更新
+	for ix in range(N_CELLS):
+		var n = get_cell_numer(ix)
+		if n == 0:
+			cell_bit[ix] = 0
+		else:
+			cell_bit[ix] = num_to_bit(n)
+func init_candidates():		# cell_bit から各セルの候補数字計算
 	for i in range(N_CELLS):
 		candidates_bit[i] = ALL_BITS if cell_bit[i] == 0 else 0
 	for y in range(N_VERT):
@@ -1166,4 +1173,23 @@ func _on_CheckButton_pressed():
 		$MessLabel.text = "間違って入っている数字（赤色）があります。"
 	else:
 		$MessLabel.text = "間違って入っている数字はありません。"
+	pass # Replace with function body.
+
+
+func _on_AutoMemoButton_pressed():
+	if paused: return		# ポーズ中
+	init_cell_bit()
+	init_candidates()
+	for ix in range(N_CELLS):
+		if get_cell_numer(ix) != 0:
+			for i in range(N_HORZ):
+				memo_labels[ix][i].text = ""
+		else:
+			var mask = BIT_1
+			for i in range(N_HORZ):
+				if (candidates_bit[ix] & mask) != 0:
+					memo_labels[ix][i].text = String(i+1)
+				else:
+					memo_labels[ix][i].text = ""
+				mask <<= 1
 	pass # Replace with function body.

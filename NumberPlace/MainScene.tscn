@@ -1050,6 +1050,7 @@ __meta__ = {
 [connection signal="pressed" from="HelpButton" to="." method="_on_QustButton_pressed"]
 [connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
+[connection signal="pressed" from="AutoMemoButton" to="." method="_on_AutoMemoButton_pressed"]
 [connection signal="pressed" from="SoundButton" to="." method="_on_SoundButton_pressed"]
 [connection signal="toggled" from="Button1" to="." method="_on_Button1_toggled"]
 [connection signal="toggled" from="Button2" to="." method="_on_Button2_toggled"]
