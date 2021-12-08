@@ -1019,6 +1019,8 @@ func _on_RestartButton_pressed():
 		if input_labels[ix].text != "":
 			add_falling_char(input_labels[ix].text, ix)
 			input_labels[ix].text = ""
+		for i in range(N_HORZ):
+			memo_labels[ix][i].text = ""
 	update_all_status()
 	#num_buttons[cur_num-1].grab_focus()
 	num_button_pressed(cur_num, true)
