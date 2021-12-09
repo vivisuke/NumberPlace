@@ -49,6 +49,8 @@ const UNDO_ITEM_NEW = 3			# for セル数字
 const IX_POS = 0
 const IX_BIT = 1
 const IX_TYPE = 2
+const NUM_FONT_SIZE = 40
+const MEMO_FONT_SIZE = 20
 
 const HINT_DUPLICATED = [
 	"縦横3x3ブロックに重複した数字（赤色）\nがあり、ヒントを表示できません。", false
@@ -260,16 +262,27 @@ func remove_all_memo():
 		for h in range(N_HORZ*3):
 			$Board/MemoTileMap.set_cell(h, v, TILE_NONE)
 func remove_memo_num(ix : int, num : int):		# ix に num を入れたときに、メモ数字削除
+	var lst = []
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
 	for h in range(N_HORZ):
-		memo_labels[xyToIX(h, y)][num-1].text = ""
-		memo_labels[xyToIX(x, h)][num-1].text = ""
+		var ix2 = xyToIX(h, y)
+		if memo_labels[ix2][num-1].text != "":
+			memo_labels[ix2][num-1].text = ""
+			lst.push_back(ix2)
+		ix2 = xyToIX(x, h)
+		if memo_labels[ix2][num-1].text != "":
+			memo_labels[ix2][num-1].text = ""
+			lst.push_back(ix2)
 	var x0 = x - x % 3
 	var y0 = y - y % 3
 	for v in range(3):
 		for h in range(3):
-			memo_labels[xyToIX(x0 + h, y0 + v)][num-1].text = ""
+			var ix2 = xyToIX(x0 + h, y0 + v)
+			if memo_labels[ix2][num-1].text != "":
+				memo_labels[ix2][num-1].text = ""
+				lst.push_back(ix2)
+	return lst
 func flip_memo_num(ix : int, num : int):
 	if memo_labels[ix][num-1].text == "":
 		memo_labels[ix][num-1].text = String(num)
@@ -1277,4 +1290,13 @@ func _on_AutoMemoButton_pressed():
 func _on_MemoButton_toggled(button_pressed):
 	memo_mode = button_pressed
 	print(memo_mode)
+	var sz = MEMO_FONT_SIZE if memo_mode else NUM_FONT_SIZE
+	var font = DynamicFont.new()
+	font.font_data = load("res://fonts/arialbd.ttf")
+	font.size = sz
+	#print(font)
+	for i in range(num_buttons.size()):
+	#	var font : DynamicFont = num_buttons[i].get_font("")
+	#	font.size = sz
+		num_buttons[i].add_font_override("font", font)
 	pass # Replace with function body.
