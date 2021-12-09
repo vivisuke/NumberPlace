@@ -39,9 +39,13 @@ const OPT_BEGINNER = 0
 const OPT_EASY = 1
 const OPT_NORMAL = 2
 const N_EMPTY_BEGINNER = 32
-const UNDO_ITEM_IX = 0
-const UNDO_ITEM_OLD = 1
-const UNDO_ITEM_NEW = 2
+const UNDO_TYPE_CELL = 0		# セル数字入力
+const UNDO_TYPE_MEMO = 1		# メモ数字反転
+const UNDO_ITEM_TYPE = 0
+const UNDO_ITEM_IX = 1
+const UNDO_ITEM_NUM = 2			# for メモ数字
+const UNDO_ITEM_OLD = 2			# for セル数字
+const UNDO_ITEM_NEW = 3			# for セル数字
 const IX_POS = 0
 const IX_BIT = 1
 const IX_TYPE = 2
@@ -255,7 +259,7 @@ func remove_all_memo():
 	for v in range(N_VERT*3):
 		for h in range(N_HORZ*3):
 			$Board/MemoTileMap.set_cell(h, v, TILE_NONE)
-func remove_memo_num(ix : int, num : int):
+func remove_memo_num(ix : int, num : int):		# ix に num を入れたときに、メモ数字削除
 	var x = ix % N_HORZ
 	var y = ix / N_HORZ
 	for h in range(N_HORZ):
@@ -266,6 +270,11 @@ func remove_memo_num(ix : int, num : int):
 	for v in range(3):
 		for h in range(3):
 			memo_labels[xyToIX(x0 + h, y0 + v)][num-1].text = ""
+func flip_memo_num(ix : int, num : int):
+	if memo_labels[ix][num-1].text == "":
+		memo_labels[ix][num-1].text = String(num)
+	else:
+		memo_labels[ix][num-1].text = ""
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
@@ -300,21 +309,19 @@ func _input(event):
 					add_falling_char(input_labels[ix].text, ix)
 				var num_str = String(cur_num)
 				if input_labels[ix].text == num_str:	# 同じ数字が入っていれば消去
-					push_to_undo_stack([ix, int(cur_num), 0])		# ix, old, new
+					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(cur_num), 0])		# ix, old, new
 					input_labels[ix].text = ""
 				else:	# 上書き
 					input_num = int(cur_num)
-					push_to_undo_stack([ix, int(input_labels[ix].text), input_num])
+					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(input_labels[ix].text), input_num])
 					input_labels[ix].text = num_str
 					remove_memo_num(ix, cur_num)
 				for i in range(N_HORZ): memo_labels[ix][i].text = ""	# メモ数字削除
 			else:	# メモ数字エディットモード
 				if get_cell_numer(ix) != 0:
 					return		# 空欄でない場合
-				if memo_labels[ix][cur_num-1].text == "":
-					memo_labels[ix][cur_num-1].text = String(cur_num)
-				else:
-					memo_labels[ix][cur_num-1].text = ""
+				push_to_undo_stack([UNDO_TYPE_MEMO, ix, cur_num])
+				flip_memo_num(ix, cur_num)
 		#update_undo_redo()
 		#update_num_buttons_disabled()
 		#update_cell_cursor(cur_num)
@@ -963,11 +970,11 @@ func num_button_pressed(num : int, button_pressed):
 				if old != 0:
 					add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
 				if num == old:		# 同じ数字を入れる → 削除
-					push_to_undo_stack([cur_cell_ix, old, 0])
+					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0])
 					input_labels[cur_cell_ix].text = ""
 				else:
 					input_num = num
-					push_to_undo_stack([cur_cell_ix, old, num])
+					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, num])
 					input_labels[cur_cell_ix].text = String(num)
 					remove_memo_num(cur_cell_ix, num)
 				for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
@@ -979,10 +986,8 @@ func num_button_pressed(num : int, button_pressed):
 		else:		# メモ数字エディットモード
 			if get_cell_numer(cur_cell_ix) != 0:
 				return		# 空欄でない場合
-			if memo_labels[cur_cell_ix][num-1].text == "":
-				memo_labels[cur_cell_ix][num-1].text = String(num)
-			else:
-					memo_labels[cur_cell_ix][num-1].text = ""
+			push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
+			flip_memo_num(cur_cell_ix, num)
 	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
@@ -1074,16 +1079,22 @@ func _on_UndoButton_pressed():
 	if paused: return		# ポーズ中
 	undo_ix -= 1
 	var item = undo_stack[undo_ix]
-	var txt = String(item[UNDO_ITEM_OLD]) if item[UNDO_ITEM_OLD] != 0 else ""
-	input_labels[item[UNDO_ITEM_IX]].text = txt
+	if item[UNDO_ITEM_TYPE] == UNDO_TYPE_CELL:
+		var txt = String(item[UNDO_ITEM_OLD]) if item[UNDO_ITEM_OLD] != 0 else ""
+		input_labels[item[UNDO_ITEM_IX]].text = txt
+	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
+		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
 	update_all_status()
 	pass
 
 func _on_RedoButton_pressed():
 	if paused: return		# ポーズ中
 	var item = undo_stack[undo_ix]
-	var txt = String(item[UNDO_ITEM_NEW]) if item[UNDO_ITEM_NEW] != 0 else ""
-	input_labels[item[UNDO_ITEM_IX]].text = txt
+	if item[UNDO_ITEM_TYPE] == UNDO_TYPE_CELL:
+		var txt = String(item[UNDO_ITEM_NEW]) if item[UNDO_ITEM_NEW] != 0 else ""
+		input_labels[item[UNDO_ITEM_IX]].text = txt
+	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
+		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
 	undo_ix += 1
 	update_all_status()
 	pass
