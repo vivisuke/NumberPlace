@@ -46,6 +46,8 @@ const UNDO_ITEM_IX = 1
 const UNDO_ITEM_NUM = 2			# for メモ数字
 const UNDO_ITEM_OLD = 2			# for セル数字
 const UNDO_ITEM_NEW = 3			# for セル数字
+const UNDO_ITEM_MEMOIX = 4		# メモ数字反転位置リスト
+const UNDO_ITEM_MEMO = 5		# 数字を入れた位置のメモ数字（ビット値）
 const IX_POS = 0
 const IX_BIT = 1
 const IX_TYPE = 2
@@ -322,13 +324,15 @@ func _input(event):
 					add_falling_char(input_labels[ix].text, ix)
 				var num_str = String(cur_num)
 				if input_labels[ix].text == num_str:	# 同じ数字が入っていれば消去
-					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(cur_num), 0])		# ix, old, new
+					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(cur_num), 0, [], 0])		# ix, old, new
 					input_labels[ix].text = ""
 				else:	# 上書き
 					input_num = int(cur_num)
-					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(input_labels[ix].text), input_num])
+					var lst = remove_memo_num(ix, cur_num)
+					var mb = get_memo_bits(ix)
+					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(input_labels[ix].text), input_num, lst, mb])
+					#undo_stack.back().back() = lst
 					input_labels[ix].text = num_str
-					remove_memo_num(ix, cur_num)
 				for i in range(N_HORZ): memo_labels[ix][i].text = ""	# メモ数字削除
 			else:	# メモ数字エディットモード
 				if get_cell_numer(ix) != 0:
@@ -458,6 +462,13 @@ func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返
 	if input_labels[ix].text != "":
 		return int(input_labels[ix].text)
 	return 0
+func get_memo_bits(ix) -> int:
+	var bits = 0
+	var mask = BIT_1
+	for i in range(N_HORZ):
+		if memo_labels[ix][i].text != "": bits |= mask
+		mask <<= 1
+	return bits
 func nEmpty():
 	var n = 0
 	for i in range(clue_labels.size()):
@@ -983,13 +994,15 @@ func num_button_pressed(num : int, button_pressed):
 				if old != 0:
 					add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
 				if num == old:		# 同じ数字を入れる → 削除
-					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0])
+					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0, [], 0])
 					input_labels[cur_cell_ix].text = ""
 				else:
 					input_num = num
-					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, num])
+					var lst = remove_memo_num(cur_cell_ix, num)
+					var mb = get_memo_bits(cur_cell_ix)
+					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, num, lst, mb])
+					#undo_stack.back().back() = lst
 					input_labels[cur_cell_ix].text = String(num)
-					remove_memo_num(cur_cell_ix, num)
 				for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
 				num_buttons[num-1].pressed = false
 				update_all_status()
@@ -1087,7 +1100,12 @@ func _on_RestartButton_pressed():
 	#num_buttons[cur_num-1].grab_focus()
 	num_button_pressed(cur_num, true)
 	pass # Replace with function body.
-
+func flip_memo_bits(ix, bits):
+	var mask = BIT_1
+	for n in range(N_HORZ):
+		if (bits & mask) != 0:
+			flip_memo_num(ix, n+1)
+		mask <<= 1
 func _on_UndoButton_pressed():
 	if paused: return		# ポーズ中
 	undo_ix -= 1
@@ -1095,6 +1113,11 @@ func _on_UndoButton_pressed():
 	if item[UNDO_ITEM_TYPE] == UNDO_TYPE_CELL:
 		var txt = String(item[UNDO_ITEM_OLD]) if item[UNDO_ITEM_OLD] != 0 else ""
 		input_labels[item[UNDO_ITEM_IX]].text = txt
+		var lst = item[UNDO_ITEM_MEMOIX]
+		for i in range(lst.size()):
+			flip_memo_num(lst[i], item[UNDO_ITEM_NEW])
+		var mb = item[UNDO_ITEM_MEMO]
+		flip_memo_bits(item[UNDO_ITEM_IX], mb)
 	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
 		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
 	update_all_status()
@@ -1106,6 +1129,9 @@ func _on_RedoButton_pressed():
 	if item[UNDO_ITEM_TYPE] == UNDO_TYPE_CELL:
 		var txt = String(item[UNDO_ITEM_NEW]) if item[UNDO_ITEM_NEW] != 0 else ""
 		input_labels[item[UNDO_ITEM_IX]].text = txt
+		var lst = item[UNDO_ITEM_MEMOIX]
+		for i in range(lst.size()):
+			flip_memo_num(lst[i], item[UNDO_ITEM_NEW])
 	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
 		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
 	undo_ix += 1
@@ -1296,7 +1322,5 @@ func _on_MemoButton_toggled(button_pressed):
 	font.size = sz
 	#print(font)
 	for i in range(num_buttons.size()):
-	#	var font : DynamicFont = num_buttons[i].get_font("")
-	#	font.size = sz
 		num_buttons[i].add_font_override("font", font)
 	pass # Replace with function body.
