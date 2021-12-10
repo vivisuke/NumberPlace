@@ -254,6 +254,8 @@ func on_solved():
 		g.stats[g.qLevel]["TotalSec"] += int(elapsedTime)
 	else:
 		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
+	if !g.stats[g.qLevel].has("BestTime") || int(elapsedTime) < g.stats[g.qLevel]["BestTime"]:
+		g.stats[g.qLevel]["BestTime"] = int(elapsedTime)
 	save_stats()
 	update_all_status()
 func remove_all_memo():
@@ -433,6 +435,10 @@ func _process(delta):
 		if shock_wave_timer > 2:
 			shock_wave_timer = -1.0
 	pass
+func sec_to_MSStr(t):
+	var sec = t % 60
+	var mnt = t / 60
+	return "%02d:%02d" % [mnt, sec]
 func update_all_status():
 	update_undo_redo()
 	update_cell_cursor(cur_num)
@@ -446,10 +452,9 @@ func update_all_status():
 	elif solvedStat:
 		var n = g.stats[g.qLevel]["NSolved"]
 		var avg : int = int(g.stats[g.qLevel]["TotalSec"] / n)
-		var sec = avg % 60
-		var mnts = avg / 60
-		var txt = "%02d:%02d" % [mnts, sec]
-		$MessLabel.text = "グッジョブ！ クリア回数: %d、平均: %s" % [n, txt]
+		var txt = sec_to_MSStr(avg)
+		var bst = sec_to_MSStr(g.stats[g.qLevel]["BestTime"])
+		$MessLabel.text = "グッジョブ！ クリア回数: %d、平均: %s、最短: %s" % [n, txt, bst]
 	elif paused:
 		$MessLabel.text = "ポーズ中です。解除にはポーズボタンを押してください。"
 	elif cur_num != 0:

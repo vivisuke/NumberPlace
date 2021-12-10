@@ -147,7 +147,6 @@ font_data = ExtResource( 16 )
 0/z_index = 0
 
 [sub_resource type="DynamicFont" id=21]
-size = 18
 font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=12]
@@ -374,7 +373,7 @@ __meta__ = {
 margin_left = 14.0
 margin_top = 572.0
 margin_right = 134.0
-margin_bottom = 597.0
+margin_bottom = 589.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 21 )
 text = "メッセージ"
