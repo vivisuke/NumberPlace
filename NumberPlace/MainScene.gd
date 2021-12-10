@@ -290,6 +290,8 @@ func flip_memo_num(ix : int, num : int):
 		memo_labels[ix][num-1].text = String(num)
 	else:
 		memo_labels[ix][num-1].text = ""
+func clear_all_memo(ix):
+	for i in range(N_HORZ): memo_labels[ix][i].text = ""
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
@@ -1132,6 +1134,7 @@ func _on_RedoButton_pressed():
 		var lst = item[UNDO_ITEM_MEMOIX]
 		for i in range(lst.size()):
 			flip_memo_num(lst[i], item[UNDO_ITEM_NEW])
+		if item[UNDO_ITEM_NEW] != 0: clear_all_memo(item[UNDO_ITEM_IX])
 	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
 		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
 	undo_ix += 1
