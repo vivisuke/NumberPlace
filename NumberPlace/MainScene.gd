@@ -1023,6 +1023,7 @@ func num_button_pressed(num : int, button_pressed):
 				return		# 空欄でない場合
 			push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
 			flip_memo_num(cur_cell_ix, num)
+			num_buttons[num-1].pressed = false
 	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
