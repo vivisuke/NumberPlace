@@ -41,6 +41,7 @@ const OPT_NORMAL = 2
 const N_EMPTY_BEGINNER = 32
 const UNDO_TYPE_CELL = 0		# セル数字入力
 const UNDO_TYPE_MEMO = 1		# メモ数字反転
+const UNDO_TYPE_AUTO_MEMO = 2	# 自動メモ
 const UNDO_ITEM_TYPE = 0
 const UNDO_ITEM_IX = 1
 const UNDO_ITEM_NUM = 2			# for メモ数字
@@ -48,6 +49,7 @@ const UNDO_ITEM_OLD = 2			# for セル数字
 const UNDO_ITEM_NEW = 3			# for セル数字
 const UNDO_ITEM_MEMOIX = 4		# メモ数字反転位置リスト
 const UNDO_ITEM_MEMO = 5		# 数字を入れた位置のメモ数字（ビット値）
+const UNDO_ITEM_MEMO_LST = 1
 const IX_POS = 0
 const IX_BIT = 1
 const IX_TYPE = 2
@@ -1113,6 +1115,14 @@ func flip_memo_bits(ix, bits):
 		if (bits & mask) != 0:
 			flip_memo_num(ix, n+1)
 		mask <<= 1
+func set_memo_bits(ix, bits):
+	var mask = BIT_1
+	for i in range(N_HORZ):
+		if (bits & mask) != 0:
+			memo_labels[ix][i].text = String(i+1)
+		else:
+			memo_labels[ix][i].text = ""
+		mask <<= 1
 func _on_UndoButton_pressed():
 	if paused: return		# ポーズ中
 	undo_ix -= 1
@@ -1127,6 +1137,10 @@ func _on_UndoButton_pressed():
 		flip_memo_bits(item[UNDO_ITEM_IX], mb)
 	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
 		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
+	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_AUTO_MEMO:
+		var lst = item[UNDO_ITEM_MEMO_LST]
+		for ix in range(N_CELLS):
+			set_memo_bits(ix, lst[ix])
 	update_all_status()
 	pass
 
@@ -1142,6 +1156,8 @@ func _on_RedoButton_pressed():
 		if item[UNDO_ITEM_NEW] != 0: clear_all_memo(item[UNDO_ITEM_IX])
 	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_MEMO:
 		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
+	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_AUTO_MEMO:
+		do_auto_memo()
 	undo_ix += 1
 	update_all_status()
 	pass
@@ -1300,23 +1316,30 @@ func _on_CheckButton_pressed():
 		$MessLabel.text = "間違って入っている数字はありません。"
 	pass # Replace with function body.
 
-
-func _on_AutoMemoButton_pressed():
-	if paused: return		# ポーズ中
+func do_auto_memo():
 	init_cell_bit()
-	init_candidates()
+	init_candidates()		# 可能候補数字計算
+	var lst = []
 	for ix in range(N_CELLS):
-		if get_cell_numer(ix) != 0:
+		var bits = 0	
+		if get_cell_numer(ix) != 0:		# 数字が入っている場合
 			for i in range(N_HORZ):
 				memo_labels[ix][i].text = ""
-		else:
+		else:							# 数字が入っていない場合
 			var mask = BIT_1
 			for i in range(N_HORZ):
+				if memo_labels[ix][i].text != "": bits |= mask
 				if (candidates_bit[ix] & mask) != 0:
 					memo_labels[ix][i].text = String(i+1)
 				else:
 					memo_labels[ix][i].text = ""
 				mask <<= 1
+		lst.push_back(bits)
+	return lst
+func _on_AutoMemoButton_pressed():
+	if paused: return		# ポーズ中
+	var lst = do_auto_memo()
+	push_to_undo_stack([UNDO_TYPE_AUTO_MEMO, lst])
 	update_all_status()
 	pass # Replace with function body.
 
