@@ -952,7 +952,7 @@ func clear_cell_cursor():
 		for x in range(N_HORZ):
 			$Board/TileMap.set_cell(x, y, TILE_NONE)
 func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを強調
-	if num != 0 && !paused:
+	if num > 0 && !paused:
 		var num_str = String(num)
 		for y in range(N_VERT):
 			for x in range(N_HORZ):
