@@ -108,7 +108,7 @@ var column_used = []		# 各カラムの使用済みビット
 var box_used = []			# 各3x3ブロックの使用済みビット
 var rmix_list = []			# 削除位置リスト
 var rmixix					# 次に削除する要素位置
-var cur_num = 0				# 選択されている数字ボタン、0 for 選択無し
+var cur_num = -1			# 選択されている数字ボタン、-1 for 選択無し
 var cur_cell_ix = -1		# 選択されているセルインデックス、-1 for 選択無し
 var input_num = 0			# 入力された数字
 var nRemoved
@@ -314,7 +314,7 @@ func _input(event):
 			# undone: 手がかり数字ボタン選択
 			num_button_pressed(int(clue_labels[ix].text), true)
 		else:
-			if cur_num == 0:			# 数字ボタン非選択の場合
+			if cur_num < 0:			# 数字ボタン非選択の場合
 				clear_cell_cursor()
 				if ix == cur_cell_ix:
 					cur_cell_ix = -1
@@ -459,7 +459,7 @@ func update_all_status():
 		$MessLabel.text = "グッジョブ！ クリア回数: %d、平均: %s、最短: %s" % [n, txt, bst]
 	elif paused:
 		$MessLabel.text = "ポーズ中です。解除にはポーズボタンを押してください。"
-	elif cur_num != 0:
+	elif cur_num > 0:
 		$MessLabel.text = "現数字（%d）を入れるセルをクリックしてください。" % cur_num
 	elif cur_cell_ix >= 0:
 		$MessLabel.text = "セルに入れる数字ボタンをクリックしてください。"
@@ -1032,12 +1032,14 @@ func num_button_pressed(num : int, button_pressed):
 			#	#if i + 1 != num: num_buttons[i].pressed = false
 			#	num_buttons[i].pressed = (i + 1 == num)
 		else:
-			cur_num = 0		# toggled
+			cur_num = -1		# toggled
 		update_cell_cursor(cur_num)
 	in_button_pressed = false
 	update_all_status()
 	pass
 
+func _on_DeleteButton_toggled(button_pressed):
+	num_button_pressed(0, button_pressed)		# 0 for delete
 func _on_Button1_toggled(button_pressed):
 	num_button_pressed(1, button_pressed)
 func _on_Button2_toggled(button_pressed):
@@ -1267,7 +1269,7 @@ func _on_HintButton_pressed():
 			hint_numstr = bit_to_numstr(fh[IX_BIT])
 			hint_texts = HINT_FULLHOUSE
 		else:
-			if cur_num != 0:	# 数字ボタン選択時
+			if cur_num > 0:		# 数字ボタン選択時
 				if !hint_hidden_single():
 					hint_nakid_single()
 			else:
@@ -1283,7 +1285,7 @@ func close_hint():
 	set_num_cursor(cur_num)
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
-	if cur_num != 0:
+	if cur_num > 0:		# 数字ボタン選択時
 		#cur_num = bit_to_num(g.hint_bit)
 		set_num_cursor(bit_to_num(g.hint_bit))
 	else:
@@ -1301,8 +1303,8 @@ func _on_DeselectButton_pressed():
 	if paused: return		# ポーズ中
 	cur_cell_ix = -1
 	update_cell_cursor(0)
-	#cur_num = 0
-	set_num_cursor(0)
+	#cur_num = -1
+	set_num_cursor(-1)
 	update_all_status()
 func _on_CheckButton_pressed():
 	if paused: return		# ポーズ中
@@ -1339,6 +1341,7 @@ func do_auto_memo():
 	return lst
 func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
+	if qCreating: return	# 問題生成中
 	var lst = do_auto_memo()
 	push_to_undo_stack([UNDO_TYPE_AUTO_MEMO, lst])
 	update_all_status()
