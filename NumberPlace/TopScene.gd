@@ -51,11 +51,12 @@ func to_MainScene(qLevel):
 func _on_Button0_pressed():
 	to_MainScene(0)
 	pass # Replace with function body.
-
 func _on_Button1_pressed():
 	to_MainScene(1)
 	pass # Replace with function body.
-
 func _on_Button2_pressed():
 	to_MainScene(2)
+	pass # Replace with function body.
+func _on_Button3_pressed():
+	to_MainScene(3)
 	pass # Replace with function body.

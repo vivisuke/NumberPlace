@@ -55,6 +55,8 @@ const IX_BIT = 1
 const IX_TYPE = 2
 const NUM_FONT_SIZE = 40
 const MEMO_FONT_SIZE = 20
+const LVL_BEGGINER = 0
+const LVL_NOT_SYMMETRIC = 3
 
 const HINT_DUPLICATED = [
 	"縦横3x3ブロックに重複した数字（赤色）\nがあり、ヒントを表示できません。", false
@@ -83,6 +85,7 @@ const HINT_HIDDEN_SINGLE = [
 
 const SETTINGS_FILE_NAME = "user://settings.dat"
 
+var symmetric = true		# 対称形問題
 var qCreating = false		# 問題生成中
 var solvedStat = false		# クリア済み状態
 var paused = false			# ポーズ状態
@@ -202,10 +205,11 @@ func gen_qName():
 		if r < 10: g.qName += String(r+1)
 		else: g.qName += "%c" % (r - 10 + 0x61)		# 0x61 is 'a'
 func titleText() -> String:
-	var tt
-	if g.qLevel == 0: tt = "【入門】"
+	var tt = ""
+	if g.qLevel == LVL_BEGGINER: tt = "【入門】"
 	elif g.qLevel == 1: tt = "【初級】"
 	elif g.qLevel == 2: tt = "【初中級】"
+	elif g.qLevel == LVL_NOT_SYMMETRIC: tt = "【非対称】"
 	return tt + "“" + g.qName + "”"
 func load_settings():
 	var file = File.new()
@@ -247,7 +251,8 @@ func on_solved():
 	$CanvasLayer/ColorRect.show()
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
-	if $SoundButton.is_pressed(): $AudioSolved.play()
+	if $SoundButton.is_pressed():
+		$AudioSolved.play()
 	if g.stats[g.qLevel].has("NSolved"):
 		g.stats[g.qLevel]["NSolved"] += 1
 	else:
@@ -260,6 +265,9 @@ func on_solved():
 		g.stats[g.qLevel]["BestTime"] = int(elapsedTime)
 	save_stats()
 	update_all_status()
+func remove_all_memo_at(ix):
+	for i in range(N_HORZ):
+		memo_labels[ix][i].text = ""
 func remove_all_memo():
 	for ix in range(N_CELLS):
 		for i in range(N_HORZ):
@@ -384,9 +392,10 @@ func _process(delta):
 		var y = rmix_list[rmixix] / N_HORZ
 		var lst = []
 		lst.push_back(xyToIX(x, y))
-		lst.push_back(xyToIX(y, x))
-		lst.push_back(xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y))
-		lst.push_back(xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x))
+		if symmetric:
+			lst.push_back(xyToIX(y, x))
+			lst.push_back(xyToIX(N_HORZ - 1 - x, N_VERT - 1 - y))
+			lst.push_back(xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x))
 		for i in range(lst.size()):
 			remove_clue_ix(lst[i])
 		#remove_clue(x, y)
@@ -416,8 +425,9 @@ func _process(delta):
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
-			#cur_num = 1
-			set_num_cursor(1)
+			cur_num = -1
+			cur_cell_ix = -1
+			#set_num_cursor(1)
 			#num_buttons[cur_num - 1].grab_focus()
 			update_all_status()
 			#update_cell_cursor()
@@ -705,6 +715,7 @@ func gen_quest():
 func gen_quest_greedy():
 	qCreating = true
 	$MessLabel.text = "問題生成中..."
+	symmetric = g.qLevel != LVL_NOT_SYMMETRIC
 	solvedStat = false
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
@@ -714,9 +725,12 @@ func gen_quest_greedy():
 			clear_cell_cursor()
 			update_num_buttons_disabled()
 			gen_ans()
-			for y in range(5):
-				for x in range(y, N_HORZ - y):
-					rmix_list.push_back(xyToIX(x, y))
+			if symmetric:
+				for y in range(5):
+					for x in range(y, N_HORZ - y):
+						rmix_list.push_back(xyToIX(x, y))
+			else:
+				for ix in range(N_CELLS): rmix_list.push_back(ix)
 			rmix_list.shuffle()
 			rmixix = 0		# 次に削除する位置
 			nRemoved = 0
@@ -997,33 +1011,41 @@ func num_button_pressed(num : int, button_pressed):
 	if paused: return			# ポーズ中
 	in_button_pressed = true
 	if cur_cell_ix >= 0:		# セルが選択されている場合
-		if !memo_mode:
-			if button_pressed:
-				var old = get_cell_numer(cur_cell_ix)
-				if old != 0:
-					add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
-				if num == old:		# 同じ数字を入れる → 削除
-					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0, [], 0])
-					input_labels[cur_cell_ix].text = ""
-				else:
-					input_num = num
-					var lst = remove_memo_num(cur_cell_ix, num)
-					var mb = get_memo_bits(cur_cell_ix)
-					push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, num, lst, mb])
-					#undo_stack.back().back() = lst
-					input_labels[cur_cell_ix].text = String(num)
-				for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
+		if num == 0:			# 削除ボタン押下の場合
+			var old = get_cell_numer(cur_cell_ix)
+			if old != 0:
+				push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0, [], 0])
+				input_labels[cur_cell_ix].text = ""
+			else:
+				remove_all_memo_at(cur_cell_ix)
+		else:
+			if !memo_mode:
+				if button_pressed:
+					var old = get_cell_numer(cur_cell_ix)
+					if old != 0:
+						add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
+					if num == old:		# 同じ数字を入れる → 削除
+						push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0, [], 0])
+						input_labels[cur_cell_ix].text = ""
+					else:
+						input_num = num
+						var lst = remove_memo_num(cur_cell_ix, num)
+						var mb = get_memo_bits(cur_cell_ix)
+						push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, num, lst, mb])
+						#undo_stack.back().back() = lst
+						input_labels[cur_cell_ix].text = String(num)
+					for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
+					num_buttons[num-1].pressed = false
+					update_all_status()
+					sound_effect()
+					if !solvedStat && is_solved():
+						on_solved()
+			else:		# メモ数字エディットモード
+				if get_cell_numer(cur_cell_ix) != 0:
+					return		# 空欄でない場合
+				push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
+				flip_memo_num(cur_cell_ix, num)
 				num_buttons[num-1].pressed = false
-				update_all_status()
-				sound_effect()
-				if !solvedStat && is_solved():
-					on_solved()
-		else:		# メモ数字エディットモード
-			if get_cell_numer(cur_cell_ix) != 0:
-				return		# 空欄でない場合
-			push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
-			flip_memo_num(cur_cell_ix, num)
-			num_buttons[num-1].pressed = false
 	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
@@ -1066,6 +1088,8 @@ func _on_NextButton_pressed():
 	$TitleBar/Label.text = titleText()
 	remove_all_memo()
 	gen_quest_greedy()
+	cur_cell_ix = -1
+	cur_num = -1
 
 func _on_PauseButton_pressed():
 	if !rmix_list.empty(): return		# 問題自動生成中はポーズ禁止
@@ -1250,9 +1274,14 @@ func is_no_mistake():		# 間違って入っている数字が無いか？
 		var n = get_cell_numer(ix)
 		if n != 0 && bit_to_num(ans_bit[ix]) != n: return false
 	return true
+func clear_memo_emphasis():
+	for y in range(N_VERT*3):
+		for x in range(N_HORZ*3):
+			$Board/MemoTileMap.set_cell(x, y, TILE_NONE)
 func _on_HintButton_pressed():
 	if paused: return		# ポーズ中
 	$MessLabel.text = ""
+	clear_memo_emphasis()
 	hint_texts = []
 	update_cell_bit()
 	init_candidates()
