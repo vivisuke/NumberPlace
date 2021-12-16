@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://addons/calendar_button/popup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://images/table_black.png" type="Texture" id=6]
 [ext_resource path="res://TopScene.gd" type="Script" id=8]
 
@@ -86,10 +85,10 @@ __meta__ = {
 }
 
 [node name="SeedLabel" type="Label" parent="."]
-margin_left = 21.0
-margin_top = 414.114
-margin_right = 219.0
-margin_bottom = 439.114
+margin_left = 24.0
+margin_top = 301.114
+margin_right = 222.0
+margin_bottom = 326.114
 rect_rotation = -0.0329332
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
@@ -99,20 +98,20 @@ __meta__ = {
 }
 
 [node name="LineEdit" type="LineEdit" parent="."]
-margin_left = 238.0
-margin_top = 410.0
-margin_right = 477.0
-margin_bottom = 445.0
+margin_left = 241.0
+margin_top = 297.0
+margin_right = 480.0
+margin_bottom = 332.0
 custom_fonts/font = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button0" type="Button" parent="."]
-margin_left = 21.0
-margin_top = 510.0
-margin_right = 477.0
-margin_bottom = 564.0
+margin_left = 24.0
+margin_top = 370.0
+margin_right = 480.0
+margin_bottom = 424.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
 text = "入門問題を生成　　　  　   "
@@ -155,10 +154,10 @@ __meta__ = {
 }
 
 [node name="Button1" type="Button" parent="."]
-margin_left = 21.0
-margin_top = 590.0
-margin_right = 477.0
-margin_bottom = 644.0
+margin_left = 24.0
+margin_top = 450.0
+margin_right = 480.0
+margin_bottom = 504.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
 text = "初級問題を生成　　     　　"
@@ -201,10 +200,10 @@ __meta__ = {
 }
 
 [node name="Button2" type="Button" parent="."]
-margin_left = 21.0
-margin_top = 670.0
-margin_right = 477.0
-margin_bottom = 724.0
+margin_left = 24.0
+margin_top = 530.0
+margin_right = 480.0
+margin_bottom = 584.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
 text = "初中級問題を生成　　  　   "
@@ -247,14 +246,13 @@ __meta__ = {
 }
 
 [node name="Button3" type="Button" parent="."]
-visible = false
-margin_left = 21.0
-margin_top = 750.0
-margin_right = 477.0
-margin_bottom = 804.0
+margin_left = 24.0
+margin_top = 610.0
+margin_right = 480.0
+margin_bottom = 664.0
 custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
-text = "非対称問題を生成　　  　   "
+text = "入門問題集　　　  　   "
 icon = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -293,13 +291,101 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="popup" parent="." instance=ExtResource( 4 )]
-margin_left = 194.0
-margin_top = 262.0
-margin_right = 194.0
-margin_bottom = 262.0
+[node name="Button4" type="Button" parent="."]
+margin_left = 24.0
+margin_top = 690.0
+margin_right = 480.0
+margin_bottom = 744.0
+custom_fonts/font = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+text = "初級問題集　　     　　"
+icon = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NSolvedLabel" type="Label" parent="Button4"]
+margin_left = 333.0
+margin_top = 5.0
+margin_right = 434.0
+margin_bottom = 22.0
+custom_fonts/font = SubResource( 9 )
+text = "クリア数: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AveTimeLabel" type="Label" parent="Button4"]
+margin_left = 333.0
+margin_top = 20.0
+margin_right = 445.0
+margin_bottom = 37.0
+custom_fonts/font = SubResource( 9 )
+text = "平均タイム: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTimeLabel" type="Label" parent="Button4"]
+margin_left = 333.0
+margin_top = 35.0
+margin_right = 445.0
+margin_bottom = 52.0
+custom_fonts/font = SubResource( 9 )
+text = "最短タイム: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button5" type="Button" parent="."]
+margin_left = 24.0
+margin_top = 770.0
+margin_right = 480.0
+margin_bottom = 824.0
+custom_fonts/font = SubResource( 7 )
+custom_styles/normal = SubResource( 8 )
+text = "初中級問題集　　  　   "
+icon = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NSolvedLabel" type="Label" parent="Button5"]
+margin_left = 333.0
+margin_top = 5.0
+margin_right = 434.0
+margin_bottom = 22.0
+custom_fonts/font = SubResource( 9 )
+text = "クリア数: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AveTimeLabel" type="Label" parent="Button5"]
+margin_left = 333.0
+margin_top = 20.0
+margin_right = 445.0
+margin_bottom = 37.0
+custom_fonts/font = SubResource( 9 )
+text = "平均タイム: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BestTimeLabel" type="Label" parent="Button5"]
+margin_left = 333.0
+margin_top = 35.0
+margin_right = 445.0
+margin_bottom = 52.0
+custom_fonts/font = SubResource( 9 )
+text = "最短タイム: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="Button0" to="." method="_on_Button0_pressed"]
 [connection signal="pressed" from="Button1" to="." method="_on_Button1_pressed"]
 [connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
 [connection signal="pressed" from="Button3" to="." method="_on_Button3_pressed"]
+[connection signal="pressed" from="Button4" to="." method="_on_Button4_pressed"]
+[connection signal="pressed" from="Button5" to="." method="_on_Button5_pressed"]

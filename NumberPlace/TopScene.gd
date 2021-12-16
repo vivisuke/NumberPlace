@@ -47,16 +47,22 @@ func to_MainScene(qLevel):
 	g.qRandom = $LineEdit.text == ""
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
+func to_LevelScene(qLevel):
+	print($LineEdit.text)
+	g.qLevel = qLevel
+	g.qName = $LineEdit.text
+	g.qRandom = $LineEdit.text == ""
+	get_tree().change_scene("res://LevelScene.tscn")
 
 func _on_Button0_pressed():
 	to_MainScene(0)
-	pass # Replace with function body.
 func _on_Button1_pressed():
 	to_MainScene(1)
-	pass # Replace with function body.
 func _on_Button2_pressed():
 	to_MainScene(2)
-	pass # Replace with function body.
 func _on_Button3_pressed():
-	to_MainScene(3)
-	pass # Replace with function body.
+	to_LevelScene(0)
+func _on_Button4_pressed():
+	to_LevelScene(1)
+func _on_Button5_pressed():
+	to_LevelScene(2)

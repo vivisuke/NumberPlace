@@ -7,4 +7,5 @@ func _ready():
 
 
 func _on_BackButton_pressed():
+	get_tree().change_scene("res://TopScene.tscn")
 	pass # Replace with function body.
