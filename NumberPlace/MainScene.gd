@@ -319,7 +319,7 @@ func _input(event):
 		if hint_showed:
 			close_hint()
 			return
-		input_num = 0
+		input_num = -1
 		var ix = xyToIX(mp.x, mp.y)
 		if clue_labels[ix].text != "":
 			# undone: 手がかり数字ボタン選択
@@ -335,8 +335,17 @@ func _input(event):
 					do_emphasize(ix, CELL, false)
 				update_all_status()
 				return
+			if cur_num == 0:
+				if input_labels[ix].text != "":
+					add_falling_char(input_labels[ix].text, ix)
+					push_to_undo_stack([UNDO_TYPE_CELL, ix, int(input_labels[ix].text), 0, [], 0])		# ix, old, new
+					input_labels[ix].text = ""
+				else:
+					# undone: Undo/Redo 対応
+					for i in range(N_HORZ):
+						memo_labels[ix][i].text = ""	# メモ数字削除
 			# 数字ボタン選択状態の場合 → セルにその数字を入れる or メモ数字反転
-			if !memo_mode:
+			elif !memo_mode:
 				if input_labels[ix].text != "":
 					add_falling_char(input_labels[ix].text, ix)
 				var num_str = String(cur_num)
