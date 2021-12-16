@@ -104,7 +104,7 @@ var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
 #var optGrade = -1			# 問題グレード、0: 入門、1:初級、2:ノーマル（初中級）
 var diffculty = 0			# 難易度、フルハウス: 1, 隠れたシングル: 2, 裸のシングル: 10pnt？
-var num_buttons = []		# 各数字ボタンリスト [0] -> Button1
+var num_buttons = []		# 各数字ボタンリスト [0] -> 削除ボタン、[1] -> Button1, ...
 var num_used = []			# 各数字使用数（手がかり数字＋入力数字）
 var ans_bit = []			# 解答の各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
 var cell_bit = []			# 各セル数値（0 | BIT_1 | BIT_2 | ... | BIT_9）
@@ -155,6 +155,7 @@ func _ready():
 	num_used.resize(N_HORZ + 1)		# +1 for 0
 	init_labels()
 	#
+	num_buttons.push_back($DeleteButton)
 	for i in range(N_HORZ):
 		num_buttons.push_back(get_node("Button%d" % (i+1)))
 	#$OptionButton.add_item(" Beginner")
@@ -165,7 +166,7 @@ func _ready():
 	#	$OptionButton.select(int(g.settings["QuestLevel"]))
 	gen_quest_greedy()
 	#cur_num = 1
-	#num_buttons[cur_num - 1].grab_focus()
+	#num_buttons[cur_num].grab_focus()
 	#update_cell_cursor()
 	#update_NEmptyLabel()
 	#update_undo_redo()
@@ -432,7 +433,7 @@ func _process(delta):
 			cur_num = -1
 			cur_cell_ix = -1
 			#set_num_cursor(1)
-			#num_buttons[cur_num - 1].grab_focus()
+			#num_buttons[cur_num].grab_focus()
 			update_all_status()
 			#update_cell_cursor()
 			#update_num_buttons_disabled()
@@ -566,7 +567,7 @@ func update_num_buttons_disabled():		# 使い切った数字ボタンをディ�
 	for ix in range(N_CELLS):
 		num_used[get_cell_numer(ix)] += 1
 	for i in range(N_HORZ):
-		num_buttons[i].disabled = num_used[i+1] >= N_HORZ
+		num_buttons[i+1].disabled = num_used[i+1] >= N_HORZ
 func update_cell_labels():		# 前提：cell_bit[ix] は 0 でない
 	var ix = 0
 	for y in range(N_VERT):
@@ -998,7 +999,7 @@ func update_cell_cursor(num):		# 選択数字ボタンと同じ数字セルを�
 func set_num_cursor(num):	# 当該ボタンだけを選択状態に
 	cur_num = num
 	for i in range(num_buttons.size()):
-		num_buttons[i].pressed = (i + 1 == num)
+		num_buttons[i].pressed = (i == num)
 func add_falling_char(num_str, ix : int):
 	var fc = FallingChar.instance()
 	var x = ix % N_HORZ
@@ -1039,7 +1040,7 @@ func num_button_pressed(num : int, button_pressed):
 						#undo_stack.back().back() = lst
 						input_labels[cur_cell_ix].text = String(num)
 					for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
-					num_buttons[num-1].pressed = false
+					num_buttons[num].pressed = false
 					update_all_status()
 					sound_effect()
 					if !solvedStat && is_solved():
@@ -1049,7 +1050,7 @@ func num_button_pressed(num : int, button_pressed):
 					return		# 空欄でない場合
 				push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
 				flip_memo_num(cur_cell_ix, num)
-				num_buttons[num-1].pressed = false
+				num_buttons[num].pressed = false
 	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
@@ -1113,7 +1114,7 @@ func _on_PauseButton_pressed():
 				lst.push_back(memo_labels[ix][i].text)
 				memo_labels[ix][i].text = ""
 			memo_text[ix] = lst
-		for i in range(N_HORZ):
+		for i in range(N_HORZ+1):
 			num_buttons[i].disabled = true
 	else:
 		for ix in range(N_CELLS):
@@ -1389,6 +1390,6 @@ func _on_MemoButton_toggled(button_pressed):
 	font.font_data = load("res://fonts/arialbd.ttf")
 	font.size = sz
 	#print(font)
-	for i in range(num_buttons.size()):
-		num_buttons[i].add_font_override("font", font)
+	for i in range(N_HORZ):
+		num_buttons[i+1].add_font_override("font", font)
 	pass # Replace with function body.
