@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://fonts/Hokjesgeest-PDGB.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://addons/calendar_button/popup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://images/table_black.png" type="Texture" id=6]
 [ext_resource path="res://TopScene.gd" type="Script" id=8]
 
@@ -291,6 +292,12 @@ text = "最短タイム: "
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="popup" parent="." instance=ExtResource( 4 )]
+margin_left = 194.0
+margin_top = 262.0
+margin_right = 194.0
+margin_bottom = 262.0
 
 [connection signal="pressed" from="Button0" to="." method="_on_Button0_pressed"]
 [connection signal="pressed" from="Button1" to="." method="_on_Button1_pressed"]

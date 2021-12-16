@@ -55,7 +55,7 @@ const IX_BIT = 1
 const IX_TYPE = 2
 const NUM_FONT_SIZE = 40
 const MEMO_FONT_SIZE = 20
-const LVL_BEGGINER = 0
+const LVL_BEGINNER = 0
 const LVL_EASY = 1
 const LVL_NORMAL = 2
 #const LVL_NOT_SYMMETRIC = 3
@@ -208,7 +208,7 @@ func gen_qName():
 		else: g.qName += "%c" % (r - 10 + 0x61)		# 0x61 is 'a'
 func titleText() -> String:
 	var tt = ""
-	if g.qLevel == LVL_BEGGINER: tt = "【入門】"
+	if g.qLevel == LVL_BEGINNER: tt = "【入門】"
 	elif g.qLevel == 1: tt = "【初級】"
 	elif g.qLevel == 2: tt = "【初中級】"
 	#elif g.qLevel == LVL_NOT_SYMMETRIC: tt = "【非対称】"
