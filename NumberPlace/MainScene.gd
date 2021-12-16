@@ -35,9 +35,9 @@ const DFCLT_FULLHOUSE = 1
 const DFCLT_HIDDEN_SINGLE = 2
 const DFCLT_HIDDEN_SINGLE_LINE = 5
 const DFCLT_NAKID_SINGLE = 10
-const OPT_BEGINNER = 0
-const OPT_EASY = 1
-const OPT_NORMAL = 2
+#const OPT_BEGINNER = 0
+#const OPT_EASY = 1
+#const OPT_NORMAL = 2
 const N_EMPTY_BEGINNER = 32
 const UNDO_TYPE_CELL = 0		# セル数字入力
 const UNDO_TYPE_MEMO = 1		# メモ数字反転
@@ -56,7 +56,9 @@ const IX_TYPE = 2
 const NUM_FONT_SIZE = 40
 const MEMO_FONT_SIZE = 20
 const LVL_BEGGINER = 0
-const LVL_NOT_SYMMETRIC = 3
+const LVL_EASY = 1
+const LVL_NORMAL = 2
+#const LVL_NOT_SYMMETRIC = 3
 
 const HINT_DUPLICATED = [
 	"縦横3x3ブロックに重複した数字（赤色）\nがあり、ヒントを表示できません。", false
@@ -209,7 +211,7 @@ func titleText() -> String:
 	if g.qLevel == LVL_BEGGINER: tt = "【入門】"
 	elif g.qLevel == 1: tt = "【初級】"
 	elif g.qLevel == 2: tt = "【初中級】"
-	elif g.qLevel == LVL_NOT_SYMMETRIC: tt = "【非対称】"
+	#elif g.qLevel == LVL_NOT_SYMMETRIC: tt = "【非対称】"
 	return tt + "“" + g.qName + "”"
 func load_settings():
 	var file = File.new()
@@ -419,11 +421,13 @@ func _process(delta):
 			nRemoved += 1
 			print("can solve, nRemoved = ", nRemoved)
 		rmixix += 1
-		if rmixix == rmix_list.size() || g.qLevel == OPT_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
+		if rmixix == rmix_list.size() || g.qLevel == LVL_BEGINNER && nEmpty() >= N_EMPTY_BEGINNER :
 			qCreating = false
 			update_cell_labels()
 			can_solve()			# 難易度を再計算
 			rmix_list.clear()
+			undo_ix = 0
+			undo_stack = []
 			clear_input()		# 手がかり数字が空のセルの入力ラベルクリア
 			cur_num = -1
 			cur_cell_ix = -1
@@ -715,7 +719,7 @@ func gen_quest():
 func gen_quest_greedy():
 	qCreating = true
 	$MessLabel.text = "問題生成中..."
-	symmetric = g.qLevel != LVL_NOT_SYMMETRIC
+	symmetric = g.qLevel != LVL_NORMAL
 	solvedStat = false
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
@@ -919,7 +923,7 @@ func step_solve() -> int:
 		update_candidates(pb[IX_POS], pb[IX_BIT])
 		#print_candidates()
 		return DFCLT_HIDDEN_SINGLE if pb[IX_TYPE] == BOX else DFCLT_HIDDEN_SINGLE_LINE
-	if g.qLevel < OPT_NORMAL: return 0
+	#if g.qLevel < OPT_NORMAL: return 0
 	pb = search_nakid_single()
 	#print("Nakid Single: ", pb)
 	if pb != []:
