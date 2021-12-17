@@ -1210,7 +1210,10 @@ func _on_SoundButton_pressed():
 
 
 func _on_BackButton_pressed():
-	get_tree().change_scene("res://TopScene.tscn")
+	if g.qNumber == 0:
+		get_tree().change_scene("res://TopScene.tscn")
+	else:
+		get_tree().change_scene("res://LevelScene.tscn")
 	pass # Replace with function body.
 
 func update_cell_bit():

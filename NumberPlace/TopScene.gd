@@ -45,6 +45,7 @@ func to_MainScene(qLevel):
 	g.qLevel = qLevel
 	g.qName = $LineEdit.text
 	g.qRandom = $LineEdit.text == ""
+	g.qNumber = 0
 	get_tree().change_scene("res://MainScene.tscn")
 	pass # Replace with function body.
 func to_LevelScene(qLevel):
