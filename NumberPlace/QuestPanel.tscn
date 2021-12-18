@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://QuestPanel.gd" type="Script" id=1]
+
+[node name="QuestPanel" type="ReferenceRect"]
+margin_right = 450.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 450, 80 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_right = 12.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 440, 70 )
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
