@@ -7,6 +7,12 @@ var QuestPanel = load("res://QuestPanel.tscn")
 
 
 func _ready():
+	var txt = ""
+	if g.qLevel == 0: txt = "入門"
+	elif g.qLevel == 1: txt = "初級"
+	elif g.qLevel == 2: txt = "初中級"
+	txt += "問題集"
+	$TitleBar/Label.text = txt
 	for i in range(20):
 		#var btn = Button.new()
 		#btn.text = "Quest %d" % (i+1)
