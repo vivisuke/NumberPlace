@@ -45,12 +45,22 @@ func load_stats():
 		file.open(StatsFileName, File.READ)
 		stats = file.get_var()
 		file.close()
+		if stats.size() == 3:
+			stats += [{}, {}, {}, ]
 	else:
-		stats = [{}, {}, {}, ]		# [0] for 入門問題生成
+		stats = [{}, {}, {}, {}, {}, {}, ]		# [0] for 入門問題生成
 	#print(stats)
 #
 func save_NSolved():
 	var file = File.new()
 	file.open(NSolvedFileName, File.WRITE)
-	file.store_var(settings)
+	file.store_var(nSolved)
 	file.close()
+func load_NSolved():
+	var file = File.new()
+	if file.file_exists(NSolvedFileName):		# 統計情報ファイル
+		file.open(NSolvedFileName, File.READ)
+		nSolved = file.get_var()
+		file.close()
+	else:
+		nSolved = [0, 0, 0]		# [0] for 入門問題集
