@@ -8,10 +8,10 @@ func sec_to_MSStr(t):
 	var mnt = t / 60
 	return "%02d:%02d" % [mnt, sec]
 func _ready():
-	for i in range(3):
+	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
 	g.load_stats()
-	for i in range(3):
+	for i in range(6):
 		var n = g.stats[i]["NSolved"] if g.stats[i].has("NSolved") else 0
 		buttons[i].get_node("NSolvedLabel").text = "クリア回数: %d" % n
 		var txt = "平均タイム: "
