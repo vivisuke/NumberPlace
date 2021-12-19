@@ -1,5 +1,6 @@
 extends Node2D
 
+var autoScrolled = false
 var panels = []
 
 onready var g = get_node("/root/Global")
@@ -16,7 +17,7 @@ func _ready():
 	txt += "問題集"
 	$TitleBar/Label.text = txt
 	g.load_nSolved()
-	for i in range(20):
+	for i in range(16):
 		var btn = QuestPanel.instance()
 		panels.push_back(btn)
 		if i <= g.nSolved[g.qLevel]:
@@ -27,6 +28,14 @@ func _ready():
 		btn.set_q_number(i + 1)
 		$ScrollContainer/VBoxContainer.add_child(btn)
 		btn.connect("pressed", self, "_on_QuestButton_pressed")
+	
+func _process(delta):
+	if !autoScrolled:
+		autoScrolled = true
+		var ix = g.nSolved[g.qLevel] + 1		# +1 for 次の問題まで表示
+		print(ix)	
+		$ScrollContainer.ensure_control_visible(panels[ix])
+		#$ScrollContainer.set_v_scroll(ix * 90)
 
 func _on_BackButton_pressed():
 	get_tree().change_scene("res://TopScene.tscn")
