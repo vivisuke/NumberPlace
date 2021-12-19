@@ -5,7 +5,7 @@
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://images/tables_black.png" type="Texture" id=4]
 [ext_resource path="res://images/table_black.png" type="Texture" id=6]
-[ext_resource path="res://TopScene.gd" type="Script" id=8]
+[ext_resource path="res://scripts/TopScene.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40

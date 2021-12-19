@@ -40,7 +40,7 @@ _global_script_class_icons={
 
 config/name="NumberPlace"
 run/main_scene="res://TopScene.tscn"
-config/icon="res://icon.png"
+config/icon="res://images/icon.png"
 
 [autoload]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://QuestPanel.gd" type="Script" id=1]
+[ext_resource path="res://scripts/QuestPanel.gd" type="Script" id=1]
 [ext_resource path="res://images/lock_white.png" type="Texture" id=2]
 
 [sub_resource type="StyleBoxFlat" id=4]
