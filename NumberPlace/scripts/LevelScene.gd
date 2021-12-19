@@ -17,22 +17,24 @@ func _ready():
 	txt += "問題集"
 	$TitleBar/Label.text = txt
 	g.load_nSolved()
+	var ix0 = max(0, g.nSolved[g.qLevel] - 9)
 	for i in range(16):
 		var btn = QuestPanel.instance()
 		panels.push_back(btn)
-		if i <= g.nSolved[g.qLevel]:
+		if ix0 + i <= g.nSolved[g.qLevel]:
 			btn.set_enabled(true)
 		else:
 			btn.set_enabled(false)
 			btn.set_icon($LockOpen.texture)
-		btn.set_q_number(i + 1)
+		btn.set_q_number(ix0 + i + 1)
 		$ScrollContainer/VBoxContainer.add_child(btn)
 		btn.connect("pressed", self, "_on_QuestButton_pressed")
 	
 func _process(delta):
 	if !autoScrolled:
 		autoScrolled = true
-		var ix = g.nSolved[g.qLevel] + 1		# +1 for 次の問題まで表示
+		var ix0 = max(0, g.nSolved[g.qLevel] - 9)
+		var ix = g.nSolved[g.qLevel] - ix0 + 1		# +1 for 次の問題まで表示
 		print(ix)	
 		$ScrollContainer.ensure_control_visible(panels[ix])
 		#$ScrollContainer.set_v_scroll(ix * 90)
