@@ -239,18 +239,20 @@ func on_solved():
 	$CanvasLayer/ColorRect.show()
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
+	var ix = g.qLevel
+	if g.qNumber != 0: ix += 3		# 問題集の場合
 	if $SoundButton.is_pressed():
 		$AudioSolved.play()
-	if g.stats[g.qLevel].has("NSolved"):
-		g.stats[g.qLevel]["NSolved"] += 1
+	if g.stats[ix].has("NSolved"):
+		g.stats[ix]["NSolved"] += 1
 	else:
-		g.stats[g.qLevel]["NSolved"] = 1
-	if g.stats[g.qLevel].has("TotalSec"):
-		g.stats[g.qLevel]["TotalSec"] += int(elapsedTime)
+		g.stats[ix]["NSolved"] = 1
+	if g.stats[ix].has("TotalSec"):
+		g.stats[ix]["TotalSec"] += int(elapsedTime)
 	else:
-		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
-	if !g.stats[g.qLevel].has("BestTime") || int(elapsedTime) < g.stats[g.qLevel]["BestTime"]:
-		g.stats[g.qLevel]["BestTime"] = int(elapsedTime)
+		g.stats[ix]["TotalSec"] = int(elapsedTime)
+	if !g.stats[ix].has("BestTime") || int(elapsedTime) < g.stats[ix]["BestTime"]:
+		g.stats[ix]["BestTime"] = int(elapsedTime)
 	g.save_stats()
 	update_all_status()
 func remove_all_memo_at(ix):
