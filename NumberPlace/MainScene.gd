@@ -1094,6 +1094,7 @@ func _on_NextButton_pressed():
 	else:
 		g.qNumber += 1
 		g.qName = "%06d" % g.qNumber
+	seed((g.qName+String(g.qLevel)).hash())
 	$TitleBar/Label.text = titleText()
 	remove_all_memo()
 	gen_quest_greedy()
