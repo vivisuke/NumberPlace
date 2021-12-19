@@ -2,7 +2,7 @@ extends Node2D
 
 var settings = {}		# 設定辞書
 var stats = []			# 各問題レベルごとの統計情報（問題クリア数、トータルタイム（単位：秒））
-var nSolved = []		# 各問題集ごとの問題クリア数、[0] for 入門問題集
+var nSolved = [0, 0, 0]		# 各問題集ごとの問題クリア数、[0] for 入門問題集
 var qLevel = 0			# 問題レベル [0, 1, 2]
 var qNumber = 0			# [1, 2^10] for 問題番号、0 for 非問題集
 var qName = ""			# 問題名

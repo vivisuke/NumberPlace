@@ -240,7 +240,11 @@ func on_solved():
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
 	var ix = g.qLevel
-	if g.qNumber != 0: ix += 3		# 問題集の場合
+	if g.qNumber != 0:		# 問題集の場合
+		if g.nSolved[g.qLevel] == g.qNumber - 1:	
+			g.nSolved[g.qLevel] += 1
+			g.save_nSolved()
+		ix += 3		# for 統計情報
 	if $SoundButton.is_pressed():
 		$AudioSolved.play()
 	if g.stats[ix].has("NSolved"):
