@@ -1,5 +1,7 @@
 extends Node2D
 
+var panels = []
+
 onready var g = get_node("/root/Global")
 
 #var QuestButton = load("res://QuestButton.tscn")
@@ -18,9 +20,13 @@ func _ready():
 		#btn.text = "Quest %d" % (i+1)
 		#var btn = QuestButton.instance()
 		var btn = QuestPanel.instance()
+		panels.push_back(btn)
+		btn.set_enabled(false)
 		btn.set_q_number(i + 1)
 		$ScrollContainer/VBoxContainer.add_child(btn)
 		btn.connect("pressed", self, "_on_QuestButton_pressed")
+	panels[0].set_icon($LockOpen.texture)
+	panels[0].set_enabled(true)
 	pass # Replace with function body.
 
 

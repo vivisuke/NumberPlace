@@ -148,7 +148,7 @@ func _ready():
 	#$Board/HintGuide.hide()
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
-	load_settings()
+	g.load_settings()
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
 	memo_text.resize(N_CELLS)
@@ -216,23 +216,6 @@ func titleText() -> String:
 	elif g.qLevel == 2: tt = "【初中級】"
 	#elif g.qLevel == LVL_NOT_SYMMETRIC: tt = "【非対称】"
 	return tt + "“" + g.qName + "”"
-func load_settings():
-	var file = File.new()
-	if file.file_exists(g.SettingsFileName):		# 設定ファイル
-		file.open(g.SettingsFileName, File.READ)
-		g.settings = file.get_var()
-		file.close()
-		#print(g.settings)
-func save_settings():
-	var file = File.new()
-	file.open(g.SettingsFileName, File.WRITE)
-	file.store_var(g.settings)
-	file.close()
-func save_stats():
-	var file = File.new()
-	file.open(g.StatsFileName, File.WRITE)
-	file.store_var(g.stats)
-	file.close()
 func update_NEmptyLabel():
 	nEmpty = 0
 	for ix in range(N_CELLS):
@@ -268,7 +251,7 @@ func on_solved():
 		g.stats[g.qLevel]["TotalSec"] = int(elapsedTime)
 	if !g.stats[g.qLevel].has("BestTime") || int(elapsedTime) < g.stats[g.qLevel]["BestTime"]:
 		g.stats[g.qLevel]["BestTime"] = int(elapsedTime)
-	save_stats()
+	g.save_stats()
 	update_all_status()
 func remove_all_memo_at(ix):
 	for i in range(N_HORZ):
@@ -735,7 +718,7 @@ func gen_quest_greedy():
 	solvedStat = false
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
-	#save_settings()
+	#g.save_settings()
 	if true:
 		if rmix_list.empty():
 			clear_cell_cursor()
@@ -1207,7 +1190,7 @@ func _on_RedoButton_pressed():
 
 func _on_SoundButton_pressed():
 	g.settings["Sound"] = $SoundButton.pressed
-	save_settings()
+	g.save_settings()
 	pass # Replace with function body.
 
 

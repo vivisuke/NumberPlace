@@ -2,7 +2,7 @@ extends Node2D
 
 var settings = {}		# 設定辞書
 var stats = []			# 各問題レベルごとの統計情報（問題クリア数、トータルタイム（単位：秒））
-var nSolved = []		# 各問題集ごとの問題クリア数
+var nSolved = []		# 各問題集ごとの問題クリア数、[0] for 入門問題集
 var qLevel = 0			# 問題レベル [0, 1, 2]
 var qNumber = 0			# [1, 2^10] for 問題番号、0 for 非問題集
 var qName = ""			# 問題名
@@ -21,3 +21,36 @@ const NSolvedFileName	= "user://NumberPlace_nSolved.dat"
 
 func _ready():
 	pass # Replace with function body.
+#
+func load_settings():
+	var file = File.new()
+	if file.file_exists(SettingsFileName):		# 設定ファイル
+		file.open(SettingsFileName, File.READ)
+		settings = file.get_var()
+		file.close()
+func save_settings():
+	var file = File.new()
+	file.open(SettingsFileName, File.WRITE)
+	file.store_var(settings)
+	file.close()
+#
+func save_stats():
+	var file = File.new()
+	file.open(StatsFileName, File.WRITE)
+	file.store_var(stats)
+	file.close()
+func load_stats():
+	var file = File.new()
+	if file.file_exists(StatsFileName):		# 統計情報ファイル
+		file.open(StatsFileName, File.READ)
+		stats = file.get_var()
+		file.close()
+	else:
+		stats = [{}, {}, {}, ]		# [0] for 入門問題生成
+	#print(stats)
+#
+func save_NSolved():
+	var file = File.new()
+	file.open(NSolvedFileName, File.WRITE)
+	file.store_var(settings)
+	file.close()

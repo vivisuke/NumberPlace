@@ -10,7 +10,7 @@ func sec_to_MSStr(t):
 func _ready():
 	for i in range(3):
 		buttons.push_back(get_node("Button%d" % i))
-	load_stats()
+	g.load_stats()
 	for i in range(3):
 		var n = g.stats[i]["NSolved"] if g.stats[i].has("NSolved") else 0
 		buttons[i].get_node("NSolvedLabel").text = "クリア回数: %d" % n
@@ -31,15 +31,6 @@ func _ready():
 		$LineEdit.text = g.qName
 	pass # Replace with function body.
 
-func load_stats():
-	var file = File.new()
-	if file.file_exists(g.StatsFileName):		# 統計情報ファイル
-		file.open(g.StatsFileName, File.READ)
-		g.stats = file.get_var()
-		file.close()
-	else:
-		g.stats = [{}, {}, {}, ]		# [0] for 入門問題生成
-	print(g.stats)
 func to_MainScene(qLevel):
 	print($LineEdit.text)
 	g.qLevel = qLevel
