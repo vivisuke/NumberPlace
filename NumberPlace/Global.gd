@@ -51,12 +51,12 @@ func load_stats():
 		stats = [{}, {}, {}, {}, {}, {}, ]		# [0] for 入門問題生成
 	#print(stats)
 #
-func save_NSolved():
+func save_nSolved():
 	var file = File.new()
 	file.open(NSolvedFileName, File.WRITE)
 	file.store_var(nSolved)
 	file.close()
-func load_NSolved():
+func load_nSolved():
 	var file = File.new()
 	if file.file_exists(NSolvedFileName):		# 統計情報ファイル
 		file.open(NSolvedFileName, File.READ)
