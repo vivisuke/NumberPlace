@@ -1088,8 +1088,12 @@ func _on_Button9_toggled(button_pressed):
 
 func _on_NextButton_pressed():
 	if paused: return		# ポーズ中
-	g.qRandom = true
-	gen_qName()
+	if g.qNumber == 0:
+		g.qRandom = true		# 問題自動生成の場合
+		gen_qName()
+	else:
+		g.qNumber += 1
+		g.qName = "%06d" % g.qNumber
 	$TitleBar/Label.text = titleText()
 	remove_all_memo()
 	gen_quest_greedy()
