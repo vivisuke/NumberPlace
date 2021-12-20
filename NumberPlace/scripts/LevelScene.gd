@@ -24,8 +24,10 @@ func _ready():
 		if ix0 + i <= g.nSolved[g.qLevel]:
 			btn.set_enabled(true)
 			btn.set_icon($LockOpen.texture)
+			btn.solved_set_visible(ix0 + i < g.nSolved[g.qLevel])
 		else:
 			btn.set_enabled(false)
+			btn.solved_set_visible(false)
 		btn.set_q_number(ix0 + i + 1)
 		$ScrollContainer/VBoxContainer.add_child(btn)
 		btn.connect("pressed", self, "_on_QuestButton_pressed")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/QuestPanel.gd" type="Script" id=1]
 [ext_resource path="res://images/lock_white.png" type="Texture" id=2]
+[ext_resource path="res://images/task_alt_white.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.898039, 0.517647, 0, 1 )
@@ -54,6 +55,16 @@ custom_styles/pressed = SubResource( 3 )
 custom_styles/disabled = SubResource( 2 )
 custom_styles/normal = SubResource( 1 )
 icon = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Solved" type="TextureRect" parent="."]
+margin_left = 378.0
+margin_top = 11.0
+margin_right = 426.0
+margin_bottom = 59.0
+texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
