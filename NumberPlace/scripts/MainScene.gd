@@ -141,7 +141,7 @@ func _ready():
 		g.qName = "%06d" % g.qNumber
 	elif g.qName == "":
 		gen_qName()
-	seed((g.qName+String(g.qLevel)).hash())
+	#seed((g.qName+String(g.qLevel)).hash())
 	#print($TitleBar/Label.text)
 	$TitleBar/Label.text = titleText()
 	#$MessLabel.text = ""
@@ -729,6 +729,10 @@ func gen_quest_greedy():
 	$NextButton.disabled = true
 	symmetric = g.qLevel != LVL_NORMAL
 	solvedStat = false
+	#seed((g.qName+String(g.qLevel)).hash())
+	var stxt = g.qName+String(g.qLevel)
+	if g.qNumber != 0: stxt += "Q"
+	seed(stxt.hash())
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
 	#g.save_settings()
@@ -1101,7 +1105,7 @@ func _on_NextButton_pressed():
 	else:
 		g.qNumber += 1
 		g.qName = "%06d" % g.qNumber
-	seed((g.qName+String(g.qLevel)).hash())
+	#seed((g.qName+String(g.qLevel)).hash())
 	$TitleBar/Label.text = titleText()
 	remove_all_memo()
 	gen_quest_greedy()
