@@ -439,7 +439,11 @@ func _process(delta):
 			#update_num_buttons_disabled()
 			#update_NEmptyLabel()
 			#check_duplicated()
-			$NextButton.disabled = false
+			if g.qNumber != 0:		# 問題集の場合
+				if g.qNumber <= g.nSolved[g.qLevel]:
+					$NextButton.disabled = false
+			else:		# 自動問題生成の場合
+				$NextButton.disabled = false
 			$DfcltLabel.text = "難易度: %.1f" % (diffculty/10.0)
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
