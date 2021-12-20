@@ -244,6 +244,7 @@ func on_solved():
 		if g.nSolved[g.qLevel] == g.qNumber - 1:	
 			g.nSolved[g.qLevel] += 1
 			g.save_nSolved()
+			$NextButton.disabled = false
 		ix += 3		# for 統計情報
 	if $SoundButton.is_pressed():
 		$AudioSolved.play()
