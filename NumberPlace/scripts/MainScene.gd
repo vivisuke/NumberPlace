@@ -439,6 +439,7 @@ func _process(delta):
 			#update_num_buttons_disabled()
 			#update_NEmptyLabel()
 			#check_duplicated()
+			$NextButton.disabled = false
 			$DfcltLabel.text = "難易度: %.1f" % (diffculty/10.0)
 			print("*** quest is generated ***")
 			print("nEmpty = ", nEmpty())
@@ -720,6 +721,7 @@ func gen_quest():
 func gen_quest_greedy():
 	qCreating = true
 	$MessLabel.text = "問題生成中..."
+	$NextButton.disabled = true
 	symmetric = g.qLevel != LVL_NORMAL
 	solvedStat = false
 	#optGrade = $OptionButton.get_selected_id()

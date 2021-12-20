@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=2]
+[gd_scene load_steps=77 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -31,6 +31,7 @@
 [ext_resource path="res://images/undo_gray.png" type="Texture" id=29]
 [ext_resource path="res://images/redo_gray.png" type="Texture" id=30]
 [ext_resource path="res://images/lightbulb_gray.png" type="Texture" id=31]
+[ext_resource path="res://images/skip_next_gray.png" type="Texture" id=32]
 [ext_resource path="res://images/close_white.png" type="Texture" id=33]
 [ext_resource path="res://images/lightblue53x53.png" type="Texture" id=34]
 [ext_resource path="res://sounds/button-3.mp3" type="AudioStream" id=35]
@@ -481,6 +482,7 @@ margin_right = 483.0
 margin_bottom = 813.0
 texture_normal = ExtResource( 23 )
 texture_pressed = ExtResource( 24 )
+texture_disabled = ExtResource( 32 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
