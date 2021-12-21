@@ -1217,7 +1217,9 @@ func _on_SoundButton_pressed():
 
 
 func _on_BackButton_pressed():
-	if g.qNumber == 0:
+	if g.todaysQuest:
+		get_tree().change_scene("res://TodaysQuest.tscn")
+	elif g.qNumber == 0:
 		get_tree().change_scene("res://TopScene.tscn")
 	else:
 		get_tree().change_scene("res://LevelScene.tscn")

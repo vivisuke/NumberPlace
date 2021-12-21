@@ -7,6 +7,7 @@ var qLevel = 0			# 問題レベル [0, 1, 2]
 var qNumber = 0			# [1, 2^10] for 問題番号、0 for 非問題集
 var qName = ""			# 問題名
 var qRandom = true		# ランダム生成問題か？
+var todaysQuest = false		# 今日の問題か？
 
 var show_hint_guide = false
 var hint_pos : int = -1			# ヒントで数字が入る位置
