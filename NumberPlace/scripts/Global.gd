@@ -21,6 +21,7 @@ var cell_bit = []			# 現在の状態
 const SettingsFileName	= "user://NumberPlace_stgs.dat"
 const StatsFileName		= "user://NumberPlace_stats.dat"
 const NSolvedFileName	= "user://NumberPlace_nSolved.dat"
+const TodaysQuestFileName	= "user://NumberPlace_todaysQuest.dat"
 
 func _ready():
 	pass # Replace with function body.
@@ -67,3 +68,20 @@ func load_nSolved():
 		file.close()
 	else:
 		nSolved = [0, 0, 0]		# [0] for 入門問題集
+#
+func save_todaysQuest():
+	var file = File.new()
+	file.open(TodaysQuestFileName, File.WRITE)
+	file.store_var([tqSolvedYMD, tqSolvedSec])
+	file.close()
+func load_todaysQuest():
+	var file = File.new()
+	if file.file_exists(TodaysQuestFileName):		# 統計情報ファイル
+		file.open(NSolvedFileName, File.READ)
+		var data = file.get_var()
+		tqSolvedYMD = data[0]
+		tqSolvedSec = data[1]
+		file.close()
+	else:
+		tqSolvedYMD = ""
+		tqSolvedSec = [-1, -1, -1]
