@@ -58,3 +58,8 @@ func _on_Button4_pressed():
 	to_LevelScene(1)
 func _on_Button5_pressed():
 	to_LevelScene(2)
+
+
+func _on_Button6_pressed():
+	get_tree().change_scene("res://TodaysQuest.tscn")
+	pass # Replace with function body.
