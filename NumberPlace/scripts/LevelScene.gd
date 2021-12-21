@@ -1,5 +1,7 @@
 extends Node2D
 
+const N_SOLVED_QUEST = 10		# クリア済み問題数
+
 var autoScrolled = false
 var panels = []
 
@@ -17,8 +19,8 @@ func _ready():
 	txt += "問題集"
 	$TitleBar/Label.text = txt
 	g.load_nSolved()
-	var ix0 = max(0, g.nSolved[g.qLevel] - 9)
-	for i in range(16):
+	var ix0 = max(0, g.nSolved[g.qLevel] - N_SOLVED_QUEST)
+	for i in range(12):
 		var btn = QuestPanel.instance()
 		panels.push_back(btn)
 		if ix0 + i <= g.nSolved[g.qLevel]:		# クリア済み or 非クリア挑戦可能問題
@@ -37,7 +39,7 @@ func _ready():
 func _process(delta):
 	if !autoScrolled:
 		autoScrolled = true
-		var ix0 = max(0, g.nSolved[g.qLevel] - 9)
+		var ix0 = max(0, g.nSolved[g.qLevel] - N_SOLVED_QUEST)
 		var ix = g.nSolved[g.qLevel] - ix0 + 1		# +1 for 次の問題まで表示
 		print(ix)	
 		$ScrollContainer.ensure_control_visible(panels[ix])
