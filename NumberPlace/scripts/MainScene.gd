@@ -245,6 +245,7 @@ func on_solved():
 	if g.todaysQuest:		# 今日の問題の場合
 		if g.tqSolvedSec[ix] < 0 || int(elapsedTime) < g.tqSolvedSec[ix]:
 			g.tqSolvedSec[ix] = int(elapsedTime)
+		g.save_todaysQuest()
 	else:	# 今日の問題でない場合
 		if g.qNumber != 0:		# 問題集の場合
 			if g.nSolved[g.qLevel] == g.qNumber - 1:	

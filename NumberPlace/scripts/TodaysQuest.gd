@@ -4,6 +4,7 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	g.todaysQuest = true
+	g.load_todaysQuest()
 	for i in range(3):
 		if g.tqSolvedSec[i] >= 0:
 			var btn = get_node("Button%d" % i)

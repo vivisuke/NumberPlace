@@ -77,7 +77,7 @@ func save_todaysQuest():
 func load_todaysQuest():
 	var file = File.new()
 	if file.file_exists(TodaysQuestFileName):		# 統計情報ファイル
-		file.open(NSolvedFileName, File.READ)
+		file.open(TodaysQuestFileName, File.READ)
 		var data = file.get_var()
 		tqSolvedYMD = data[0]
 		tqSolvedSec = data[1]
