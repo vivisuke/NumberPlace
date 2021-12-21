@@ -1103,10 +1103,13 @@ func _on_Button9_toggled(button_pressed):
 
 func _on_NextButton_pressed():
 	if paused: return		# ポーズ中
-	if g.qNumber == 0:
-		g.qRandom = true		# 問題自動生成の場合
+	if g.todaysQuest:		# 今日の問題の場合
+		g.qLevel += 1
+		if g.qLevel > 2: g.qLevel = 0
+	elif g.qNumber == 0:		# 問題自動生成の場合
+		g.qRandom = true		# 
 		gen_qName()
-	else:
+	else:					# 問題集の場合
 		g.qNumber += 1
 		g.qName = "%06d" % g.qNumber
 	#seed((g.qName+String(g.qLevel)).hash())
