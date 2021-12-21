@@ -21,13 +21,15 @@ func _ready():
 	for i in range(16):
 		var btn = QuestPanel.instance()
 		panels.push_back(btn)
-		if ix0 + i <= g.nSolved[g.qLevel]:
+		if ix0 + i <= g.nSolved[g.qLevel]:		# クリア済み or 非クリア挑戦可能問題
 			btn.set_enabled(true)
-			btn.set_icon($LockOpen.texture)
-			btn.solved_set_visible(ix0 + i < g.nSolved[g.qLevel])
+			if ix0 + i == g.nSolved[g.qLevel]:		# 非クリア挑戦可能問題
+				btn.set_icon($LockOpen.texture)
+			#btn.solved_set_visible(ix0 + i < g.nSolved[g.qLevel])
 		else:
 			btn.set_enabled(false)
-			btn.solved_set_visible(false)
+			btn.set_icon($Locked.texture)
+			#btn.solved_set_visible(false)
 		btn.set_q_number(ix0 + i + 1)
 		$ScrollContainer/VBoxContainer.add_child(btn)
 		btn.connect("pressed", self, "_on_QuestButton_pressed")
