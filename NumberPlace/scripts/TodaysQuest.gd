@@ -4,6 +4,10 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	g.todaysQuest = true
+	for i in range(3):
+		if g.tqSolvedSec[i] >= 0:
+			var btn = get_node("Button%d" % i)
+			btn.set_button_icon($SolvedTexture.texture)
 	pass
 
 func _on_BackButton_pressed():

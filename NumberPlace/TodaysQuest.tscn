@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://fonts/FlopDesignFONT.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://images/leftward_black.png" type="Texture" id=4]
 [ext_resource path="res://scripts/TodaysQuest.gd" type="Script" id=5]
 [ext_resource path="res://images/arrow_forward_white.png" type="Texture" id=6]
+[ext_resource path="res://images/task_alt_white.png" type="Texture" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -110,6 +111,16 @@ custom_fonts/font = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 text = "初中級問題"
 icon = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SolvedTexture" type="TextureRect" parent="."]
+margin_left = -91.0
+margin_top = 1.0
+margin_right = -43.0
+margin_bottom = 49.0
+texture = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

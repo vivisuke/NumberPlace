@@ -239,26 +239,30 @@ func on_solved():
 	$CanvasLayer/ColorRect.show()
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
-	var ix = g.qLevel
-	if g.qNumber != 0:		# 問題集の場合
-		if g.nSolved[g.qLevel] == g.qNumber - 1:	
-			g.nSolved[g.qLevel] += 1
-			g.save_nSolved()
-			$NextButton.disabled = false
-		ix += 3		# for 統計情報
 	if $SoundButton.is_pressed():
-		$AudioSolved.play()
-	if g.stats[ix].has("NSolved"):
-		g.stats[ix]["NSolved"] += 1
-	else:
-		g.stats[ix]["NSolved"] = 1
-	if g.stats[ix].has("TotalSec"):
-		g.stats[ix]["TotalSec"] += int(elapsedTime)
-	else:
-		g.stats[ix]["TotalSec"] = int(elapsedTime)
-	if !g.stats[ix].has("BestTime") || int(elapsedTime) < g.stats[ix]["BestTime"]:
-		g.stats[ix]["BestTime"] = int(elapsedTime)
-	g.save_stats()
+		$AudioSolved.play()		# 効果音再生
+	var ix = g.qLevel
+	if g.todaysQuest:		# 今日の問題の場合
+		if g.tqSolvedSec[ix] < 0 || int(elapsedTime) < g.tqSolvedSec[ix]:
+			g.tqSolvedSec[ix] = int(elapsedTime)
+	else:	# 今日の問題でない場合
+		if g.qNumber != 0:		# 問題集の場合
+			if g.nSolved[g.qLevel] == g.qNumber - 1:	
+				g.nSolved[g.qLevel] += 1
+				g.save_nSolved()
+				$NextButton.disabled = false
+			ix += 3		# for 統計情報
+		if g.stats[ix].has("NSolved"):
+			g.stats[ix]["NSolved"] += 1
+		else:
+			g.stats[ix]["NSolved"] = 1
+		if g.stats[ix].has("TotalSec"):
+			g.stats[ix]["TotalSec"] += int(elapsedTime)
+		else:
+			g.stats[ix]["TotalSec"] = int(elapsedTime)
+		if !g.stats[ix].has("BestTime") || int(elapsedTime) < g.stats[ix]["BestTime"]:
+			g.stats[ix]["BestTime"] = int(elapsedTime)
+		g.save_stats()
 	update_all_status()
 func remove_all_memo_at(ix):
 	for i in range(N_HORZ):

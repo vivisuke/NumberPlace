@@ -8,6 +8,8 @@ var qNumber = 0			# [1, 2^10] for 問題番号、0 for 非問題集
 var qName = ""			# 問題名
 var qRandom = true		# ランダム生成問題か？
 var todaysQuest = false		# 今日の問題か？
+var tqSolvedYMD = ""		# 今日の問題を解いた日付 "YYYY/MM/DD"
+var tqSolvedSec = [-1, -1, -1]		# 各今日の問題クリアタイム、-1 for 未クリア
 
 var show_hint_guide = false
 var hint_pos : int = -1			# ヒントで数字が入る位置
