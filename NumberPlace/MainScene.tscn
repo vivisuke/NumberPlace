@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=2]
+[gd_scene load_steps=83 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -60,6 +60,8 @@
 [ext_resource path="res://images/menu_white.png" type="Texture" id=58]
 [ext_resource path="res://images/volume_up_white.png" type="Texture" id=59]
 [ext_resource path="res://images/volume_off_white.png" type="Texture" id=60]
+[ext_resource path="res://images/delMemo.png" type="Texture" id=61]
+[ext_resource path="res://images/delMemo_white.png" type="Texture" id=62]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -291,9 +293,9 @@ __meta__ = {
 
 [node name="MenuButton" type="MenuButton" parent="TitleBar"]
 margin_left = 437.0
-margin_top = 1.0
+margin_top = -2.0
 margin_right = 497.0
-margin_bottom = 55.0
+margin_bottom = 52.0
 focus_mode = 2
 mouse_filter = 1
 custom_fonts/font = SubResource( 26 )
@@ -631,9 +633,9 @@ __meta__ = {
 
 [node name="MemoButton" type="TextureButton" parent="."]
 margin_left = 373.0
-margin_top = 685.0
+margin_top = 605.0
 margin_right = 421.0
-margin_bottom = 733.0
+margin_bottom = 653.0
 toggle_mode = true
 texture_normal = ExtResource( 54 )
 texture_pressed = ExtResource( 55 )
@@ -665,13 +667,37 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="AutoMemoButton"]
-margin_left = -9.0
+margin_left = -7.0
 margin_top = 48.0
-margin_right = 55.0
+margin_right = 57.0
 margin_bottom = 67.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "自動メモ"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DelMemoButton" type="TextureButton" parent="."]
+margin_left = 373.0
+margin_top = 685.0
+margin_right = 421.0
+margin_bottom = 733.0
+texture_normal = ExtResource( 61 )
+texture_pressed = ExtResource( 62 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DelMemoButton"]
+margin_left = -11.0
+margin_top = 48.0
+margin_right = 53.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "メモ削除"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1125,6 +1151,7 @@ __meta__ = {
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="toggled" from="MemoButton" to="." method="_on_MemoButton_toggled"]
 [connection signal="pressed" from="AutoMemoButton" to="." method="_on_AutoMemoButton_pressed"]
+[connection signal="pressed" from="DelMemoButton" to="." method="_on_DelMemoButton_pressed"]
 [connection signal="pressed" from="SoundButton" to="." method="_on_SoundButton_pressed"]
 [connection signal="toggled" from="Button1" to="." method="_on_Button1_toggled"]
 [connection signal="toggled" from="Button2" to="." method="_on_Button2_toggled"]

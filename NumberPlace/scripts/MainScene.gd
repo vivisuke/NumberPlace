@@ -1467,3 +1467,9 @@ func _on_MenuButton_button_down():
 func _on_MenuButton_button_up():
 	print("_on_MenuButton_button_up")
 	pass # Replace with function body.
+
+
+func _on_DelMemoButton_pressed():
+	for ix in range(N_CELLS):
+		clear_all_memo(ix)
+	pass # Replace with function body.
