@@ -95,6 +95,7 @@ var symmetric = true		# 対称形問題
 var qCreating = false		# 問題生成中
 var solvedStat = false		# クリア済み状態
 var paused = false			# ポーズ状態
+var sound = true			# 効果音
 var menuPopuped = false
 var hint_showed = false
 var memo_mode = false		# メモ（候補数字）エディットモード
@@ -154,6 +155,7 @@ func _ready():
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
 	g.load_settings()
+	sound = !g.settings.has("Sound") || g.settings["Sound"]
 	cell_bit.resize(N_CELLS)
 	candidates_bit.resize(N_CELLS)
 	memo_text.resize(N_CELLS)
@@ -167,11 +169,9 @@ func _ready():
 	pu.connect("modal_closed", self, "on_ModalClosed")
 	#pu.font = $TitleBar/Label.font
 	#var pu = $TitleBar/MenuButton/PopupMenu2
+	var txr = $TextureSoundON.texture if sound else $TextureSoundOFF.texture
+	pu.add_icon_item(txr, "Sound", ID_SOUND)
 	pu.add_icon_item($TextureRestart.texture, "Restartリスタート", ID_RESTART)
-	if !g.settings.has("Sound") || g.settings["Sound"]:
-		pu.add_icon_item($TextureSoundON.texture, "Sound", ID_SOUND)
-	else:
-		pu.add_icon_item($TextureSoundOFF.texture, "Sound", ID_SOUND)
 	#
 	num_buttons.push_back($DeleteButton)
 	for i in range(N_HORZ):
@@ -246,7 +246,7 @@ func push_to_undo_stack(item):
 	undo_stack.push_back(item)
 	undo_ix += 1
 func sound_effect():
-	if $SoundButton.is_pressed():
+	if sound:
 		if input_num != 0 && num_used[input_num] >= 9:
 			$AudioNumCompleted.play()
 		else:
@@ -255,7 +255,7 @@ func on_solved():
 	$CanvasLayer/ColorRect.show()
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
-	if $SoundButton.is_pressed():
+	if sound:
 		$AudioSolved.play()		# 効果音再生
 	var ix = g.qLevel
 	if g.todaysQuest:		# 今日の問題の場合
@@ -1237,8 +1237,12 @@ func _on_RedoButton_pressed():
 	pass
 
 func _on_SoundButton_pressed():
-	g.settings["Sound"] = $SoundButton.pressed
+	sound = !sound
+	g.settings["Sound"] = sound
 	g.save_settings()
+	var pu = $TitleBar/MenuButton.get_popup()
+	var txr = $TextureSoundON.texture if sound else $TextureSoundOFF.texture
+	pu.set_item_icon(pu.get_item_index(ID_SOUND), txr)
 	pass # Replace with function body.
 
 
@@ -1447,7 +1451,7 @@ func _on_PopupMenuPressed(id):
 	if id == ID_RESTART:
 		_on_RestartButton_pressed()
 	elif id == ID_SOUND:
-		pass
+		_on_SoundButton_pressed()
 
 func on_ModalClosed():
 	menuPopuped = false
