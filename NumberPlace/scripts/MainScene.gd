@@ -91,6 +91,7 @@ var symmetric = true		# 対称形問題
 var qCreating = false		# 問題生成中
 var solvedStat = false		# クリア済み状態
 var paused = false			# ポーズ状態
+var menuPopuped = false
 var hint_showed = false
 var memo_mode = false		# メモ（候補数字）エディットモード
 var in_button_pressed = false	# ボタン押下処理中
@@ -156,6 +157,14 @@ func _ready():
 	box_used.resize(N_HORZ)
 	num_used.resize(N_HORZ + 1)		# +1 for 0
 	init_labels()
+	#
+	var pu = $TitleBar/MenuButton.get_popup()
+	pu.connect("id_pressed", self, "_on_PopupMenuPressed")
+	pu.connect("modal_closed", self, "on_ModalClosed")
+	#pu.font = $TitleBar/Label.font
+	#var pu = $TitleBar/MenuButton/PopupMenu2
+	pu.add_icon_item($TextureRestart.texture, "Restartリスタート")
+	pu.add_icon_item($TextureSound.texture, "Sound")
 	#
 	num_buttons.push_back($DeleteButton)
 	for i in range(N_HORZ):
@@ -306,6 +315,7 @@ func flip_memo_num(ix : int, num : int):
 func clear_all_memo(ix):
 	for i in range(N_HORZ): memo_labels[ix][i].text = ""
 func _input(event):
+	if menuPopuped: return
 	if event is InputEventMouseButton && event.is_pressed():
 		if event.button_index == BUTTON_WHEEL_UP || event.button_index == BUTTON_WHEEL_DOWN:
 				return
@@ -1422,4 +1432,23 @@ func _on_MemoButton_toggled(button_pressed):
 	#print(font)
 	for i in range(N_HORZ):
 		num_buttons[i+1].add_font_override("font", font)
+	pass # Replace with function body.
+#
+func _on_PopupMenuPressed(id):
+	menuPopuped = false
+	print("_on_PopupMenuPressed(", id, ")")
+
+func on_ModalClosed():
+	menuPopuped = false
+	print("on_ModalClosed")
+
+
+func _on_MenuButton_button_down():
+	menuPopuped = true
+	print("_on_MenuButton_button_down")
+	pass # Replace with function body.
+
+
+func _on_MenuButton_button_up():
+	print("_on_MenuButton_button_up")
 	pass # Replace with function body.
