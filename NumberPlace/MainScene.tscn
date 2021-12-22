@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=2]
+[gd_scene load_steps=81 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -59,6 +59,7 @@
 [ext_resource path="res://images/lightorange18x18.png" type="Texture" id=57]
 [ext_resource path="res://images/menu_white.png" type="Texture" id=58]
 [ext_resource path="res://images/volume_up_white.png" type="Texture" id=59]
+[ext_resource path="res://images/volume_off_white.png" type="Texture" id=60]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -1089,12 +1090,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureSound" type="TextureRect" parent="."]
+[node name="TextureSoundON" type="TextureRect" parent="."]
 margin_left = 553.0
 margin_top = 60.0
 margin_right = 601.0
 margin_bottom = 108.0
 texture = ExtResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureSoundOFF" type="TextureRect" parent="."]
+margin_left = 553.0
+margin_top = 124.0
+margin_right = 601.0
+margin_bottom = 172.0
+texture = ExtResource( 60 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

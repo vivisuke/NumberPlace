@@ -59,6 +59,10 @@ const LVL_BEGINNER = 0
 const LVL_EASY = 1
 const LVL_NORMAL = 2
 #const LVL_NOT_SYMMETRIC = 3
+enum {
+	ID_RESTART = 1,
+	ID_SOUND,			# 効果音
+}
 
 const HINT_DUPLICATED = [
 	"縦横3x3ブロックに重複した数字（赤色）\nがあり、ヒントを表示できません。", false
@@ -163,8 +167,11 @@ func _ready():
 	pu.connect("modal_closed", self, "on_ModalClosed")
 	#pu.font = $TitleBar/Label.font
 	#var pu = $TitleBar/MenuButton/PopupMenu2
-	pu.add_icon_item($TextureRestart.texture, "Restartリスタート")
-	pu.add_icon_item($TextureSound.texture, "Sound")
+	pu.add_icon_item($TextureRestart.texture, "Restartリスタート", ID_RESTART)
+	if !g.settings.has("Sound") || g.settings["Sound"]:
+		pu.add_icon_item($TextureSoundON.texture, "Sound", ID_SOUND)
+	else:
+		pu.add_icon_item($TextureSoundOFF.texture, "Sound", ID_SOUND)
 	#
 	num_buttons.push_back($DeleteButton)
 	for i in range(N_HORZ):
@@ -183,7 +190,7 @@ func _ready():
 	#update_undo_redo()
 	update_all_status()
 	$CanvasLayer/ColorRect.material.set_shader_param("size", 0)
-	$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
+	#$SoundButton.pressed = !g.settings.has("Sound") || g.settings["Sound"]
 	pass
 func init_labels():
 	# 手がかり数字、入力数字用 Label 生成
@@ -1436,7 +1443,11 @@ func _on_MemoButton_toggled(button_pressed):
 #
 func _on_PopupMenuPressed(id):
 	menuPopuped = false
-	print("_on_PopupMenuPressed(", id, ")")
+	print("_on_PopupMenuPressed(id = ", id, ")")
+	if id == ID_RESTART:
+		_on_RestartButton_pressed()
+	elif id == ID_SOUND:
+		pass
 
 func on_ModalClosed():
 	menuPopuped = false
