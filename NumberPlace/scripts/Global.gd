@@ -26,6 +26,10 @@ const TodaysQuestFileName	= "user://NumberPlace_todaysQuest.dat"
 func _ready():
 	pass # Replace with function body.
 #
+func today_string():
+	var d = OS.get_date()
+	return "%04d/%02d/%02d" % [d["year"], d["month"], d["day"]]
+#
 func load_settings():
 	var file = File.new()
 	if file.file_exists(SettingsFileName):		# 設定ファイル

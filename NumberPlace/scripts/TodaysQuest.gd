@@ -5,6 +5,10 @@ onready var g = get_node("/root/Global")
 func _ready():
 	g.todaysQuest = true
 	g.load_todaysQuest()
+	var today_string = g.today_string()
+	if g.tqSolvedYMD != today_string:
+		g.tqSolvedYMD = today_string
+		g.tqSolvedSec = [-1, -1, -1]
 	for i in range(3):
 		if g.tqSolvedSec[i] >= 0:
 			var btn = get_node("Button%d" % i)
@@ -20,8 +24,7 @@ func to_MainScene(qLevel):
 	g.qLevel = qLevel
 	g.qRandom = false
 	g.qNumber = 0
-	var d = OS.get_date()
-	g.qName = "%04d/%02d/%02d" % [d["year"], d["month"], d["day"]]
+	g.qName = g.today_string()
 	get_tree().change_scene("res://MainScene.tscn")
 func _on_Button0_pressed():
 	to_MainScene(0)
