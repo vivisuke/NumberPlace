@@ -10,6 +10,8 @@ var qRandom = true		# ランダム生成問題か？
 var todaysQuest = false		# 今日の問題か？
 var tqSolvedYMD = ""		# 今日の問題を解いた日付 "YYYY/MM/DD"
 var tqSolvedSec = [-1, -1, -1]		# 各今日の問題クリアタイム、-1 for 未クリア
+var tqConsSolvedDays = 0			# 連続クリア日数
+var tqMaxConsSolvedDays = 0			# 最大連続クリア日数
 
 var show_hint_guide = false
 var hint_pos : int = -1			# ヒントで数字が入る位置
@@ -76,7 +78,7 @@ func load_nSolved():
 func save_todaysQuest():
 	var file = File.new()
 	file.open(TodaysQuestFileName, File.WRITE)
-	file.store_var([tqSolvedYMD, tqSolvedSec])
+	file.store_var([tqSolvedYMD, tqSolvedSec, tqConsSolvedDays, tqMaxConsSolvedDays])
 	file.close()
 func load_todaysQuest():
 	var file = File.new()
@@ -85,6 +87,12 @@ func load_todaysQuest():
 		var data = file.get_var()
 		tqSolvedYMD = data[0]
 		tqSolvedSec = data[1]
+		if data.size() >= 4:
+			tqConsSolvedDays = data[2]
+			tqMaxConsSolvedDays = data[3]
+		else:
+			tqConsSolvedDays = 0
+			tqMaxConsSolvedDays = 0
 		file.close()
 	else:
 		tqSolvedYMD = ""
