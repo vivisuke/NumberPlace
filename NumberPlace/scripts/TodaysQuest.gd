@@ -28,6 +28,7 @@ func _ready():
 
 func _on_BackButton_pressed():
 	g.todaysQuest = false
+	g.qName = ""
 	get_tree().change_scene("res://TopScene.tscn")
 	pass
 
