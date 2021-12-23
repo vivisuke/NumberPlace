@@ -1476,6 +1476,5 @@ func _on_MenuButton_button_up():
 
 
 func _on_DelMemoButton_pressed():
-	for ix in range(N_CELLS):
-		clear_all_memo(ix)
+	remove_all_memo()
 	pass # Replace with function body.
