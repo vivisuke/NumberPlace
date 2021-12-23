@@ -13,6 +13,7 @@ func _ready():
 		if g.tqSolvedSec[i] >= 0:
 			var btn = get_node("Button%d" % i)
 			btn.set_button_icon($SolvedTexture.texture)
+	$DateLabel.text = g.today_string()
 	pass
 
 func _on_BackButton_pressed():

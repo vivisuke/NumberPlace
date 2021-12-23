@@ -85,6 +85,7 @@ func load_todaysQuest():
 	if file.file_exists(TodaysQuestFileName):		# 統計情報ファイル
 		file.open(TodaysQuestFileName, File.READ)
 		var data = file.get_var()
+		print("today's data = ", data)
 		tqSolvedYMD = data[0]
 		tqSolvedSec = data[1]
 		if data.size() >= 4:
