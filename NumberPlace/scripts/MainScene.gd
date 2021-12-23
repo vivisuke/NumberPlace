@@ -251,6 +251,8 @@ func sound_effect():
 			$AudioNumCompleted.play()
 		else:
 			$AudioNumClicked.play()
+func is_all_solved_todaysQuest():
+	return g.tqSolvedSec[0] >= 0 && g.tqSolvedSec[1] >= 0 && g.tqSolvedSec[2] >= 0
 func on_solved():
 	$CanvasLayer/ColorRect.show()
 	shock_wave_timer = 0.0      # start shock wave
@@ -261,6 +263,10 @@ func on_solved():
 	if g.todaysQuest:		# 今日の問題の場合
 		if g.tqSolvedSec[ix] < 0 || int(elapsedTime) < g.tqSolvedSec[ix]:
 			g.tqSolvedSec[ix] = int(elapsedTime)
+		if is_all_solved_todaysQuest():
+			g.tqConsSolvedDays = g.tqConsYesterdayDays + 1
+			if g.tqConsSolvedDays > g.tqMaxConsSolvedDays:
+				g.tqMaxConsSolvedDays = g.tqConsSolvedDays		# 最大連続クリア日数
 		g.tqSolvedYMD = g.today_string()
 		g.save_todaysQuest()
 	else:	# 今日の問題でない場合

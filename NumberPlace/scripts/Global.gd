@@ -10,6 +10,7 @@ var qRandom = true		# ランダム生成問題か？
 var todaysQuest = false		# 今日の問題か？
 var tqSolvedYMD = ""		# 今日の問題を解いた日付 "YYYY/MM/DD"
 var tqSolvedSec = [-1, -1, -1]		# 各今日の問題クリアタイム、-1 for 未クリア
+var tqConsYesterdayDays = 0			# 昨日までの連続クリア日数
 var tqConsSolvedDays = 0			# 連続クリア日数
 var tqMaxConsSolvedDays = 0			# 最大連続クリア日数
 
@@ -31,6 +32,10 @@ func _ready():
 func today_string():
 	var d = OS.get_date()
 	return "%04d/%02d/%02d" % [d["year"], d["month"], d["day"]]
+func yesterday_string():
+	var u = OS.get_unix_time_from_datetime(OS.get_datetime())
+	var y = OS.get_datetime_from_unix_time(u - 60*60*24)	# 24時間前
+	return "%04d/%02d/%02d" % [y["year"], y["month"], y["day"]]
 #
 func load_settings():
 	var file = File.new()
