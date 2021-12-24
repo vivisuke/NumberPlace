@@ -247,7 +247,7 @@ func push_to_undo_stack(item):
 	undo_ix += 1
 func sound_effect():
 	if sound:
-		if input_num != 0 && num_used[input_num] >= 9:
+		if input_num > 0 && num_used[input_num] >= 9:
 			$AudioNumCompleted.play()
 		else:
 			$AudioNumClicked.play()
