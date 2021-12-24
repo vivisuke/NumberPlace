@@ -1059,6 +1059,7 @@ func num_button_pressed(num : int, button_pressed):
 		if num == 0:			# 削除ボタン押下の場合
 			var old = get_cell_numer(cur_cell_ix)
 			if old != 0:
+				add_falling_char(input_labels[cur_cell_ix].text, cur_cell_ix)
 				push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, 0, [], 0])
 				input_labels[cur_cell_ix].text = ""
 			else:
