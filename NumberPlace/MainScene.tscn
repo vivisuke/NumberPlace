@@ -976,9 +976,9 @@ stream = ExtResource( 36 )
 
 [node name="HintLayer" type="ColorRect" parent="."]
 visible = false
-margin_top = 560.0
+margin_top = 570.0
 margin_right = 500.0
-margin_bottom = 890.0
+margin_bottom = 900.0
 color = Color( 0.501961, 0.752941, 0.501961, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
