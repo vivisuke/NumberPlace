@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=2]
+[gd_scene load_steps=84 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -62,6 +62,7 @@
 [ext_resource path="res://images/volume_off_white.png" type="Texture" id=60]
 [ext_resource path="res://images/delMemo.png" type="Texture" id=61]
 [ext_resource path="res://images/delMemo_white.png" type="Texture" id=62]
+[ext_resource path="res://images/circle_before_gray.png" type="Texture" id=63]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -1013,7 +1014,7 @@ margin_right = 196.0
 margin_bottom = 58.0
 texture_normal = ExtResource( 44 )
 texture_pressed = ExtResource( 43 )
-texture_disabled = ExtResource( 46 )
+texture_disabled = ExtResource( 63 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
