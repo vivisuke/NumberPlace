@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -63,6 +63,7 @@
 [ext_resource path="res://images/delMemo.png" type="Texture" id=61]
 [ext_resource path="res://images/delMemo_white.png" type="Texture" id=62]
 [ext_resource path="res://images/circle_before_gray.png" type="Texture" id=63]
+[ext_resource path="res://images/gold_medal.png" type="Texture" id=64]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -160,7 +161,11 @@ font_data = ExtResource( 16 )
 font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=12]
+size = 12
 font_data = ExtResource( 27 )
+
+[sub_resource type="DynamicFont" id=27]
+font_data = ExtResource( 16 )
 
 [sub_resource type="DynamicFont" id=25]
 size = 40
@@ -607,6 +612,38 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CoinButton" type="TextureButton" parent="."]
+margin_left = 14.0
+margin_top = 765.0
+margin_right = 62.0
+margin_bottom = 813.0
+texture_normal = ExtResource( 64 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CoinButton"]
+margin_left = -8.0
+margin_top = 48.0
+margin_right = 56.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "コイン"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NCoinLabel" type="Label" parent="CoinButton"]
+margin_right = 48.0
+margin_bottom = 48.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 27 )
+text = "10"
+align = 1
+valign = 1
 
 [node name="HintButton" type="TextureButton" parent="."]
 margin_left = 77.0
@@ -1149,6 +1186,7 @@ __meta__ = {
 [connection signal="toggled" from="DeleteButton" to="." method="_on_DeleteButton_toggled"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
+[connection signal="pressed" from="CoinButton" to="." method="_on_CheckButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="toggled" from="MemoButton" to="." method="_on_MemoButton_toggled"]
 [connection signal="pressed" from="AutoMemoButton" to="." method="_on_AutoMemoButton_pressed"]
