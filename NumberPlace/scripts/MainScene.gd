@@ -150,6 +150,7 @@ func _ready():
 	#seed((g.qName+String(g.qLevel)).hash())
 	#print($TitleBar/Label.text)
 	$TitleBar/Label.text = titleText()
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	#$MessLabel.text = ""
 	#$Board/HintGuide.hide()
 	g.show_hint_guide = false
@@ -515,6 +516,8 @@ func update_all_status():
 		$MessLabel.text = "セルに入れる数字ボタンをクリックしてください。"
 	else:
 		$MessLabel.text = "数字ボタンまたは空セルをクリックしてください。"
+	$HintButton.disabled = g.env[g.KEY_N_COINS] <= 0
+	
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
@@ -1343,6 +1346,9 @@ func clear_memo_emphasis():
 			$Board/MemoTileMap.set_cell(x, y, TILE_NONE)
 func _on_HintButton_pressed():
 	if paused: return		# ポーズ中
+	g.env[g.KEY_N_COINS] -= 1
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
+	g.save_environment()
 	$MessLabel.text = ""
 	clear_memo_emphasis()
 	hint_texts = []

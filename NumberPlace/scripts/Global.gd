@@ -1,5 +1,11 @@
 extends Node2D
 
+const INIT_N_COINS = 10
+const DAYLY_N_COINS = 2
+const KEY_N_COINS = "nCoins"
+const KEY_LOGIN_DATE = "LoginDate"
+
+var env = {}			# 環境辞書
 var settings = {}		# 設定辞書
 var stats = []			# 各問題レベルごとの統計情報（問題クリア数、トータルタイム（単位：秒））
 var nSolved = [0, 0, 0]		# 各問題集ごとの問題クリア数、[0] for 入門問題集
@@ -21,6 +27,7 @@ var hint_type : int = -1
 var candidates_bit = []		# 入力可能ビット論理和
 var cell_bit = []			# 現在の状態
 
+const EnvFileName	= "user://NumberPlace_env.dat"				# 環境ファイル
 const SettingsFileName	= "user://NumberPlace_stgs.dat"
 const StatsFileName		= "user://NumberPlace_stats.dat"
 const NSolvedFileName	= "user://NumberPlace_nSolved.dat"
@@ -36,6 +43,19 @@ func yesterday_string():
 	var u = OS.get_unix_time_from_datetime(OS.get_datetime())
 	var y = OS.get_datetime_from_unix_time(u - 60*60*24)	# 24時間前
 	return "%04d/%02d/%02d" % [y["year"], y["month"], y["day"]]
+#
+func load_environment():
+	var file = File.new()
+	if file.file_exists(EnvFileName):		# 設定ファイル
+		file.open(EnvFileName, File.READ)
+		env = file.get_var()
+		file.close()
+	if !env.has(KEY_N_COINS): env[KEY_N_COINS] = INIT_N_COINS
+func save_environment():
+	var file = File.new()
+	file.open(EnvFileName, File.WRITE)
+	file.store_var(env)
+	file.close()
 #
 func load_settings():
 	var file = File.new()

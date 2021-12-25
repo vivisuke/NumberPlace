@@ -8,9 +8,14 @@ func sec_to_MSStr(t):
 	var mnt = t / 60
 	return "%02d:%02d" % [mnt, sec]
 func _ready():
+	g.load_environment()
+	if !g.env.has(g.KEY_LOGIN_DATE) || g.env[g.KEY_LOGIN_DATE] != g.today_string():
+		g.env[g.KEY_LOGIN_DATE] = g.today_string()
+		g.env[g.KEY_N_COINS] += g.DAYLY_N_COINS
+		g.save_environment()
+	g.load_stats()
 	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
-	g.load_stats()
 	for i in range(6):
 		var n = g.stats[i]["NSolved"] if g.stats[i].has("NSolved") else 0
 		buttons[i].get_node("NSolvedLabel").text = "クリア回数: %d" % n
