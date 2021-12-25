@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=2]
+[gd_scene load_steps=87 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -64,6 +64,7 @@
 [ext_resource path="res://images/delMemo_white.png" type="Texture" id=62]
 [ext_resource path="res://images/circle_before_gray.png" type="Texture" id=63]
 [ext_resource path="res://images/gold_medal.png" type="Texture" id=64]
+[ext_resource path="res://images/auto_candidates_gray.png" type="Texture" id=65]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -703,6 +704,7 @@ margin_right = 485.0
 margin_bottom = 733.0
 texture_normal = ExtResource( 53 )
 texture_pressed = ExtResource( 56 )
+texture_disabled = ExtResource( 65 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

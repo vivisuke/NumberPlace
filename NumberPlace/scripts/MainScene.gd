@@ -516,7 +516,9 @@ func update_all_status():
 		$MessLabel.text = "セルに入れる数字ボタンをクリックしてください。"
 	else:
 		$MessLabel.text = "数字ボタンまたは空セルをクリックしてください。"
+	$CheckButton.disabled = g.env[g.KEY_N_COINS] <= 0
 	$HintButton.disabled = g.env[g.KEY_N_COINS] <= 0
+	$AutoMemoButton.disabled = g.env[g.KEY_N_COINS] <= 0
 	
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
