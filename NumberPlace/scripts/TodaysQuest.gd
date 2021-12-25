@@ -4,6 +4,7 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	g.todaysQuest = true
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.load_todaysQuest()
 	var today_string = g.today_string()
 	if g.tqSolvedYMD != today_string:		# 日付が変わっている場合
