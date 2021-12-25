@@ -1408,6 +1408,9 @@ func _on_DeselectButton_pressed():
 	update_all_status()
 func _on_CheckButton_pressed():
 	if paused: return		# ポーズ中
+	g.env[g.KEY_N_COINS] -= 1
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
+	g.save_environment()
 	var err = false
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "" && input_labels[ix].text != bit_to_numstr(ans_bit[ix]):
@@ -1442,6 +1445,9 @@ func do_auto_memo():
 func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
 	if qCreating: return	# 問題生成中
+	g.env[g.KEY_N_COINS] -= 1
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
+	g.save_environment()
 	var lst = do_auto_memo()
 	push_to_undo_stack([UNDO_TYPE_AUTO_MEMO, lst])
 	update_all_status()
