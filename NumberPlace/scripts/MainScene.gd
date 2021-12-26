@@ -270,6 +270,7 @@ func on_solved():
 			if g.tqConsSolvedDays > g.tqMaxConsSolvedDays:
 				g.tqMaxConsSolvedDays = g.tqConsSolvedDays		# 最大連続クリア日数
 			g.env[g.KEY_N_COINS] += g.TODAYS_QUEST_N_COINS
+			$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 			g.save_environment()
 		g.tqSolvedYMD = g.today_string()
 		g.save_todaysQuest()
@@ -521,7 +522,7 @@ func update_all_status():
 		$MessLabel.text = "数字ボタンまたは空セルをクリックしてください。"
 	$CheckButton.disabled = g.env[g.KEY_N_COINS] <= 0
 	$HintButton.disabled = g.env[g.KEY_N_COINS] <= 0
-	$AutoMemoButton.disabled = g.env[g.KEY_N_COINS] <= 0
+	$AutoMemoButton.disabled = g.env[g.KEY_N_COINS] < 2
 	
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
@@ -1448,7 +1449,7 @@ func do_auto_memo():
 func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
 	if qCreating: return	# 問題生成中
-	g.env[g.KEY_N_COINS] -= 1
+	g.env[g.KEY_N_COINS] -= 2
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
 	var lst = do_auto_memo()
