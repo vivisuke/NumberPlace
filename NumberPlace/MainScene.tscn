@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -50,9 +50,9 @@
 [ext_resource path="res://scripts/HintGuide.gd" type="Script" id=48]
 [ext_resource path="res://images/deselect_white.png" type="Texture" id=49]
 [ext_resource path="res://images/done_white.png" type="Texture" id=50]
-[ext_resource path="res://images/done_black.png" type="Texture" id=51]
+[ext_resource path="res://images/done_gold.png" type="Texture" id=51]
 [ext_resource path="res://images/done_gray.png" type="Texture" id=52]
-[ext_resource path="res://images/auto_candidates.png" type="Texture" id=53]
+[ext_resource path="res://images/auto_candidates_gold.png" type="Texture" id=53]
 [ext_resource path="res://images/edit_black.png" type="Texture" id=54]
 [ext_resource path="res://images/edit_cand_black.png" type="Texture" id=55]
 [ext_resource path="res://images/auto_candidates_white.png" type="Texture" id=56]
@@ -65,6 +65,7 @@
 [ext_resource path="res://images/circle_before_gray.png" type="Texture" id=63]
 [ext_resource path="res://images/gold_medal.png" type="Texture" id=64]
 [ext_resource path="res://images/auto_candidates_gray.png" type="Texture" id=65]
+[ext_resource path="res://images/lightbulb_gold.png" type="Texture" id=66]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -654,7 +655,7 @@ margin_left = 77.0
 margin_top = 685.0
 margin_right = 125.0
 margin_bottom = 733.0
-texture_normal = ExtResource( 7 )
+texture_normal = ExtResource( 66 )
 texture_pressed = ExtResource( 6 )
 texture_disabled = ExtResource( 31 )
 __meta__ = {
