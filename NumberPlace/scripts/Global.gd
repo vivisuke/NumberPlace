@@ -2,6 +2,7 @@ extends Node2D
 
 const INIT_N_COINS = 10
 const DAYLY_N_COINS = 2
+const TODAYS_QUEST_N_COINS = 3
 const KEY_N_COINS = "nCoins"
 const KEY_LOGIN_DATE = "LoginDate"
 

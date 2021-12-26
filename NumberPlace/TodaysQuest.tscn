@@ -221,6 +221,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CoinLabel" type="Label" parent="."]
+margin_top = 714.0
+margin_right = 499.0
+margin_bottom = 735.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "※ 今日の問題を全クリアすると、コインを３個もらえます。"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="TitleBar/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="Button0" to="." method="_on_Button0_pressed"]
 [connection signal="pressed" from="Button1" to="." method="_on_Button1_pressed"]

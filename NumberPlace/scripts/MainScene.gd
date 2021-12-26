@@ -263,11 +263,14 @@ func on_solved():
 	var ix = g.qLevel
 	if g.todaysQuest:		# 今日の問題の場合
 		if g.tqSolvedSec[ix] < 0 || int(elapsedTime) < g.tqSolvedSec[ix]:
-			g.tqSolvedSec[ix] = int(elapsedTime)
-		if is_all_solved_todaysQuest():
+			g.tqSolvedSec[ix] = int(elapsedTime)	# 最短クリア時間更新
+		if is_all_solved_todaysQuest() && g.tqConsSolvedDays != g.tqConsYesterdayDays + 1:
+			# 全問クリアの場合
 			g.tqConsSolvedDays = g.tqConsYesterdayDays + 1
 			if g.tqConsSolvedDays > g.tqMaxConsSolvedDays:
 				g.tqMaxConsSolvedDays = g.tqConsSolvedDays		# 最大連続クリア日数
+			g.end[g.KEY_N_COINS] += g.TODAYS_QUEST_N_COINS
+			g.save_environment()
 		g.tqSolvedYMD = g.today_string()
 		g.save_todaysQuest()
 	else:	# 今日の問題でない場合
