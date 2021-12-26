@@ -269,7 +269,7 @@ func on_solved():
 			g.tqConsSolvedDays = g.tqConsYesterdayDays + 1
 			if g.tqConsSolvedDays > g.tqMaxConsSolvedDays:
 				g.tqMaxConsSolvedDays = g.tqConsSolvedDays		# 最大連続クリア日数
-			g.end[g.KEY_N_COINS] += g.TODAYS_QUEST_N_COINS
+			g.env[g.KEY_N_COINS] += g.TODAYS_QUEST_N_COINS
 			g.save_environment()
 		g.tqSolvedYMD = g.today_string()
 		g.save_todaysQuest()
