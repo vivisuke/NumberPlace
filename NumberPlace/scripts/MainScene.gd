@@ -42,6 +42,7 @@ const N_EMPTY_BEGINNER = 32
 const UNDO_TYPE_CELL = 0		# セル数字入力
 const UNDO_TYPE_MEMO = 1		# メモ数字反転
 const UNDO_TYPE_AUTO_MEMO = 2	# 自動メモ
+const UNDO_TYPE_DEL_MEMO = 3	# メモ削除
 const UNDO_ITEM_TYPE = 0
 const UNDO_ITEM_IX = 1
 const UNDO_ITEM_NUM = 2			# for メモ数字
@@ -1231,6 +1232,10 @@ func _on_UndoButton_pressed():
 		var lst = item[UNDO_ITEM_MEMO_LST]
 		for ix in range(N_CELLS):
 			set_memo_bits(ix, lst[ix])
+	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_DEL_MEMO:
+		var lst = item[UNDO_ITEM_MEMO_LST]
+		for ix in range(N_CELLS):
+			set_memo_bits(ix, lst[ix])
 	update_all_status()
 	pass
 
@@ -1248,6 +1253,8 @@ func _on_RedoButton_pressed():
 		flip_memo_num(item[UNDO_ITEM_IX], item[UNDO_ITEM_NUM])
 	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_AUTO_MEMO:
 		do_auto_memo()
+	elif item[UNDO_ITEM_TYPE] == UNDO_TYPE_DEL_MEMO:
+		remove_all_memo()
 	undo_ix += 1
 	update_all_status()
 	pass
@@ -1426,6 +1433,17 @@ func _on_CheckButton_pressed():
 		$MessLabel.text = "間違って入っている数字はありません。"
 	pass # Replace with function body.
 
+func get_memo():
+	var lst = []
+	for ix in range(N_CELLS):
+		var bits = 0	
+		if get_cell_numer(ix) == 0:		# 数字が入っていない場合
+			var mask = BIT_1
+			for i in range(N_HORZ):
+				if memo_labels[ix][i].text != "": bits |= mask
+				mask <<= 1
+		lst.push_back(bits)
+	return lst
 func do_auto_memo():
 	init_cell_bit()
 	init_candidates()		# 可能候補数字計算
@@ -1495,5 +1513,7 @@ func _on_MenuButton_button_up():
 
 
 func _on_DelMemoButton_pressed():
+	var lst = get_memo()
+	push_to_undo_stack([UNDO_TYPE_DEL_MEMO, lst])
 	remove_all_memo()
 	pass # Replace with function body.
