@@ -1359,6 +1359,7 @@ func clear_memo_emphasis():
 			$Board/MemoTileMap.set_cell(x, y, TILE_NONE)
 func _on_HintButton_pressed():
 	if paused: return		# ポーズ中
+	if g.env[g.KEY_N_COINS] < 1: return
 	g.env[g.KEY_N_COINS] -= 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
@@ -1419,6 +1420,7 @@ func _on_DeselectButton_pressed():
 	update_all_status()
 func _on_CheckButton_pressed():
 	if paused: return		# ポーズ中
+	if g.env[g.KEY_N_COINS] < 1: return
 	g.env[g.KEY_N_COINS] -= 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
@@ -1467,6 +1469,7 @@ func do_auto_memo():
 func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
 	if qCreating: return	# 問題生成中
+	if g.env[g.KEY_N_COINS] < 2: return
 	g.env[g.KEY_N_COINS] -= 2
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
