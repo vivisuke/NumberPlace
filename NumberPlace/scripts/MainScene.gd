@@ -238,7 +238,7 @@ func update_NEmptyLabel():
 	nEmpty = 0
 	for ix in range(N_CELLS):
 		if get_cell_numer(ix) == 0: nEmpty += 1
-	$NEmptyLabel.text = "#spc: %d" % nEmpty
+	$NEmptyLabel.text = "空欄数: %d" % nEmpty
 func update_undo_redo():
 	$UndoButton.disabled = undo_ix == 0
 	$RedoButton.disabled = undo_ix == undo_stack.size()
