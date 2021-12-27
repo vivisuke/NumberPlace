@@ -1112,6 +1112,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HintLayer/NextHintButton"]
+
 [node name="CloseHintButton" type="TextureButton" parent="HintLayer"]
 anchor_right = 0.83
 anchor_bottom = 0.061
@@ -1192,7 +1194,6 @@ __meta__ = {
 [connection signal="toggled" from="DeleteButton" to="." method="_on_DeleteButton_toggled"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
-[connection signal="pressed" from="CoinButton" to="." method="_on_CheckButton_pressed"]
 [connection signal="pressed" from="HintButton" to="." method="_on_HintButton_pressed"]
 [connection signal="toggled" from="MemoButton" to="." method="_on_MemoButton_toggled"]
 [connection signal="pressed" from="AutoMemoButton" to="." method="_on_AutoMemoButton_pressed"]
