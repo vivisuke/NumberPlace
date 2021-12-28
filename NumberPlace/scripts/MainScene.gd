@@ -1425,6 +1425,7 @@ func close_hint():
 	set_num_cursor(cur_num)
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
+	HintLayer/NextHintButton.rect_position = hint_next_pos0
 	#hint_next_scale = 1.0
 	#$HintLayer/NextHintButton.set_scale(hint_next_scale)
 	if cur_num > 0:		# 数字ボタン選択時
