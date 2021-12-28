@@ -60,6 +60,8 @@ const LVL_BEGINNER = 0
 const LVL_EASY = 1
 const LVL_NORMAL = 2
 #const LVL_NOT_SYMMETRIC = 3
+const INIT_HINT_NEXT_VY = Vector2(0, -1.0)		# 初期速度
+const HINT_NEXT_DV = Vector2(0, 10.0)			# 加速度
 enum {
 	ID_RESTART = 1,
 	ID_SOUND,			# 効果音
@@ -101,6 +103,11 @@ var menuPopuped = false
 var hint_showed = false
 var memo_mode = false		# メモ（候補数字）エディットモード
 var in_button_pressed = false	# ボタン押下処理中
+var hint_next_pos			# 次ボタン位置
+var hint_next_pos0			# 次ボタン初期位置
+var hint_next_vy			# 次ボタン速度
+
+#var hint_next_scale = 1.0	# ヒント次ボタン表示スケール
 #var hint_num				# ヒントで確定する数字、[1, 9]
 var hint_numstr				# ヒントで確定する数字、[1, 9]
 var hint_ix = 0				# 0, 1, 2, ...
@@ -137,6 +144,7 @@ var ClueLabel = load("res://ClueLabel.tscn")
 var InputLabel = load("res://InputLabel.tscn")
 var MemoLabel = load("res://MemoLabel.tscn")
 var FallingChar = load("res://FallingChar.tscn")
+var FallingCoin = load("res://FallingCoin.tscn")
 var rng = RandomNumberGenerator.new()
 
 onready var g = get_node("/root/Global")
@@ -492,6 +500,15 @@ func _process(delta):
 		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
 		if shock_wave_timer > 2:
 			shock_wave_timer = -1.0
+	if hint_showed:
+		hint_next_vy += HINT_NEXT_DV * delta / 8.0
+		hint_next_pos += hint_next_vy
+		if hint_next_pos >= hint_next_pos0:
+			hint_next_vy = INIT_HINT_NEXT_VY
+		$HintLayer/NextHintButton.rect_position = hint_next_pos
+		#hint_next_scale += delta
+		#if hint_next_scale > 2.0: hint_next_scale = 1.0
+		#$HintLayer/NextHintButton.set_scale(Vector2(hint_next_scale, hint_next_scale))
 	pass
 func sec_to_MSStr(t):
 	var sec = t % 60
@@ -1061,6 +1078,14 @@ func add_falling_char(num_str, ix : int):
 	fc.angular_velocity = rng.randf_range(0, 1)
 	add_child(fc)
 
+func add_falling_coin():
+	var fc = FallingCoin.instance()
+	fc.position = $CoinButton.rect_position + $CoinButton.rect_size / 2
+	var th = rng.randf_range(0, 3.1415926535*2)
+	fc.linear_velocity = Vector2(cos(th), sin(th))*100
+	fc.angular_velocity = rng.randf_range(0, 1)
+	add_child(fc)
+
 func num_button_pressed(num : int, button_pressed):
 	if in_button_pressed: return		# ボタン押下処理中の場合
 	if paused: return			# ポーズ中
@@ -1332,6 +1357,9 @@ func hint_nakid_single():
 func show_hint():
 	hint_showed = true
 	hint_ix = 0
+	hint_next_pos0 = $HintLayer/NextHintButton.rect_position
+	hint_next_pos = hint_next_pos0
+	hint_next_vy = INIT_HINT_NEXT_VY
 	$HintLayer.show()
 	$HintLayer/Label.text = hint_texts[0]
 	$HintLayer/PageLabel.text = "1/%d" % (hint_texts.size()/2)
@@ -1359,6 +1387,7 @@ func clear_memo_emphasis():
 func _on_HintButton_pressed():
 	if paused: return		# ポーズ中
 	if g.env[g.KEY_N_COINS] < 1: return
+	add_falling_coin()
 	g.env[g.KEY_N_COINS] -= 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
@@ -1396,6 +1425,8 @@ func close_hint():
 	set_num_cursor(cur_num)
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
+	#hint_next_scale = 1.0
+	#$HintLayer/NextHintButton.set_scale(hint_next_scale)
 	if cur_num > 0:		# 数字ボタン選択時
 		#cur_num = bit_to_num(g.hint_bit)
 		set_num_cursor(bit_to_num(g.hint_bit))
@@ -1420,6 +1451,7 @@ func _on_DeselectButton_pressed():
 func _on_CheckButton_pressed():
 	if paused: return		# ポーズ中
 	if g.env[g.KEY_N_COINS] < 1: return
+	add_falling_coin()
 	g.env[g.KEY_N_COINS] -= 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
@@ -1469,6 +1501,8 @@ func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
 	if qCreating: return	# 問題生成中
 	if g.env[g.KEY_N_COINS] < 2: return
+	add_falling_coin()
+	add_falling_coin()
 	g.env[g.KEY_N_COINS] -= 2
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()

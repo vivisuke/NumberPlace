@@ -53,7 +53,7 @@ func load_environment():
 		file.close()
 	if !env.has(KEY_N_COINS): env[KEY_N_COINS] = INIT_N_COINS
 	if env[KEY_N_COINS] < 0: env[KEY_N_COINS] = 0
-	## if env[KEY_N_COINS] == 0: env[KEY_N_COINS] = 5		# for Test
+	if env[KEY_N_COINS] == 0: env[KEY_N_COINS] = 50		# for Test
 func save_environment():
 	var file = File.new()
 	file.open(EnvFileName, File.WRITE)
