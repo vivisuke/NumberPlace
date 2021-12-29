@@ -1353,9 +1353,16 @@ func hint_nakid_single():
 	g.hint_pos = ns[IX_POS]
 	g.hint_bit = ns[IX_BIT]
 	return true
+func update_hint_dots():
+	$HintLayer/DotButton0.pressed = hint_ix == 0
+	$HintLayer/DotButton1.pressed = hint_ix == 2
+	$HintLayer/DotButton2.pressed = hint_ix == 4
+	if hint_texts.size()/2 > 3:
+		$HintLayer/DotButton3.pressed = hint_ix == 6
 func show_hint():
 	hint_showed = true
 	hint_ix = 0
+	update_hint_dots()
 	hint_next_pos0 = $HintLayer/NextHintButton.rect_position
 	hint_next_pos = hint_next_pos0
 	hint_next_vy = INIT_HINT_NEXT_VY
@@ -1368,6 +1375,7 @@ func show_hint():
 	$Board/HintGuide.update()
 func hint_prev_next_page(d):
 	hint_ix += d * 2
+	update_hint_dots()
 	$HintLayer/Label.text = hint_texts[hint_ix].replace("%d", hint_numstr)
 	$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix/2+1), (hint_texts.size()/2)]
 	$HintLayer/PrevHintButton.disabled = hint_ix == 0
