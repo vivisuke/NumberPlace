@@ -501,15 +501,12 @@ func _process(delta):
 		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
 		if shock_wave_timer > 2:
 			shock_wave_timer = -1.0
-	if hint_showed:
+	if false:	#hint_showed:
 		hint_next_vy += HINT_NEXT_DV * delta / 8.0
 		hint_next_pos += hint_next_vy
 		if hint_next_pos >= hint_next_pos0:
 			hint_next_vy = INIT_HINT_NEXT_VY
 		$HintLayer/NextHintButton.rect_position = hint_next_pos
-		#hint_next_scale += delta
-		#if hint_next_scale > 2.0: hint_next_scale = 1.0
-		#$HintLayer/NextHintButton.set_scale(Vector2(hint_next_scale, hint_next_scale))
 	pass
 func sec_to_MSStr(t):
 	var sec = t % 60

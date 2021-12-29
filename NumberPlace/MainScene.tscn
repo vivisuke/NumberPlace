@@ -168,9 +168,6 @@ font_data = ExtResource( 27 )
 size = 12
 font_data = ExtResource( 27 )
 
-[sub_resource type="DynamicFont" id=27]
-font_data = ExtResource( 16 )
-
 [sub_resource type="DynamicFont" id=25]
 size = 40
 font_data = ExtResource( 12 )
@@ -254,6 +251,9 @@ font_data = ExtResource( 16 )
 [sub_resource type="DynamicFont" id=19]
 size = 24
 font_data = ExtResource( 27 )
+
+[sub_resource type="DynamicFont" id=27]
+font_data = ExtResource( 16 )
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -613,41 +613,6 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "チェック"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CoinButton" type="TextureButton" parent="."]
-margin_left = 14.0
-margin_top = 765.0
-margin_right = 62.0
-margin_bottom = 813.0
-texture_normal = ExtResource( 64 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CoinButton"]
-margin_left = -8.0
-margin_top = 48.0
-margin_right = 56.0
-margin_bottom = 67.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "コイン"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NCoinLabel" type="Label" parent="CoinButton"]
-margin_right = 48.0
-margin_bottom = 48.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 27 )
-text = "10"
-align = 1
-valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1145,7 +1110,7 @@ __meta__ = {
 margin_left = 14.0
 margin_top = 95.0
 margin_right = 483.0
-margin_bottom = 236.0
+margin_bottom = 182.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 19 )
 text = "あーだ
@@ -1165,46 +1130,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CoinButton" type="TextureButton" parent="SolvedLayer"]
-margin_left = 14.0
-margin_top = 175.0
-margin_right = 62.0
-margin_bottom = 223.0
-texture_normal = ExtResource( 64 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="SolvedLayer/CoinButton"]
-margin_left = -8.0
-margin_top = 48.0
-margin_right = 56.0
-margin_bottom = 67.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "コイン"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NCoinLabel" type="Label" parent="SolvedLayer/CoinButton"]
-margin_right = 48.0
-margin_bottom = 48.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 27 )
-text = "10"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="TweetButton" type="TextureButton" parent="SolvedLayer"]
 margin_left = 77.0
-margin_top = 175.0
+margin_top = 165.0
 margin_right = 125.0
-margin_bottom = 223.0
+margin_bottom = 213.0
 texture_normal = ExtResource( 67 )
 texture_pressed = ExtResource( 68 )
 __meta__ = {
@@ -1225,9 +1155,9 @@ __meta__ = {
 
 [node name="NextButton" type="TextureButton" parent="SolvedLayer"]
 margin_left = 435.0
-margin_top = 175.0
+margin_top = 165.0
 margin_right = 483.0
-margin_bottom = 223.0
+margin_bottom = 213.0
 texture_normal = ExtResource( 23 )
 texture_pressed = ExtResource( 24 )
 texture_disabled = ExtResource( 32 )
@@ -1243,6 +1173,41 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
 text = "次問題"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CoinButton" type="TextureButton" parent="."]
+margin_left = 14.0
+margin_top = 765.0
+margin_right = 62.0
+margin_bottom = 813.0
+texture_normal = ExtResource( 64 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CoinButton"]
+margin_left = -8.0
+margin_top = 48.0
+margin_right = 56.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "コイン"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NCoinLabel" type="Label" parent="CoinButton"]
+margin_right = 48.0
+margin_bottom = 48.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 27 )
+text = "10"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
