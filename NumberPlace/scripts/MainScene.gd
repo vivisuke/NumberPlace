@@ -1416,6 +1416,8 @@ func _on_HintButton_pressed():
 					hint_hidden_single()
 	if hint_texts != []:
 		show_hint()
+		print("nPages = ", hint_texts.size()/2)
+		$HintLayer/DotButton3.disabled = hint_texts.size()/2 < 4
 	pass # Replace with function body.
 
 func close_hint():
