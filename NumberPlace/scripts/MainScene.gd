@@ -265,6 +265,7 @@ func is_all_solved_todaysQuest():
 	return g.tqSolvedSec[0] >= 0 && g.tqSolvedSec[1] >= 0 && g.tqSolvedSec[2] >= 0
 func on_solved():
 	$CanvasLayer/ColorRect.show()
+	$SolvedLayer.show()
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
 	if sound:
@@ -1163,6 +1164,7 @@ func _on_Button9_toggled(button_pressed):
 
 func _on_NextButton_pressed():
 	if paused: return		# ポーズ中
+	$SolvedLayer.hide()
 	if g.todaysQuest:		# 今日の問題の場合
 		g.qLevel += 1
 		if g.qLevel > 2: g.qLevel = 0
@@ -1425,7 +1427,7 @@ func close_hint():
 	set_num_cursor(cur_num)
 	g.show_hint_guide = false
 	$Board/HintGuide.update()
-	HintLayer/NextHintButton.rect_position = hint_next_pos0
+	$HintLayer/NextHintButton.rect_position = hint_next_pos0
 	#hint_next_scale = 1.0
 	#$HintLayer/NextHintButton.set_scale(hint_next_scale)
 	if cur_num > 0:		# 数字ボタン選択時

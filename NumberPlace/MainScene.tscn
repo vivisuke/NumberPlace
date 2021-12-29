@@ -1153,6 +1153,40 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SolvedLayer" type="ColorRect" parent="."]
+visible = false
+margin_top = 600.0
+margin_right = 500.0
+margin_bottom = 900.0
+color = Color( 0.501961, 0.752941, 0.501961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NextButton" type="TextureButton" parent="SolvedLayer"]
+margin_left = 435.0
+margin_top = 175.0
+margin_right = 483.0
+margin_bottom = 223.0
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
+texture_disabled = ExtResource( 32 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SolvedLayer/NextButton"]
+margin_top = 48.0
+margin_right = 48.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "次問題"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TextureRestart" type="TextureRect" parent="."]
 margin_left = 553.0
 margin_right = 601.0
@@ -1211,3 +1245,4 @@ __meta__ = {
 [connection signal="pressed" from="HintLayer/PrevHintButton" to="." method="_on_PrevHintButton_pressed"]
 [connection signal="pressed" from="HintLayer/NextHintButton" to="." method="_on_NextHintButton_pressed"]
 [connection signal="pressed" from="HintLayer/CloseHintButton" to="." method="_on_CloseHintButton_pressed"]
+[connection signal="pressed" from="SolvedLayer/NextButton" to="." method="_on_NextButton_pressed"]
