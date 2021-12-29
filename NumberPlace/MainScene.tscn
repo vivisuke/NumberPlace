@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=2]
+[gd_scene load_steps=90 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -66,6 +66,8 @@
 [ext_resource path="res://images/gold_medal.png" type="Texture" id=64]
 [ext_resource path="res://images/auto_candidates_gray.png" type="Texture" id=65]
 [ext_resource path="res://images/lightbulb_gold.png" type="Texture" id=66]
+[ext_resource path="res://images/twitter-blue.png" type="Texture" id=67]
+[ext_resource path="res://images/twitter-white.png" type="Texture" id=68]
 
 [sub_resource type="DynamicFont" id=18]
 size = 20
@@ -1163,6 +1165,64 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CoinButton" type="TextureButton" parent="SolvedLayer"]
+margin_left = 14.0
+margin_top = 175.0
+margin_right = 62.0
+margin_bottom = 223.0
+texture_normal = ExtResource( 64 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SolvedLayer/CoinButton"]
+margin_left = -8.0
+margin_top = 48.0
+margin_right = 56.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "コイン"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NCoinLabel" type="Label" parent="SolvedLayer/CoinButton"]
+margin_right = 48.0
+margin_bottom = 48.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 27 )
+text = "10"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TweetButton" type="TextureButton" parent="SolvedLayer"]
+margin_left = 77.0
+margin_top = 175.0
+margin_right = 125.0
+margin_bottom = 223.0
+texture_normal = ExtResource( 67 )
+texture_pressed = ExtResource( 68 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SolvedLayer/TweetButton"]
+margin_top = 48.0
+margin_right = 48.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "tweet"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="NextButton" type="TextureButton" parent="SolvedLayer"]
 margin_left = 435.0
 margin_top = 175.0
@@ -1245,4 +1305,5 @@ __meta__ = {
 [connection signal="pressed" from="HintLayer/PrevHintButton" to="." method="_on_PrevHintButton_pressed"]
 [connection signal="pressed" from="HintLayer/NextHintButton" to="." method="_on_NextHintButton_pressed"]
 [connection signal="pressed" from="HintLayer/CloseHintButton" to="." method="_on_CloseHintButton_pressed"]
+[connection signal="pressed" from="SolvedLayer/TweetButton" to="." method="_on_TweetButton_pressed"]
 [connection signal="pressed" from="SolvedLayer/NextButton" to="." method="_on_NextButton_pressed"]

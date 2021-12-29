@@ -1556,3 +1556,9 @@ func _on_DelMemoButton_pressed():
 	push_to_undo_stack([UNDO_TYPE_DEL_MEMO, lst])
 	remove_all_memo()
 	pass # Replace with function body.
+
+
+func _on_TweetButton_pressed():
+	var txt = "%23SakuSakuNumberPlace"
+	OS.shell_open("https://twitter.com/intent/tweet?text=" + txt)
+	pass # Replace with function body.
