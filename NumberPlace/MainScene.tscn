@@ -999,9 +999,9 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="HintLayer"]
-margin_left = 14.0
+margin_left = 226.0
 margin_top = 10.0
-margin_right = 62.0
+margin_right = 274.0
 margin_bottom = 58.0
 texture = ExtResource( 7 )
 __meta__ = {
@@ -1021,9 +1021,9 @@ __meta__ = {
 }
 
 [node name="PrevHintButton" type="TextureButton" parent="HintLayer"]
-margin_left = 100.0
+margin_left = 93.0
 margin_top = 195.0
-margin_right = 152.0
+margin_right = 145.0
 margin_bottom = 243.0
 texture_normal = ExtResource( 44 )
 texture_pressed = ExtResource( 43 )
@@ -1059,9 +1059,9 @@ __meta__ = {
 }
 
 [node name="NextHintButton" type="TextureButton" parent="HintLayer"]
-margin_left = 370.0
+margin_left = 363.0
 margin_top = 195.0
-margin_right = 418.0
+margin_right = 411.0
 margin_bottom = 243.0
 texture_normal = ExtResource( 45 )
 texture_pressed = ExtResource( 42 )
@@ -1089,9 +1089,9 @@ __meta__ = {
 anchor_right = 0.83
 anchor_bottom = 0.061
 margin_left = 435.0
-margin_top = 10.0
+margin_top = 195.0
 margin_right = 68.0
-margin_bottom = 37.87
+margin_bottom = 222.87
 texture_normal = ExtResource( 28 )
 texture_pressed = ExtResource( 33 )
 __meta__ = {
@@ -1125,9 +1125,9 @@ __meta__ = {
 }
 
 [node name="DotButton0" type="TextureButton" parent="HintLayer"]
-margin_left = 160.0
+margin_left = 153.0
 margin_top = 195.0
-margin_right = 208.0
+margin_right = 201.0
 margin_bottom = 243.0
 toggle_mode = true
 texture_normal = ExtResource( 69 )
@@ -1135,9 +1135,9 @@ texture_pressed = ExtResource( 70 )
 texture_disabled = ExtResource( 71 )
 
 [node name="DotButton1" type="TextureButton" parent="HintLayer"]
-margin_left = 210.0
+margin_left = 203.0
 margin_top = 195.0
-margin_right = 258.0
+margin_right = 251.0
 margin_bottom = 243.0
 toggle_mode = true
 texture_normal = ExtResource( 69 )
@@ -1145,9 +1145,9 @@ texture_pressed = ExtResource( 70 )
 texture_disabled = ExtResource( 71 )
 
 [node name="DotButton2" type="TextureButton" parent="HintLayer"]
-margin_left = 260.0
+margin_left = 253.0
 margin_top = 195.0
-margin_right = 308.0
+margin_right = 301.0
 margin_bottom = 243.0
 toggle_mode = true
 texture_normal = ExtResource( 69 )
@@ -1155,9 +1155,9 @@ texture_pressed = ExtResource( 70 )
 texture_disabled = ExtResource( 71 )
 
 [node name="DotButton3" type="TextureButton" parent="HintLayer"]
-margin_left = 310.0
+margin_left = 303.0
 margin_top = 195.0
-margin_right = 358.0
+margin_right = 351.0
 margin_bottom = 243.0
 toggle_mode = true
 texture_normal = ExtResource( 69 )
