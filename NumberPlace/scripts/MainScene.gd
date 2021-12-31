@@ -62,6 +62,7 @@ const LVL_NORMAL = 2
 #const LVL_NOT_SYMMETRIC = 3
 const INIT_HINT_NEXT_VY = Vector2(0, -1.0)		# 初期速度
 const HINT_NEXT_DV = Vector2(0, 10.0)			# 加速度
+const AUTO_MEMO_N_COINS = 3				# 自動メモ消費コイン数
 enum {
 	ID_RESTART = 1,
 	ID_SOUND,			# 効果音
@@ -538,7 +539,7 @@ func update_all_status():
 		$MessLabel.text = "数字ボタンまたは空セルをクリックしてください。"
 	$CheckButton.disabled = g.env[g.KEY_N_COINS] <= 0
 	$HintButton.disabled = g.env[g.KEY_N_COINS] <= 0
-	$AutoMemoButton.disabled = g.env[g.KEY_N_COINS] < 2
+	$AutoMemoButton.disabled = g.env[g.KEY_N_COINS] < AUTO_MEMO_N_COINS
 	
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
@@ -1521,10 +1522,10 @@ func do_auto_memo():
 func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
 	if qCreating: return	# 問題生成中
-	if g.env[g.KEY_N_COINS] < 2: return
+	if g.env[g.KEY_N_COINS] < AUTO_MEMO_N_COINS: return
 	add_falling_coin()
 	add_falling_coin()
-	g.env[g.KEY_N_COINS] -= 2
+	g.env[g.KEY_N_COINS] -= AUTO_MEMO_N_COINS
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
 	var lst = do_auto_memo()
