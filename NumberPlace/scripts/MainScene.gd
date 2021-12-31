@@ -1405,6 +1405,7 @@ func clear_memo_emphasis():
 			$Board/MemoTileMap.set_cell(x, y, TILE_NONE)
 func _on_HintButton_pressed():
 	if paused: return		# ポーズ中
+	if qCreating: return	# 問題生成中
 	if g.env[g.KEY_N_COINS] < 1: return
 	add_falling_coin()
 	g.env[g.KEY_N_COINS] -= 1
@@ -1472,6 +1473,7 @@ func _on_DeselectButton_pressed():
 	update_all_status()
 func _on_CheckButton_pressed():
 	if paused: return		# ポーズ中
+	if qCreating: return	# 問題生成中
 	if g.env[g.KEY_N_COINS] < 1: return
 	add_falling_coin()
 	g.env[g.KEY_N_COINS] -= 1
