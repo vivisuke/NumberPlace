@@ -1133,6 +1133,9 @@ toggle_mode = true
 texture_normal = ExtResource( 69 )
 texture_pressed = ExtResource( 70 )
 texture_disabled = ExtResource( 71 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="DotButton1" type="TextureButton" parent="HintLayer"]
 margin_left = 203.0
@@ -1314,5 +1317,9 @@ __meta__ = {
 [connection signal="pressed" from="HintLayer/PrevHintButton" to="." method="_on_PrevHintButton_pressed"]
 [connection signal="pressed" from="HintLayer/NextHintButton" to="." method="_on_NextHintButton_pressed"]
 [connection signal="pressed" from="HintLayer/CloseHintButton" to="." method="_on_CloseHintButton_pressed"]
+[connection signal="toggled" from="HintLayer/DotButton0" to="." method="_on_DotButton0_toggled"]
+[connection signal="toggled" from="HintLayer/DotButton1" to="." method="_on_DotButton1_toggled"]
+[connection signal="toggled" from="HintLayer/DotButton2" to="." method="_on_DotButton2_toggled"]
+[connection signal="toggled" from="HintLayer/DotButton3" to="." method="_on_DotButton3_toggled"]
 [connection signal="pressed" from="SolvedLayer/TweetButton" to="." method="_on_TweetButton_pressed"]
 [connection signal="pressed" from="SolvedLayer/NextButton" to="." method="_on_NextButton_pressed"]
