@@ -1582,6 +1582,9 @@ func _on_DelMemoButton_pressed():
 func _on_TweetButton_pressed():
 	var txt = "%23SakuSakuNumberPlace"
 	OS.shell_open("https://twitter.com/intent/tweet?text=" + txt)
+	g.env[g.KEY_N_COINS] += 1
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
+	g.save_environment()
 	pass # Replace with function body.
 
 func on_dotButtaonPressed(ix):
