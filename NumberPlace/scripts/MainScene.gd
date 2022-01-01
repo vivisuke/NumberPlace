@@ -427,15 +427,17 @@ func _input(event):
 	pass
 func is_solved():
 	return nEmpty == 0 && nDuplicated == 0
+func time_string(sec : int):
+	#var sec = int(tm)
+	var h = sec / (60*60)
+	sec -= h * (60*60)
+	var m = sec / 60
+	sec -= m * 60
+	return "%02d:%02d:%02d" % [h, m, sec]
 func _process(delta):
 	if !is_solved() && !paused:
 		elapsedTime += delta
-		var sec = int(elapsedTime)
-		var h = sec / (60*60)
-		sec -= h * (60*60)
-		var m = sec / 60
-		sec -= m * 60
-		$TimeLabel.text = "%02d:%02d:%02d" % [h, m, sec]
+		$TimeLabel.text = time_string(int(elapsedTime))
 	#if cur_num != 0: set_num_cursor(cur_num)
 	if !rmix_list.empty():		# 問題自動生成中
 		var sv = cell_bit.duplicate()
@@ -1593,7 +1595,9 @@ func _on_TweetButton_pressed():
 	var txt = "http://vivi.dyndns.org/Godot/NumberPlace/ %23さくさくナンプレ "
 	if g.todaysQuest:		# 今日の問題の場合
 		txt += "今日の問題" + classText()
-	txt += "問題を解きました。"
+	elif g.qNumber != 0:	# 問題集の場合
+		txt += classText() + ("問題集 %%23%06d " % g.qNumber)
+	txt += "を " + time_string(int(elapsedTime)) + " で解きました。"
 	OS.shell_open("https://twitter.com/intent/tweet?text=" + txt)
 	g.env[g.KEY_N_COINS] += 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
