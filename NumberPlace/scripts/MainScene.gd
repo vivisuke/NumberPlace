@@ -1212,6 +1212,8 @@ func _on_PauseButton_pressed():
 
 func _on_RestartButton_pressed():
 	if paused: return		# ポーズ中
+	if qCreating: return	# 問題生成中
+	_on_DeselectButton_pressed()	# 選択解除
 	for ix in range(N_CELLS):
 		if input_labels[ix].text != "":
 			add_falling_char(input_labels[ix].text, ix)
