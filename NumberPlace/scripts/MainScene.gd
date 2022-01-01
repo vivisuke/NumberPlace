@@ -1381,20 +1381,18 @@ func show_hint():
 func update_hint_prev_next():
 	$HintLayer/PrevHintButton.disabled = hint_ix == 0
 	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 2
+func update_hint_text():
+	$HintLayer/Label.text = hint_texts[hint_ix].replace("%d", hint_numstr)
+	$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix/2+1), (hint_texts.size()/2)]
 func hint_prev_next_page(d):
 	if !in_button_pressed:
 		in_button_pressed = true
 		hint_ix += d * 2
-		#print("hint_ix = ", hint_ix)
 		update_hint_dots()
-		#print("hint_ix = ", hint_ix)
-		$HintLayer/Label.text = hint_texts[hint_ix].replace("%d", hint_numstr)
-		$HintLayer/PageLabel.text = "%d/%d" % [(hint_ix/2+1), (hint_texts.size()/2)]
 		update_hint_prev_next()
-		#print("hint_ix = ", hint_ix)
+		update_hint_text()
 		g.show_hint_guide = hint_texts[hint_ix + 1]
 		$Board/HintGuide.update()
-		#print("hint_ix = ", hint_ix)
 		in_button_pressed = false
 func is_no_mistake():		# 間違って入っている数字が無いか？
 	for ix in range(N_CELLS):
@@ -1595,6 +1593,8 @@ func on_dotButtaonPressed(ix):
 		hint_ix = ix * 2
 		update_hint_dots()
 		update_hint_prev_next()
+		update_hint_text()
+		#hint_prev_next_page(0)
 		in_button_pressed = false
 func _on_DotButton0_toggled(button_pressed):
 	on_dotButtaonPressed(0)
