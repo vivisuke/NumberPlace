@@ -1501,36 +1501,44 @@ func get_memo():
 				mask <<= 1
 		lst.push_back(bits)
 	return lst
+func is_same_memo(lst):	# candidates_bit[] と lst[] を比較
+	for i in range(N_CELLS):
+		if lst[i] != candidates_bit[i]:
+			return false;
+	return true
 func do_auto_memo():
 	init_cell_bit()
-	init_candidates()		# 可能候補数字計算
-	var lst = []
+	init_candidates()		# 可能候補数字計算 → candidates_bit[]
+	var lst0 = get_memo()
+	if is_same_memo(lst0): return []	# 既に正しい候補数字が入っている場合
+	#var lst = []
 	for ix in range(N_CELLS):
-		var bits = 0	
+		#var bits = 0		# 以前の状態
 		if get_cell_numer(ix) != 0:		# 数字が入っている場合
 			for i in range(N_HORZ):
 				memo_labels[ix][i].text = ""
 		else:							# 数字が入っていない場合
 			var mask = BIT_1
 			for i in range(N_HORZ):
-				if memo_labels[ix][i].text != "": bits |= mask
+				#if memo_labels[ix][i].text != "": bits |= mask
 				if (candidates_bit[ix] & mask) != 0:
 					memo_labels[ix][i].text = String(i+1)
 				else:
 					memo_labels[ix][i].text = ""
 				mask <<= 1
-		lst.push_back(bits)
-	return lst
+		#lst.push_back(bits)
+	return lst0
 func _on_AutoMemoButton_pressed():
 	if paused: return		# ポーズ中
 	if qCreating: return	# 問題生成中
 	if g.env[g.KEY_N_COINS] < AUTO_MEMO_N_COINS: return
-	add_falling_coin()
-	add_falling_coin()
+	var lst = do_auto_memo()
+	if lst == []: return
+	for i in range(AUTO_MEMO_N_COINS):
+		add_falling_coin()
 	g.env[g.KEY_N_COINS] -= AUTO_MEMO_N_COINS
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.save_environment()
-	var lst = do_auto_memo()
 	push_to_undo_stack([UNDO_TYPE_AUTO_MEMO, lst])
 	update_all_status()
 	pass # Replace with function body.
