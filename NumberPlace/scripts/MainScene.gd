@@ -236,11 +236,13 @@ func gen_qName():
 		var r = rng.randi_range(0, 10+26-1)
 		if r < 10: g.qName += String(r+1)
 		else: g.qName += "%c" % (r - 10 + 0x61)		# 0x61 is 'a'
+func classText() -> String:
+	if g.qLevel == LVL_BEGINNER: return "【入門】"
+	elif g.qLevel == 1: return "【初級】"
+	elif g.qLevel == 2: return "【初中級】"
+	return ""
 func titleText() -> String:
-	var tt = ""
-	if g.qLevel == LVL_BEGINNER: tt = "【入門】"
-	elif g.qLevel == 1: tt = "【初級】"
-	elif g.qLevel == 2: tt = "【初中級】"
+	var tt = classText()
 	#elif g.qLevel == LVL_NOT_SYMMETRIC: tt = "【非対称】"
 	return tt + "“" + g.qName + "”"
 func update_NEmptyLabel():
@@ -1588,7 +1590,10 @@ func _on_DelMemoButton_pressed():
 
 
 func _on_TweetButton_pressed():
-	var txt = "%23さくさくナンプレ"
+	var txt = "http://vivi.dyndns.org/Godot/NumberPlace/ %23さくさくナンプレ "
+	if g.todaysQuest:		# 今日の問題の場合
+		txt += "今日の問題" + classText()
+	txt += "問題を解きました。"
 	OS.shell_open("https://twitter.com/intent/tweet?text=" + txt)
 	g.env[g.KEY_N_COINS] += 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
