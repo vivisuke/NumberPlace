@@ -1299,6 +1299,8 @@ func _on_SoundButton_pressed():
 	pass # Replace with function body.
 
 
+func _on_TopButton_pressed():
+	get_tree().change_scene("res://TopScene.tscn")
 func _on_BackButton_pressed():
 	if g.todaysQuest:
 		get_tree().change_scene("res://TodaysQuest.tscn")
@@ -1621,3 +1623,5 @@ func _on_DotButton2_toggled(button_pressed):
 	on_dotButtaonPressed(2)
 func _on_DotButton3_toggled(button_pressed):
 	on_dotButtaonPressed(3)
+
+
