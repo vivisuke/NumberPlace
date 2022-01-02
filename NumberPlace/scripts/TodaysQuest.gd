@@ -22,6 +22,8 @@ func _ready():
 		if g.tqSolvedSec[i] >= 0:
 			var btn = get_node("Button%d" % i)
 			btn.set_button_icon($SolvedTexture.texture)
+			var tm = "N/A" if g.tqSolvedSec[i] < 0 else g.sec_to_MSStr(g.tqSolvedSec[i])
+			get_node("Button%d/TimeLabel" % i).text = tm
 	$DateLabel.text = g.today_string()
 	#
 	#print(g.yesterday_string())

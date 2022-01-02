@@ -37,6 +37,11 @@ const TodaysQuestFileName	= "user://NumberPlace_todaysQuest.dat"
 func _ready():
 	pass # Replace with function body.
 #
+func sec_to_MSStr(t):
+	var sec = t % 60
+	var mnt = t / 60
+	return "%02d:%02d" % [mnt, sec]
+#
 func today_string():
 	var d = OS.get_date()
 	return "%04d/%02d/%02d" % [d["year"], d["month"], d["day"]]
