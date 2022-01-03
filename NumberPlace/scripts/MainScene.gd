@@ -309,7 +309,9 @@ func on_solved():
 	update_all_status()
 func remove_all_memo_at(ix):
 	for i in range(N_HORZ):
-		memo_labels[ix][i].text = ""
+		if memo_labels[ix][i].text != "":
+			add_falling_memo(int(memo_labels[ix][i].text), ix)
+			memo_labels[ix][i].text = ""
 func remove_all_memo():
 	for ix in range(N_CELLS):
 		for i in range(N_HORZ):
@@ -324,10 +326,12 @@ func remove_memo_num(ix : int, num : int):		# ix に num を入れたときに�
 	for h in range(N_HORZ):
 		var ix2 = xyToIX(h, y)
 		if memo_labels[ix2][num-1].text != "":
+			add_falling_memo(num, ix2)
 			memo_labels[ix2][num-1].text = ""
 			lst.push_back(ix2)
 		ix2 = xyToIX(x, h)
 		if memo_labels[ix2][num-1].text != "":
+			add_falling_memo(num, ix2)
 			memo_labels[ix2][num-1].text = ""
 			lst.push_back(ix2)
 	var x0 = x - x % 3
@@ -336,6 +340,7 @@ func remove_memo_num(ix : int, num : int):		# ix に num を入れたときに�
 		for h in range(3):
 			var ix2 = xyToIX(x0 + h, y0 + v)
 			if memo_labels[ix2][num-1].text != "":
+				add_falling_memo(num, ix2)
 				memo_labels[ix2][num-1].text = ""
 				lst.push_back(ix2)
 	return lst
@@ -1131,7 +1136,10 @@ func num_button_pressed(num : int, button_pressed):
 						push_to_undo_stack([UNDO_TYPE_CELL, cur_cell_ix, old, num, lst, mb])
 						#undo_stack.back().back() = lst
 						input_labels[cur_cell_ix].text = String(num)
-					for i in range(N_HORZ): memo_labels[cur_cell_ix][i].text = ""
+					for i in range(N_HORZ):
+						if memo_labels[cur_cell_ix][i].text != "":
+							add_falling_memo(int(memo_labels[cur_cell_ix][i].text), cur_cell_ix)
+							memo_labels[cur_cell_ix][i].text = ""
 					num_buttons[num].pressed = false
 					update_all_status()
 					sound_effect()
