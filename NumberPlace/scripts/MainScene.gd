@@ -389,7 +389,9 @@ func _input(event):
 				else:
 					# undone: Undo/Redo 対応
 					for i in range(N_HORZ):
-						memo_labels[ix][i].text = ""	# メモ数字削除
+						if memo_labels[ix][i].text != "":
+							add_falling_memo(int(memo_labels[ix][i].text), ix)
+							memo_labels[ix][i].text = ""	# メモ数字削除
 			# 数字ボタン選択状態の場合 → セルにその数字を入れる or メモ数字反転
 			elif !memo_mode:
 				if input_labels[ix].text != "":
