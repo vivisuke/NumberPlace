@@ -315,7 +315,9 @@ func remove_all_memo_at(ix):
 func remove_all_memo():
 	for ix in range(N_CELLS):
 		for i in range(N_HORZ):
-			memo_labels[ix][i].text = ""
+			if memo_labels[ix][i].text != "":
+				add_falling_memo(int(memo_labels[ix][i].text), ix)
+				memo_labels[ix][i].text = ""
 	for v in range(N_VERT*3):
 		for h in range(N_HORZ*3):
 			$Board/MemoTileMap.set_cell(h, v, TILE_NONE)
