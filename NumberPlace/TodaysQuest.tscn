@@ -112,7 +112,7 @@ margin_top = 20.0
 margin_right = 445.0
 margin_bottom = 37.0
 custom_fonts/font = SubResource( 7 )
-text = "HH:MM:SS"
+text = "N/A"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -137,7 +137,7 @@ margin_top = 20.0
 margin_right = 445.0
 margin_bottom = 37.0
 custom_fonts/font = SubResource( 7 )
-text = "HH:MM:SS"
+text = "N/A"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -162,7 +162,7 @@ margin_top = 20.0
 margin_right = 445.0
 margin_bottom = 37.0
 custom_fonts/font = SubResource( 7 )
-text = "HH:MM:SS"
+text = "N/A"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false

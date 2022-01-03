@@ -145,6 +145,7 @@ var ClueLabel = load("res://ClueLabel.tscn")
 var InputLabel = load("res://InputLabel.tscn")
 var MemoLabel = load("res://MemoLabel.tscn")
 var FallingChar = load("res://FallingChar.tscn")
+var FallingMemo = load("res://FallingMemo.tscn")
 var FallingCoin = load("res://FallingCoin.tscn")
 var rng = RandomNumberGenerator.new()
 
@@ -342,6 +343,7 @@ func flip_memo_num(ix : int, num : int):
 	if memo_labels[ix][num-1].text == "":
 		memo_labels[ix][num-1].text = String(num)
 	else:
+		add_falling_memo(int(memo_labels[ix][num-1].text), ix)
 		memo_labels[ix][num-1].text = ""
 func clear_all_memo(ix):
 	for i in range(N_HORZ): memo_labels[ix][i].text = ""
@@ -1070,6 +1072,17 @@ func set_num_cursor(num):	# 当該ボタンだけを選択状態に
 	cur_num = num
 	for i in range(num_buttons.size()):
 		num_buttons[i].pressed = (i == num)
+func add_falling_memo(num : int, ix : int):
+	var fc = FallingMemo.instance()
+	var x = (ix % N_HORZ) * 3 + (num-1) % 3
+	var y = (ix / N_HORZ) * 3 + (num-1) / 3
+	fc.position = $Board.rect_position + Vector2(x*CELL_WIDTH/3, y*CELL_WIDTH/3)
+	fc.get_node("Label").text = String(num)
+	var th = rng.randf_range(0, 3.1415926535*2)
+	fc.linear_velocity = Vector2(cos(th), sin(th))*100
+	fc.angular_velocity = rng.randf_range(0, 1)
+	#fc.set_scale(1.0/3.0)
+	add_child(fc)
 func add_falling_char(num_str, ix : int):
 	var fc = FallingChar.instance()
 	var x = ix % N_HORZ
