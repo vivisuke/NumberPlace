@@ -3,10 +3,10 @@ extends Node2D
 var buttons = []
 onready var g = get_node("/root/Global")
 
-func sec_to_MSStr(t):
-	var sec = t % 60
-	var mnt = t / 60
-	return "%02d:%02d" % [mnt, sec]
+#func sec_to_MSStr(t):
+#	var sec = t % 60
+#	var mnt = t / 60
+#	return "%02d:%02d" % [mnt, sec]
 func _ready():
 	g.load_environment()
 	if !g.env.has(g.KEY_LOGIN_DATE) || g.env[g.KEY_LOGIN_DATE] != g.today_string():
@@ -24,11 +24,11 @@ func _ready():
 			txt += "N/A"
 		else:
 			var avg : int = int(g.stats[i]["TotalSec"] / n)
-			txt += sec_to_MSStr(avg)
+			txt += g.sec_to_MSStr(avg)
 		buttons[i].get_node("AveTimeLabel").text = txt
 		txt = "最短タイム: "
 		if g.stats[i].has("BestTime"):
-			txt += sec_to_MSStr(g.stats[i]["BestTime"])
+			txt += g.sec_to_MSStr(g.stats[i]["BestTime"])
 		else:
 			txt += "N/A"
 		buttons[i].get_node("BestTimeLabel").text = txt
