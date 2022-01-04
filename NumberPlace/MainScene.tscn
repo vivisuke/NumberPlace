@@ -512,30 +512,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NextButton" type="TextureButton" parent="."]
-margin_left = 435.0
-margin_top = 765.0
-margin_right = 483.0
-margin_bottom = 813.0
-texture_normal = ExtResource( 23 )
-texture_pressed = ExtResource( 24 )
-texture_disabled = ExtResource( 32 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="NextButton"]
-margin_top = 48.0
-margin_right = 48.0
-margin_bottom = 67.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 12 )
-text = "次問題"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="DeselectButton" type="TextureButton" parent="."]
 margin_left = 77.0
 margin_top = 765.0
@@ -1170,7 +1146,6 @@ texture_pressed = ExtResource( 70 )
 texture_disabled = ExtResource( 71 )
 
 [node name="SolvedLayer" type="ColorRect" parent="."]
-visible = false
 margin_top = 600.0
 margin_right = 500.0
 margin_bottom = 900.0
@@ -1249,6 +1224,7 @@ __meta__ = {
 }
 
 [node name="NextButton" type="TextureButton" parent="SolvedLayer"]
+visible = false
 margin_left = 435.0
 margin_top = 165.0
 margin_right = 483.0
@@ -1307,6 +1283,30 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="NextButton" type="TextureButton" parent="."]
+margin_left = 435.0
+margin_top = 765.0
+margin_right = 483.0
+margin_bottom = 813.0
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
+texture_disabled = ExtResource( 32 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="NextButton"]
+margin_top = 48.0
+margin_right = 48.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "次問題"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TextureRestart" type="TextureRect" parent="."]
 margin_left = 553.0
 margin_right = 601.0
@@ -1343,7 +1343,6 @@ __meta__ = {
 [connection signal="pressed" from="RedoButton" to="." method="_on_RedoButton_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
-[connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
 [connection signal="pressed" from="DeselectButton" to="." method="_on_DeselectButton_pressed"]
 [connection signal="toggled" from="DeleteButton" to="." method="_on_DeleteButton_toggled"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
@@ -1373,3 +1372,4 @@ __meta__ = {
 [connection signal="pressed" from="SolvedLayer/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="SolvedLayer/TweetButton" to="." method="_on_TweetButton_pressed"]
 [connection signal="pressed" from="SolvedLayer/NextButton" to="." method="_on_NextButton_pressed"]
+[connection signal="pressed" from="NextButton" to="." method="_on_NextButton_pressed"]
