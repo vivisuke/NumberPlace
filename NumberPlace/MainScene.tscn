@@ -1146,6 +1146,7 @@ texture_pressed = ExtResource( 70 )
 texture_disabled = ExtResource( 71 )
 
 [node name="SolvedLayer" type="ColorRect" parent="."]
+visible = false
 margin_top = 600.0
 margin_right = 500.0
 margin_bottom = 900.0

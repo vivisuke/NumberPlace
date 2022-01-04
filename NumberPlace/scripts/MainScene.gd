@@ -1397,6 +1397,7 @@ func update_hint_dots():
 	#print("hint_ix = ", hint_ix)
 func show_hint():
 	hint_showed = true
+	$NextButton.hide()
 	hint_ix = 0
 	update_hint_dots()
 	hint_next_pos0 = $HintLayer/NextHintButton.rect_position
@@ -1474,6 +1475,7 @@ func _on_HintButton_pressed():
 
 func close_hint():
 	$HintLayer.hide()
+	$NextButton.show()
 	hint_showed = false
 	set_num_cursor(cur_num)
 	g.show_hint_guide = false

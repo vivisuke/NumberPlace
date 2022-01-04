@@ -13,6 +13,7 @@ func _ready():
 		g.env[g.KEY_LOGIN_DATE] = g.today_string()
 		g.env[g.KEY_N_COINS] += g.DAYLY_N_COINS
 		g.save_environment()
+	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.load_stats()
 	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
