@@ -153,6 +153,7 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	rng.randomize()
+	g.auto_save(false)		# false for 保存データ無し
 	print("g.qLevel = ", g.qLevel)		# 問題難易度レベル、0, 1, 2
 	if g.qNumber != 0:
 		g.qName = "%06d" % g.qNumber
@@ -424,6 +425,9 @@ func _input(event):
 		sound_effect()
 		if !solvedStat && is_solved():
 			on_solved()
+			g.auto_save(false)		# false for 保存データ無し
+		else:
+			g.auto_save(true)
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
 		if paused: return
@@ -1154,6 +1158,7 @@ func num_button_pressed(num : int, button_pressed):
 					push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
 					flip_memo_num(cur_cell_ix, num)
 		num_buttons[num].pressed = false
+		g.auto_save(true)
 	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
@@ -1327,6 +1332,7 @@ func _on_SoundButton_pressed():
 func _on_TopButton_pressed():
 	get_tree().change_scene("res://TopScene.tscn")
 func _on_BackButton_pressed():
+	g.auto_save(false)
 	if g.todaysQuest:
 		get_tree().change_scene("res://TodaysQuest.tscn")
 	elif g.qNumber == 0:
@@ -1574,6 +1580,7 @@ func _on_AutoMemoButton_pressed():
 	g.save_environment()
 	push_to_undo_stack([UNDO_TYPE_AUTO_MEMO, lst])
 	update_all_status()
+	g.auto_save(true)
 	pass # Replace with function body.
 
 
@@ -1617,6 +1624,7 @@ func _on_DelMemoButton_pressed():
 	var lst = get_memo()
 	push_to_undo_stack([UNDO_TYPE_DEL_MEMO, lst])
 	remove_all_memo()
+	g.auto_save(true)
 	pass # Replace with function body.
 
 

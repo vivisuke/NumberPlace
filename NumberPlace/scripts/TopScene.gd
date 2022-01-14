@@ -15,6 +15,22 @@ func _ready():
 		g.save_environment()
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])
 	g.load_stats()
+	var data = g.auto_load()
+	print("auto_loaded: ", data)
+	if data != {} && data["solving"]:
+		g.qLevel = data["qLevel"]
+		g.qNumber = data["qNumber"]
+		g.qName = data["qName"]
+		g.qRandom = data["qRandom"]
+		g.todaysQuest = data["todaysQuest"]
+		if g.todaysQuest:
+			if data["today"] == g.today_string():	# 今日の問題 && 日付が変わっていない場合
+				print("todaysQuest")
+				get_tree().change_scene("res://MainScene.tscn")
+				return
+		else:
+			get_tree().change_scene("res://MainScene.tscn")
+			return
 	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
 	for i in range(6):

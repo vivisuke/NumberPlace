@@ -28,6 +28,7 @@ var hint_type : int = -1
 var candidates_bit = []		# 入力可能ビット論理和
 var cell_bit = []			# 現在の状態
 
+const AutoSaveFileName	= "user://NumberPlace_autosave.dat"		# 自動保存ファイル
 const EnvFileName	= "user://NumberPlace_env.dat"				# 環境ファイル
 const SettingsFileName	= "user://NumberPlace_stgs.dat"
 const StatsFileName		= "user://NumberPlace_stats.dat"
@@ -49,6 +50,27 @@ func yesterday_string():
 	var u = OS.get_unix_time_from_datetime(OS.get_datetime())
 	var y = OS.get_datetime_from_unix_time(u - 60*60*24)	# 24時間前
 	return "%04d/%02d/%02d" % [y["year"], y["month"], y["day"]]
+#
+func auto_load():
+	var file = File.new()
+	if !file.file_exists(AutoSaveFileName): return {}
+	file.open(AutoSaveFileName, File.READ)
+	var data = file.get_var()
+	file.close()
+	return data
+func auto_save(solving : bool):
+	var data = {}
+	data["solving"] = solving
+	data["today"] = today_string()
+	data["qLevel"] = qLevel
+	data["qNumber"] = qNumber
+	data["qName"] = qName
+	data["qRandom"] = qRandom
+	data["todaysQuest"] = todaysQuest
+	var file = File.new()
+	file.open(AutoSaveFileName, File.WRITE)
+	file.store_var(data)
+	file.close()
 #
 func load_environment():
 	var file = File.new()
