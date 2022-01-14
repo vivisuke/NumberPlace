@@ -27,6 +27,7 @@ var hint_bit : int = 0		# ヒントで入る数字ビット
 var hint_type : int = -1
 var candidates_bit = []		# 入力可能ビット論理和
 var cell_bit = []			# 現在の状態
+var saved_data = {}			# 自動保存データ
 
 const AutoSaveFileName	= "user://NumberPlace_autosave.dat"		# 自動保存ファイル
 const EnvFileName	= "user://NumberPlace_env.dat"				# 環境ファイル
@@ -53,14 +54,17 @@ func yesterday_string():
 #
 func auto_load():
 	var file = File.new()
-	if !file.file_exists(AutoSaveFileName): return {}
-	file.open(AutoSaveFileName, File.READ)
-	var data = file.get_var()
-	file.close()
-	return data
-func auto_save(solving : bool):
+	if !file.file_exists(AutoSaveFileName):
+		saved_data = {}
+	else:
+		file.open(AutoSaveFileName, File.READ)
+		saved_data = file.get_var()
+		file.close()
+	return saved_data
+func auto_save(solving : bool, board : Array):
 	var data = {}
 	data["solving"] = solving
+	data["board"] = board
 	data["today"] = today_string()
 	data["qLevel"] = qLevel
 	data["qNumber"] = qNumber

@@ -22,6 +22,7 @@ const BIT_7 = 1<<6
 const BIT_8 = 1<<7
 const BIT_9 = 1<<8
 const ALL_BITS = (1<<N_HORZ) - 1
+const BIT_MEMO = 1<<10
 const TILE_NONE = -1
 const TILE_CURSOR = 0
 const TILE_LTBLUE = 1				# 強調カーソル（薄青）
@@ -153,7 +154,7 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	rng.randomize()
-	g.auto_save(false)		# false for 保存データ無し
+	g.auto_save(false, [])		# false for 保存データ無し
 	print("g.qLevel = ", g.qLevel)		# 問題難易度レベル、0, 1, 2
 	if g.qNumber != 0:
 		g.qName = "%06d" % g.qNumber
@@ -425,9 +426,9 @@ func _input(event):
 		sound_effect()
 		if !solvedStat && is_solved():
 			on_solved()
-			g.auto_save(false)		# false for 保存データ無し
+			g.auto_save(false, [])		# false for 保存データ無し
 		else:
-			g.auto_save(true)
+			g.auto_save(true, get_cell_state())
 	if event is InputEventKey && event.is_pressed():
 		print(event.as_text())
 		if paused: return
@@ -559,7 +560,17 @@ func update_all_status():
 	$CheckButton.disabled = g.env[g.KEY_N_COINS] <= 0
 	$HintButton.disabled = g.env[g.KEY_N_COINS] <= 0
 	$AutoMemoButton.disabled = g.env[g.KEY_N_COINS] < AUTO_MEMO_N_COINS
-	
+
+func get_cell_state() -> Array:
+	var s = []		#
+	for ix in range(N_CELLS):
+		if clue_labels[ix].text != "":
+			s.push_back(int(clue_labels[ix].text))
+		elif input_labels[ix].text != "":
+			s.push_back(int(input_labels[ix].text))
+		else:
+			s.push_back(get_memo_bits(ix) + BIT_MEMO)
+	return s
 func get_cell_numer(ix) -> int:		# ix 位置に入っている数字の値を返す、0 for 空欄
 	if clue_labels[ix].text != "":
 		return int(clue_labels[ix].text)
@@ -1158,7 +1169,7 @@ func num_button_pressed(num : int, button_pressed):
 					push_to_undo_stack([UNDO_TYPE_MEMO, cur_cell_ix, num])
 					flip_memo_num(cur_cell_ix, num)
 		num_buttons[num].pressed = false
-		g.auto_save(true)
+		g.auto_save(true, get_cell_state())
 	else:	# セルが選択されていない場合
 		#cur_num = num
 		if button_pressed:
@@ -1332,7 +1343,7 @@ func _on_SoundButton_pressed():
 func _on_TopButton_pressed():
 	get_tree().change_scene("res://TopScene.tscn")
 func _on_BackButton_pressed():
-	g.auto_save(false)
+	g.auto_save(false, [])
 	if g.todaysQuest:
 		get_tree().change_scene("res://TodaysQuest.tscn")
 	elif g.qNumber == 0:
@@ -1580,7 +1591,7 @@ func _on_AutoMemoButton_pressed():
 	g.save_environment()
 	push_to_undo_stack([UNDO_TYPE_AUTO_MEMO, lst])
 	update_all_status()
-	g.auto_save(true)
+	g.auto_save(true, get_cell_state())
 	pass # Replace with function body.
 
 
@@ -1624,7 +1635,7 @@ func _on_DelMemoButton_pressed():
 	var lst = get_memo()
 	push_to_undo_stack([UNDO_TYPE_DEL_MEMO, lst])
 	remove_all_memo()
-	g.auto_save(true)
+	g.auto_save(true, get_cell_state())
 	pass # Replace with function body.
 
 
