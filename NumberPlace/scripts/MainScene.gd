@@ -108,6 +108,7 @@ var in_button_pressed = false	# ボタン押下処理中
 var hint_next_pos			# 次ボタン位置
 var hint_next_pos0			# 次ボタン初期位置
 var hint_next_vy			# 次ボタン速度
+var saved_cell_data = []
 
 #var hint_next_scale = 1.0	# ヒント次ボタン表示スケール
 #var hint_num				# ヒントで確定する数字、[1, 9]
@@ -154,6 +155,7 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	rng.randomize()
+	if g.saved_data != {}: saved_cell_data = g.saved_data["board"]
 	g.auto_save(false, [])		# false for 保存データ無し
 	print("g.qLevel = ", g.qLevel)		# 問題難易度レベル、0, 1, 2
 	if g.qNumber != 0:
@@ -516,6 +518,12 @@ func _process(delta):
 			print("diffculty = ", diffculty)
 			print("g.qLevel = ", g.qLevel)
 			print_cells()
+			if saved_cell_data.size() == N_CELLS:	# 自動保存データがある場合
+				for ix in range(N_CELLS):
+					print(clue_labels[ix].text)
+					if clue_labels[ix].text == "":
+						if (saved_cell_data[ix] & BIT_MEMO) == 0:
+							input_labels[ix].text = String(saved_cell_data[ix])
 			elapsedTime = 0.0
 	if shock_wave_timer >= 0:
 		shock_wave_timer += delta
