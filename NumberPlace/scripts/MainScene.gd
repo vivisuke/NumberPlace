@@ -116,7 +116,8 @@ var hint_numstr				# ヒントで確定する数字、[1, 9]
 var hint_ix = 0				# 0, 1, 2, ...
 var hint_texts = []			# ヒントテキスト配列
 #var restarted = false
-var elapsedTime = 0.0   	# 経過時間（単位：秒）
+#var elapsedTime = 0.0   	# 経過時間（単位：秒）
+var saved_time
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
 #var optGrade = -1			# 問題グレード、0: 入門、1:初級、2:ノーマル（初中級）
@@ -155,7 +156,9 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	rng.randomize()
-	if g.saved_data != {}: saved_cell_data = g.saved_data["board"]
+	if g.saved_data != {}:
+		saved_cell_data = g.saved_data["board"]
+		saved_time = g.saved_data["elapsedTime"] if  g.saved_data.has("elapsedTime") else 0.0
 	g.auto_save(false, [])		# false for 保存データ無し
 	print("g.qLevel = ", g.qLevel)		# 問題難易度レベル、0, 1, 2
 	if g.qNumber != 0:
@@ -280,8 +283,8 @@ func on_solved():
 		$AudioSolved.play()		# 効果音再生
 	var ix = g.qLevel
 	if g.todaysQuest:		# 今日の問題の場合
-		if g.tqSolvedSec[ix] < 0 || int(elapsedTime) < g.tqSolvedSec[ix]:
-			g.tqSolvedSec[ix] = int(elapsedTime)	# 最短クリア時間更新
+		if g.tqSolvedSec[ix] < 0 || int(g.elapsedTime) < g.tqSolvedSec[ix]:
+			g.tqSolvedSec[ix] = int(g.elapsedTime)	# 最短クリア時間更新
 		if is_all_solved_todaysQuest() && g.tqConsSolvedDays != g.tqConsYesterdayDays + 1:
 			# 全問クリアの場合
 			g.tqConsSolvedDays = g.tqConsYesterdayDays + 1
@@ -304,11 +307,11 @@ func on_solved():
 		else:
 			g.stats[ix]["NSolved"] = 1
 		if g.stats[ix].has("TotalSec"):
-			g.stats[ix]["TotalSec"] += int(elapsedTime)
+			g.stats[ix]["TotalSec"] += int(g.elapsedTime)
 		else:
-			g.stats[ix]["TotalSec"] = int(elapsedTime)
-		if !g.stats[ix].has("BestTime") || int(elapsedTime) < g.stats[ix]["BestTime"]:
-			g.stats[ix]["BestTime"] = int(elapsedTime)
+			g.stats[ix]["TotalSec"] = int(g.elapsedTime)
+		if !g.stats[ix].has("BestTime") || int(g.elapsedTime) < g.stats[ix]["BestTime"]:
+			g.stats[ix]["BestTime"] = int(g.elapsedTime)
 		g.save_stats()
 	update_all_status()
 func remove_all_memo_at(ix):
@@ -454,8 +457,8 @@ func time_string(sec : int):
 	return "%02d:%02d:%02d" % [h, m, sec]
 func _process(delta):
 	if !is_solved() && !paused:
-		elapsedTime += delta
-		$TimeLabel.text = time_string(int(elapsedTime))
+		g.elapsedTime += delta
+		$TimeLabel.text = time_string(int(g.elapsedTime))
 	#if cur_num != 0: set_num_cursor(cur_num)
 	if !rmix_list.empty():		# 問題自動生成中
 		var sv = cell_bit.duplicate()
@@ -526,7 +529,10 @@ func _process(delta):
 							input_labels[ix].text = String(saved_cell_data[ix])
 						else:
 							flip_memo_bits(ix, saved_cell_data[ix])
-			elapsedTime = 0.0
+				g.elapsedTime = saved_time
+				g.auto_save(true, saved_cell_data)
+			else:
+				g.elapsedTime = 0.0
 	if shock_wave_timer >= 0:
 		shock_wave_timer += delta
 		$CanvasLayer/ColorRect.material.set_shader_param("size", shock_wave_timer)
@@ -1655,7 +1661,7 @@ func _on_TweetButton_pressed():
 		txt += "今日の問題" + classText()
 	elif g.qNumber != 0:	# 問題集の場合
 		txt += classText() + ("問題集 %%23%06d " % g.qNumber)
-	txt += "を " + time_string(int(elapsedTime)) + " で解きました。"
+	txt += "を " + time_string(int(g.elapsedTime)) + " で解きました。"
 	OS.shell_open("https://twitter.com/intent/tweet?text=" + txt)
 	g.env[g.KEY_N_COINS] += 1
 	$CoinButton/NCoinLabel.text = String(g.env[g.KEY_N_COINS])

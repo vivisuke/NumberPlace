@@ -20,6 +20,7 @@ var tqSolvedSec = [-1, -1, -1]		# 各今日の問題クリアタイム、-1 for 
 var tqConsYesterdayDays = 0			# 昨日までの連続クリア日数
 var tqConsSolvedDays = 0			# 連続クリア日数
 var tqMaxConsSolvedDays = 0			# 最大連続クリア日数
+var elapsedTime = 0.0   	# 経過時間（単位：秒）
 
 var show_hint_guide = false
 var hint_pos : int = -1			# ヒントで数字が入る位置
@@ -70,6 +71,7 @@ func auto_save(solving : bool, board : Array):
 	data["qNumber"] = qNumber
 	data["qName"] = qName
 	data["qRandom"] = qRandom
+	data["elapsedTime"] = elapsedTime
 	data["todaysQuest"] = todaysQuest
 	var file = File.new()
 	file.open(AutoSaveFileName, File.WRITE)
