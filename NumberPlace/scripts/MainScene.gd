@@ -88,9 +88,10 @@ const HINT_NAKID_SINGLE = [
 	"ちなみに、この解法テクニックを\n「裸のシングル」と呼びます。", false,
 ]
 const HINT_HIDDEN_SINGLE = [
-	"とある数字が、強調された領域の一箇所に\nしか入れることができません。", false,
-	"この場合、バツの場所に“%d”を入れる\nことが出来ません。", true,
-	"したがって、バツがない空欄には“%d”が\n入ります。", true, 
+	#"とある数字が、強調された領域の一箇所に\nしか入れることができません。", false,
+	"ピンク強調された部分のバツの場所には\n“%d”を入れることが出来ません。", true,
+	#"したがって、ピンク強調された部分のバツ\nがない空欄には“%d”が入ります。", true, 
+	"したがって、“%d”を入れることができる\nのは、ピンク強調された部分のバツがな\nいところだけです。", true, 
 	"ちなみに、この解法テクニックを\n「隠れたシングル」と呼びます。", true,
 ]
 
@@ -156,7 +157,8 @@ onready var g = get_node("/root/Global")
 
 func _ready():
 	rng.randomize()
-	if g.saved_data != {}:
+	print(g.saved_data)
+	if g.saved_data != {} && g.saved_data.has("board"):
 		saved_cell_data = g.saved_data["board"]
 		saved_time = g.saved_data["elapsedTime"] if  g.saved_data.has("elapsedTime") else 0.0
 	g.auto_save(false, [])		# false for 保存データ無し
@@ -458,7 +460,10 @@ func time_string(sec : int):
 func _process(delta):
 	if !is_solved() && !paused:
 		g.elapsedTime += delta
-		$TimeLabel.text = time_string(int(g.elapsedTime))
+		var ts = time_string(int(g.elapsedTime))
+		if $TimeLabel.text != ts:
+			$TimeLabel.text = ts
+			g.auto_save(true, get_cell_state())
 	#if cur_num != 0: set_num_cursor(cur_num)
 	if !rmix_list.empty():		# 問題自動生成中
 		var sv = cell_bit.duplicate()
@@ -1437,7 +1442,8 @@ func show_hint():
 	hint_next_pos = hint_next_pos0
 	hint_next_vy = INIT_HINT_NEXT_VY
 	$HintLayer.show()
-	$HintLayer/Label.text = hint_texts[0]
+	#$HintLayer/Label.text = hint_texts[0]
+	$HintLayer/Label.text = hint_texts[0].replace("%d", hint_numstr)
 	$HintLayer/PageLabel.text = "1/%d" % (hint_texts.size()/2)
 	$HintLayer/PrevHintButton.disabled = true
 	$HintLayer/NextHintButton.disabled = hint_ix == hint_texts.size() - 2

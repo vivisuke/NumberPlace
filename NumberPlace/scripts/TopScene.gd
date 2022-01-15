@@ -31,6 +31,8 @@ func _ready():
 		else:
 			get_tree().change_scene("res://MainScene.tscn")
 			return
+	g.auto_save(false, [])
+	g.saved_data = {}
 	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
 	for i in range(6):
