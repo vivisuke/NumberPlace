@@ -524,6 +524,8 @@ func _process(delta):
 					if clue_labels[ix].text == "":
 						if (saved_cell_data[ix] & BIT_MEMO) == 0:
 							input_labels[ix].text = String(saved_cell_data[ix])
+						else:
+							flip_memo_bits(ix, saved_cell_data[ix])
 			elapsedTime = 0.0
 	if shock_wave_timer >= 0:
 		shock_wave_timer += delta
