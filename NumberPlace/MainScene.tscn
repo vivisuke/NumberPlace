@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=2]
+[gd_scene load_steps=96 format=2]
 
 [ext_resource path="res://scripts/TitleBar.gd" type="Script" id=1]
 [ext_resource path="res://scripts/MainScene.gd" type="Script" id=2]
@@ -255,6 +255,9 @@ font_data = ExtResource( 16 )
 
 [sub_resource type="DynamicFont" id=19]
 size = 24
+font_data = ExtResource( 27 )
+
+[sub_resource type="DynamicFont" id=28]
 font_data = ExtResource( 27 )
 
 [sub_resource type="DynamicFont" id=27]
@@ -1248,6 +1251,15 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Label" type="Label" parent="SolvedLayer"]
+margin_left = 14.0
+margin_top = 133.0
+margin_right = 54.0
+margin_bottom = 147.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 28 )
+text = "※ tweet で結果をツイートするとコインが１個増えます。"
 
 [node name="CoinButton" type="TextureButton" parent="."]
 margin_left = 14.0
