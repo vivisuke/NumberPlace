@@ -17,7 +17,7 @@ func _ready():
 	g.load_stats()
 	var data = g.auto_load()
 	print("auto_loaded: ", data)
-	if data != {} && data["solving"]:
+	if data != {} && data.has("solving") && data["solving"]:
 		g.qLevel = data["qLevel"]
 		g.qNumber = data["qNumber"]
 		g.qName = data["qName"]
@@ -28,6 +28,8 @@ func _ready():
 				print("todaysQuest")
 				get_tree().change_scene("res://MainScene.tscn")
 				return
+			else:
+				g.qName = ""
 		else:
 			get_tree().change_scene("res://MainScene.tscn")
 			return
