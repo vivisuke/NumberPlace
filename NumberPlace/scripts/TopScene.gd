@@ -30,6 +30,7 @@ func _ready():
 				return
 			else:
 				g.qName = ""
+				g.todaysQuest = false
 		else:
 			get_tree().change_scene("res://MainScene.tscn")
 			return
