@@ -17,7 +17,7 @@ func _ready():
 		g.tqSolvedSec = [-1, -1, -1]
 	$ConsDaysLabel.text = "連続クリア日数：%d" % g.tqConsSolvedDays
 	$ConsYesterdayLabel.text = "昨日の連続クリア日数：%d" % g.tqConsYesterdayDays
-	$MaxConsDaysLabel.text = "最大クリア日数：%d" % g.tqMaxConsSolvedDays
+	$MaxConsDaysLabel.text = "最大連続クリア日数：%d" % g.tqMaxConsSolvedDays
 	for i in range(3):
 		if g.tqSolvedSec[i] >= 0:
 			var btn = get_node("Button%d" % i)
