@@ -63,19 +63,22 @@ func auto_load():
 		file.close()
 	return saved_data
 func auto_save(solving : bool, board : Array):
-	var data = {}
-	data["solving"] = solving
-	data["board"] = board
-	data["today"] = today_string()
-	data["qLevel"] = qLevel
-	data["qNumber"] = qNumber
-	data["qName"] = qName
-	data["qRandom"] = qRandom
-	data["elapsedTime"] = elapsedTime
-	data["todaysQuest"] = todaysQuest
+	if !solving:
+		saved_data = {}
+	else:
+		#var data = {}
+		saved_data["solving"] = solving
+		saved_data["board"] = board
+		saved_data["today"] = today_string()
+		saved_data["qLevel"] = qLevel
+		saved_data["qNumber"] = qNumber
+		saved_data["qName"] = qName
+		saved_data["qRandom"] = qRandom
+		saved_data["elapsedTime"] = elapsedTime
+		saved_data["todaysQuest"] = todaysQuest
 	var file = File.new()
 	file.open(AutoSaveFileName, File.WRITE)
-	file.store_var(data)
+	file.store_var(saved_data)
 	file.close()
 #
 func load_environment():

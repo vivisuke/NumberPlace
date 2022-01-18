@@ -161,6 +161,8 @@ func _ready():
 	if g.saved_data != {} && g.saved_data.has("board"):
 		saved_cell_data = g.saved_data["board"]
 		saved_time = g.saved_data["elapsedTime"] if  g.saved_data.has("elapsedTime") else 0.0
+	else:
+		saved_cell_data = []
 	g.auto_save(false, [])		# false for 保存データ無し
 	print("g.qLevel = ", g.qLevel)		# 問題難易度レベル、0, 1, 2
 	if g.qNumber != 0:
@@ -1228,6 +1230,8 @@ func _on_Button9_toggled(button_pressed):
 
 func _on_NextButton_pressed():
 	if paused: return		# ポーズ中
+	g.auto_save(false, [])
+	saved_cell_data = []
 	$SolvedLayer.hide()
 	if g.todaysQuest:		# 今日の問題の場合
 		g.qLevel += 1
