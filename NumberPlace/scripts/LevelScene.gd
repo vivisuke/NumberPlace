@@ -35,7 +35,8 @@ func _ready():
 		btn.set_q_number(ix0 + i + 1)
 		$ScrollContainer/VBoxContainer.add_child(btn)
 		btn.connect("pressed", self, "_on_QuestButton_pressed")
-	
+	#if g.qNumber == 0:
+	#$ScrollContainer.ensure_control_visible(panels[g.qNumber - 1])
 func _process(delta):
 	if !autoScrolled:
 		autoScrolled = true

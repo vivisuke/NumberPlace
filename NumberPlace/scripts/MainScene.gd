@@ -118,6 +118,7 @@ var hint_ix = 0				# 0, 1, 2, ...
 var hint_texts = []			# ヒントテキスト配列
 #var restarted = false
 #var elapsedTime = 0.0   	# 経過時間（単位：秒）
+var confetti_count_down = 0.0	# 0.0より大きい：紙吹雪表示中
 var saved_time
 var nEmpty = 0				# 空欄数
 var nDuplicated = 0			# 重複数字数
@@ -281,6 +282,8 @@ func is_all_solved_todaysQuest():
 func on_solved():
 	$CanvasLayer/ColorRect.show()
 	$SolvedLayer.show()
+	confetti_count_down = 5.0
+	$FakeConfettiParticles.emitting = true
 	shock_wave_timer = 0.0      # start shock wave
 	solvedStat = true
 	if sound:
@@ -466,6 +469,10 @@ func _process(delta):
 		if $TimeLabel.text != ts:
 			$TimeLabel.text = ts
 			g.auto_save(true, get_cell_state())
+	if confetti_count_down > 0.0:
+		confetti_count_down -= delta
+		if confetti_count_down <= 0.0:
+			$FakeConfettiParticles.emitting = false
 	#if cur_num != 0: set_num_cursor(cur_num)
 	if !rmix_list.empty():		# 問題自動生成中
 		var sv = cell_bit.duplicate()
@@ -1230,6 +1237,7 @@ func _on_Button9_toggled(button_pressed):
 
 func _on_NextButton_pressed():
 	if paused: return		# ポーズ中
+	$FakeConfettiParticles.emitting = false
 	g.auto_save(false, [])
 	saved_cell_data = []
 	$SolvedLayer.hide()

@@ -69,6 +69,7 @@ func to_MainScene(qLevel):
 	pass # Replace with function body.
 func to_LevelScene(qLevel):
 	print($LineEdit.text)
+	g.qNumber = 0
 	g.qLevel = qLevel
 	g.qName = $LineEdit.text
 	g.qRandom = false	#$LineEdit.text == ""
