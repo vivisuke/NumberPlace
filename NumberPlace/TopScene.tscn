@@ -408,9 +408,6 @@ custom_fonts/font = SubResource( 7 )
 custom_styles/normal = SubResource( 8 )
 text = "今日の問題　　　  　  "
 icon = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="NSolvedLabel" type="Label" parent="Button6"]
 visible = false

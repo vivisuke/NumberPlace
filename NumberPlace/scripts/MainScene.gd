@@ -493,8 +493,8 @@ func _process(delta):
 		if !can_solve():
 			print("CAN NOT SOLVE")
 			cell_bit = sv
-			for i in range(lst.size()):
-				clue_labels[lst[i]].text = "?"	#bit_to_numstr(cell_bit[lst[i]])
+			##for i in range(lst.size()):
+			##	clue_labels[lst[i]].text = "?"	#bit_to_numstr(cell_bit[lst[i]])
 			#var ix = xyToIX(x, y)
 			#clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 			#ix = xyToIX(y, x)
@@ -777,7 +777,7 @@ func gen_ans_sub(ix : int, line_used):
 
 func gen_ans():		# 解答生成
 	for i in range(N_CELLS):
-		clue_labels[i].text = "?"
+		##clue_labels[i].text = "?"
 		input_labels[i].text = ""
 	for i in range(box_used.size()): box_used[i] = 0
 	for i in range(cell_bit.size()): cell_bit[i] = 0
@@ -848,6 +848,7 @@ func gen_quest_greedy():
 	var stxt = g.qName+String(g.qLevel)
 	if g.qNumber != 0: stxt += "Q"
 	seed(stxt.hash())
+	#seed(0)
 	#optGrade = $OptionButton.get_selected_id()
 	#g.settings["QuestLevel"] = optGrade
 	#g.save_settings()
@@ -895,6 +896,9 @@ func gen_quest_greedy():
 				ix = xyToIX(N_VERT - 1 - y, N_HORZ - 1 - x)
 				clue_labels[ix].text = bit_to_numstr(cell_bit[ix])
 				init_candidates()
+	#for i in range(N_CELLS):
+	#	clue_labels[i].text = bit_to_numstr(cell_bit[i])
+	#rmix_list = []
 	pass
 func search_fullhouse() -> Array:	# [] for not found, [pos, bit, type], type: HORZ | VERT | BOX
 	var pos
