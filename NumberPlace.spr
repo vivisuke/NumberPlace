@@ -397,8 +397,10 @@
 									対処：プロジェクト設定＞表示＞ウィンドウ＞Handheld＞Orientation：portrate
 0393 ◎ C 12/16 12/16 0.101│問題│Android版：画面サイズ不正？
 									対処：Stretch＞Mode：2d、アスペクト：keep
-0393 ● C 12/16            │ToDo│Android版：アプリアイコン
-0393 ● C 12/16            │ToDo│Android版：apk を vivisuke2.keystore で署名
+0393 ◎ C 12/16 12/16 0.101│ToDo│Android版：アプリアイコン
+									export > Android > Launchar Icons
+0393 ◎ C 12/16 12/16 0.101│ToDo│Android版：apk を vivisuke2.keystore で署名
+									export > ketstore
 0393 ● C 12/16            │ToDo│
 0393 ● C 12/16            │ToDo│
 0393 ● C 12/16            │ToDo│
