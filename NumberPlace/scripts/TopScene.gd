@@ -1,5 +1,6 @@
 extends Node2D
 
+var lang
 var buttons = []
 onready var g = get_node("/root/Global")
 
@@ -36,6 +37,10 @@ func _ready():
 			return
 	g.auto_save(false, [])
 	g.saved_data = {}
+	g.load_settings()
+	lang = g.JA if !g.settings.has("Lang") || g.settings["Lang"] == g.JA else g.EN
+	$LangTextureRect/JaButton.pressed = lang == g.JA
+	$LangTextureRect/EnButton.pressed = lang == g.EN
 	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
 	for i in range(6):
@@ -92,4 +97,24 @@ func _on_Button5_pressed():
 
 func _on_Button6_pressed():
 	get_tree().change_scene("res://TodaysQuest.tscn")
+	pass # Replace with function body.
+
+func on_lang_changed():
+	if lang == g.JA:
+		$CoinLabel.text = "毎日アプリを開くと、コインが２個増えます。"
+		$CoinButton/Label.text = "コイン"
+	else:
+		$CoinLabel.text = "open the app every day, you will get 2 coins."
+		$CoinButton/Label.text = "coin"
+func _on_JaButton_toggled(button_pressed):
+	lang = g.JA if button_pressed else g.EN
+	$LangTextureRect/EnButton.pressed = !button_pressed
+	on_lang_changed()
+	pass # Replace with function body.
+
+
+func _on_EnButton_toggled(button_pressed):
+	lang = g.JA if !button_pressed else g.EN
+	$LangTextureRect/JaButton.pressed = !button_pressed
+	on_lang_changed()
 	pass # Replace with function body.

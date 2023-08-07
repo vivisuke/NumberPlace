@@ -11,3 +11,8 @@ data_*/
 #
 *.wasm
 *.apk
+
+#
+windows/
+web/
+html/

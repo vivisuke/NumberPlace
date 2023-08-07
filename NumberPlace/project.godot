@@ -46,7 +46,7 @@ _global_script_class_icons={
 
 config/name="NumberPlace"
 run/main_scene="res://TopScene.tscn"
-config/icon="res://images/icon.png"
+config/icon="res://icons/Sudoku-002.png"
 
 [autoload]
 
@@ -63,6 +63,10 @@ window/stretch/aspect="keep"
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/calendar_button/plugin.cfg" )
+
+[global]
+
+icon=false
 
 [physics]
 

@@ -5,6 +5,9 @@ const DAYLY_N_COINS = 2
 const TODAYS_QUEST_N_COINS = 3
 const KEY_N_COINS = "nCoins"
 const KEY_LOGIN_DATE = "LoginDate"
+enum {
+	JA = 0, EN,			# 日本語/英語
+}
 
 var env = {}			# 環境辞書
 var settings = {}		# 設定辞書
