@@ -101,9 +101,23 @@ func _on_Button6_pressed():
 
 func on_lang_changed():
 	if lang == g.JA:
+		$Button0/Label.text = "入門問題を生成"
+		$Button1/Label.text = "初級問題を生成"
+		$Button2/Label.text = "初中級問題を生成"
+		$Button3/Label.text = "入門問題集"
+		$Button4/Label.text = "初級問題集"
+		$Button5/Label.text = "初中級問題集"
+		$Button6/Label.text = "今日の問題"
 		$CoinLabel.text = "毎日アプリを開くと、コインが２個増えます。"
 		$CoinButton/Label.text = "コイン"
 	else:
+		$Button0/Label.text = "gen Beginner Quest"
+		$Button1/Label.text = "gen Easy Quest"
+		$Button2/Label.text = "gen Easy+ Quest"
+		$Button3/Label.text = "Beginner Q Collection"
+		$Button4/Label.text = "Easy Q Collection"
+		$Button5/Label.text = "Easy+ Q Collection"
+		$Button6/Label.text = "Today's Quest"
 		$CoinLabel.text = "open the app every day, you will get 2 coins."
 		$CoinButton/Label.text = "coin"
 func _on_JaButton_toggled(button_pressed):
