@@ -41,6 +41,7 @@ func _ready():
 	lang = g.JA if !g.settings.has("Lang") || g.settings["Lang"] == g.JA else g.EN
 	$LangTextureRect/JaButton.pressed = lang == g.JA
 	$LangTextureRect/EnButton.pressed = lang == g.EN
+	on_lang_changed()
 	for i in range(6):
 		buttons.push_back(get_node("Button%d" % i))
 	for i in range(6):
@@ -101,6 +102,7 @@ func _on_Button6_pressed():
 
 func on_lang_changed():
 	if lang == g.JA:
+		$SeedLabel.text = "問題名（空欄可）:"
 		$Button0/Label.text = "入門問題を生成"
 		$Button1/Label.text = "初級問題を生成"
 		$Button2/Label.text = "初中級問題を生成"
@@ -111,6 +113,7 @@ func on_lang_changed():
 		$CoinLabel.text = "毎日アプリを開くと、コインが２個増えます。"
 		$CoinButton/Label.text = "コイン"
 	else:
+		$SeedLabel.text = "Quest name:"
 		$Button0/Label.text = "gen Beginner Quest"
 		$Button1/Label.text = "gen Easy Quest"
 		$Button2/Label.text = "gen Easy+ Quest"
@@ -118,17 +121,31 @@ func on_lang_changed():
 		$Button4/Label.text = "Easy Q Collection"
 		$Button5/Label.text = "Easy+ Q Collection"
 		$Button6/Label.text = "Today's Quest"
+		for i in range(6):
+			get_node("Button%d/NSolvedLabel"%i).text = "num clear: "
+			get_node("Button%d/AveTimeLabel"%i).text = "avg time: "
+			get_node("Button%d/BestTimeLabel"%i).text = "best time: "
 		$CoinLabel.text = "open the app every day, you will get 2 coins."
 		$CoinButton/Label.text = "coin"
 func _on_JaButton_toggled(button_pressed):
-	lang = g.JA if button_pressed else g.EN
+	print("JaButton_toggled")
+	var t = g.JA if button_pressed else g.EN
+	if t == lang: return
+	lang = t
 	$LangTextureRect/EnButton.pressed = !button_pressed
 	on_lang_changed()
+	g.settings["Lang"] = lang
+	g.save_settings()
 	pass # Replace with function body.
 
 
 func _on_EnButton_toggled(button_pressed):
-	lang = g.JA if !button_pressed else g.EN
+	print("EnButton_toggled")
+	var t = g.EN if button_pressed else g.JA
+	if t == lang: return
+	lang = t
 	$LangTextureRect/JaButton.pressed = !button_pressed
 	on_lang_changed()
+	g.settings["Lang"] = lang
+	g.save_settings()
 	pass # Replace with function body.

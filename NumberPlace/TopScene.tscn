@@ -158,6 +158,7 @@ rect_rotation = -0.0329332
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
 text = "問題名（空欄可）:"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
